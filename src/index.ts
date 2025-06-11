@@ -1,7 +1,8 @@
 import { Elysia } from 'elysia';
 import { mcp } from 'elysia-mcp';
-import { z } from 'zod';
 import { registerCalculateTool } from './tools/calculate';
+import { registerHelloPrompt } from './prompts/hello';
+import { registerNewsResource } from './resources/news';
 
 const app = new Elysia()
   .use(
@@ -11,8 +12,16 @@ const app = new Elysia()
         name: 'elysia-mcp-server',
         version: '0.0.1',
       },
+      enableLogging: false,
       setupServer: (server) => {
+        // Register tools
         registerCalculateTool(server);
+
+        // Register prompts
+        registerHelloPrompt(server);
+
+        // Register resources
+        registerNewsResource(server);
       },
     })
   )
