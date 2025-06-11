@@ -2,6 +2,8 @@
 
 A starter template for building MCP (Model Context Protocol) servers using Elysia and Bun runtime.
 
+This starter template is based on the [elysia-mcp](https://github.com/kerlos/elysia-mcp) plugin, which provides comprehensive ElysiaJS integration for the Model Context Protocol with HTTP transport support.
+
 ## Purpose
 
 This repository provides a foundation for creating MCP servers that can be used with LLM clients like Claude Desktop, Cody, or other MCP-compatible applications. It demonstrates how to implement:
@@ -112,6 +114,51 @@ registerYourResource(server);
 ## Using with LLM Clients
 
 Configure your MCP-compatible client to connect to `http://localhost:3000/mcp` to access the tools, prompts, and resources provided by this server.
+
+### MCP Client Configuration
+
+Add the following configuration to your MCP client's configuration file:
+
+**For Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json`):**
+
+```json
+{
+  "mcpServers": {
+    "elysia-mcp-starter": {
+      "type": "http",
+      "url": "http://localhost:3000/mcp"
+    }
+  }
+}
+```
+
+**For Cursor (`~/.cursor/mcp.json`):**
+
+```json
+{
+  "mcpServers": {
+    "elysia-mcp-starter": {
+      "type": "http",
+      "url": "http://localhost:3000/mcp"
+    }
+  }
+}
+```
+
+**For Cody (VS Code settings):**
+
+```json
+{
+  "cody.experimental.mcp.servers": {
+    "elysia-mcp-starter": {
+      "type": "http",
+      "url": "http://localhost:3000/mcp"
+    }
+  }
+}
+```
+
+Replace `"elysia-mcp-starter"` with your preferred server name and update the URL if you're running on a different port.
 
 ## License
 
