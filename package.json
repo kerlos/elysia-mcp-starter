@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "elysia": "latest",
-    "elysia-mcp": "^0.0.7"
+    "elysia-mcp": "^0.0.8"
   },
   "devDependencies": {
     "bun-types": "latest"
