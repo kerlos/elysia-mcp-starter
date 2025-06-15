@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { McpServer } from 'elysia-mcp';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 export const registerCalculateTool = (server: McpServer) => {
   server.tool(

@@ -1,5 +1,4 @@
-import { McpServer } from 'elysia-mcp';
-
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 interface NewsArticle {
   id: string;
   title: string;
