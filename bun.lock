@@ -5,7 +5,7 @@
       "name": "elysia-mcp-starter",
       "dependencies": {
         "elysia": "latest",
-        "elysia-mcp": "^0.0.9",
+        "elysia-mcp": "^0.0.11",
       },
       "devDependencies": {
         "bun-types": "latest",
@@ -59,7 +59,7 @@
 
     "elysia": ["elysia@1.3.4", "", { "dependencies": { "cookie": "^1.0.2", "exact-mirror": "0.1.2", "fast-decode-uri-component": "^1.0.1" }, "optionalDependencies": { "@sinclair/typebox": "^0.34.33", "openapi-types": "^12.1.3" }, "peerDependencies": { "file-type": ">= 20.0.0", "typescript": ">= 5.0.0" } }, "sha512-kAfM3Zwovy3z255IZgTKVxBw91HbgKhYl3TqrGRdZqqr+Fd+4eKOfvxgaKij22+MZLczPzIHtscAmvfpI3+q/A=="],
 
-    "elysia-mcp": ["elysia-mcp@0.0.9", "", { "dependencies": { "@modelcontextprotocol/sdk": "^1.12.1" }, "peerDependencies": { "elysia": ">=1.0.0" } }, "sha512-B7OmjA4TTDFWBWzYv/nT9P7iST/bpSYe5fanZWmRLRDz7e3rBNg8JquKZsK5Ry3Q/dEG9F63wRZEfLN/CvxVTw=="],
+    "elysia-mcp": ["elysia-mcp@0.0.11", "", { "dependencies": { "@modelcontextprotocol/sdk": "^1.12.1" }, "peerDependencies": { "elysia": ">=1.0.0" } }, "sha512-XFfDcVESgq16jSpLLWbA/QmawBtAz1FQNzSNmC3AIsexLgnEJegki9gSlM9gJNOrwnSkh/Z7RS0JHY9Uef6FaQ=="],
 
     "encodeurl": ["encodeurl@2.0.0", "", {}, "sha512-Q0n9HRi4m6JuGIV1eFlmvJB7ZEVxu93IrMyiMsGC0lrMJMWzRgx6WGquyfQgZVb31vhGgXnfmPNNXmxnOkRBrg=="],
 
