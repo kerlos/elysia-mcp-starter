@@ -45912,5 +45912,12 @@ var app = new Elysia().use(mcp({
     registerHelloPrompt(server);
     registerNewsResource(server);
   }
-})).listen(3000);
-console.log(`\uD83E\uDD8A Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
+}));
+console.log(`\uD83E\uDD8A Elysia is running at localhost:3000`);
+var src_default = {
+  port: 3000,
+  fetch: app.fetch
+};
+export {
+  src_default as default
+};

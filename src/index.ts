@@ -27,8 +27,12 @@ const app = new Elysia()
       },
     })
   )
-  .listen(3000);
 
 console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+  `🦊 Elysia is running at localhost:3000`
 );
+
+export default {
+  port: 3000,
+  fetch: app.fetch,
+}
