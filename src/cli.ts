@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Elysia } from 'elysia';
 import { mcp } from 'elysia-mcp';
 import { registerCalculateTool } from './tools/calculate';
@@ -24,8 +26,26 @@ const app = new Elysia()
         registerNewsResource(server);
       },
     })
-  ).listen(3000);
+  )
 
 console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+  `🦊 Elysia is running at localhost:3000`
 );
+
+export default {
+  port: 3000,
+  fetch: app.fetch,
+}
+
+// Keep the process alive
+process.on('SIGINT', () => {
+  console.log('\nGracefully shutting down...');
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  console.log('\nGracefully shutting down...');
+  process.exit(0);
+});
+
+

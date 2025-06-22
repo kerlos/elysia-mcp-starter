@@ -45899,7 +45899,7 @@ ${article.content}
   });
 };
 
-// src/index.ts
+// src/cli.ts
 var app = new Elysia().use(mcp({
   basePath: "/mcp",
   serverInfo: {
@@ -45912,12 +45912,22 @@ var app = new Elysia().use(mcp({
     registerHelloPrompt(server);
     registerNewsResource(server);
   }
-})).listen(3000);
-console.log(`\uD83E\uDD8A Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
-var src_default = {
-  port: app.server?.port,
+}));
+console.log(`\uD83E\uDD8A Elysia is running at localhost:3000`);
+var cli_default = {
+  port: 3000,
   fetch: app.fetch
 };
+process.on("SIGINT", () => {
+  console.log(`
+Gracefully shutting down...`);
+  process.exit(0);
+});
+process.on("SIGTERM", () => {
+  console.log(`
+Gracefully shutting down...`);
+  process.exit(0);
+});
 export {
-  src_default as default
+  cli_default as default
 };
