@@ -1,6 +1,9 @@
 {
   "name": "elysia-mcp-starter",
   "version": "1.0.50",
+  "bin": {
+    "elysia-mcp-starter": "/cli/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "bun run src/index.ts",
