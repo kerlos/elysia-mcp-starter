@@ -1,3 +1,4 @@
+// @bun
 var __create = Object.create;
 var __getProtoOf = Object.getPrototypeOf;
 var __defProp = Object.defineProperty;
@@ -25,710 +26,7 @@ var __export = (target, all) => {
     });
 };
 var __esm = (fn, res) => () => (fn && (res = fn(fn = 0)), res);
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-}) : x)(function(x) {
-  if (typeof require !== "undefined")
-    return require.apply(this, arguments);
-  throw Error('Dynamic require of "' + x + '" is not supported');
-});
-
-// node_modules/cookie/dist/index.js
-var require_dist = __commonJS((exports) => {
-  Object.defineProperty(exports, "__esModule", { value: true });
-  exports.parse = parse2;
-  exports.serialize = serialize;
-  var cookieNameRegExp = /^[\u0021-\u003A\u003C\u003E-\u007E]+$/;
-  var cookieValueRegExp = /^[\u0021-\u003A\u003C-\u007E]*$/;
-  var domainValueRegExp = /^([.]?[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i;
-  var pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
-  var __toString = Object.prototype.toString;
-  var NullObject = /* @__PURE__ */ (() => {
-    const C = function() {};
-    C.prototype = Object.create(null);
-    return C;
-  })();
-  function parse2(str, options) {
-    const obj = new NullObject;
-    const len = str.length;
-    if (len < 2)
-      return obj;
-    const dec = options?.decode || decode2;
-    let index = 0;
-    do {
-      const eqIdx = str.indexOf("=", index);
-      if (eqIdx === -1)
-        break;
-      const colonIdx = str.indexOf(";", index);
-      const endIdx = colonIdx === -1 ? len : colonIdx;
-      if (eqIdx > endIdx) {
-        index = str.lastIndexOf(";", eqIdx - 1) + 1;
-        continue;
-      }
-      const keyStartIdx = startIndex(str, index, eqIdx);
-      const keyEndIdx = endIndex(str, eqIdx, keyStartIdx);
-      const key = str.slice(keyStartIdx, keyEndIdx);
-      if (obj[key] === undefined) {
-        let valStartIdx = startIndex(str, eqIdx + 1, endIdx);
-        let valEndIdx = endIndex(str, endIdx, valStartIdx);
-        const value = dec(str.slice(valStartIdx, valEndIdx));
-        obj[key] = value;
-      }
-      index = endIdx + 1;
-    } while (index < len);
-    return obj;
-  }
-  function startIndex(str, index, max) {
-    do {
-      const code = str.charCodeAt(index);
-      if (code !== 32 && code !== 9)
-        return index;
-    } while (++index < max);
-    return max;
-  }
-  function endIndex(str, index, min) {
-    while (index > min) {
-      const code = str.charCodeAt(--index);
-      if (code !== 32 && code !== 9)
-        return index + 1;
-    }
-    return min;
-  }
-  function serialize(name, val, options) {
-    const enc = options?.encode || encodeURIComponent;
-    if (!cookieNameRegExp.test(name)) {
-      throw new TypeError(`argument name is invalid: ${name}`);
-    }
-    const value = enc(val);
-    if (!cookieValueRegExp.test(value)) {
-      throw new TypeError(`argument val is invalid: ${val}`);
-    }
-    let str = name + "=" + value;
-    if (!options)
-      return str;
-    if (options.maxAge !== undefined) {
-      if (!Number.isInteger(options.maxAge)) {
-        throw new TypeError(`option maxAge is invalid: ${options.maxAge}`);
-      }
-      str += "; Max-Age=" + options.maxAge;
-    }
-    if (options.domain) {
-      if (!domainValueRegExp.test(options.domain)) {
-        throw new TypeError(`option domain is invalid: ${options.domain}`);
-      }
-      str += "; Domain=" + options.domain;
-    }
-    if (options.path) {
-      if (!pathValueRegExp.test(options.path)) {
-        throw new TypeError(`option path is invalid: ${options.path}`);
-      }
-      str += "; Path=" + options.path;
-    }
-    if (options.expires) {
-      if (!isDate(options.expires) || !Number.isFinite(options.expires.valueOf())) {
-        throw new TypeError(`option expires is invalid: ${options.expires}`);
-      }
-      str += "; Expires=" + options.expires.toUTCString();
-    }
-    if (options.httpOnly) {
-      str += "; HttpOnly";
-    }
-    if (options.secure) {
-      str += "; Secure";
-    }
-    if (options.partitioned) {
-      str += "; Partitioned";
-    }
-    if (options.priority) {
-      const priority = typeof options.priority === "string" ? options.priority.toLowerCase() : undefined;
-      switch (priority) {
-        case "low":
-          str += "; Priority=Low";
-          break;
-        case "medium":
-          str += "; Priority=Medium";
-          break;
-        case "high":
-          str += "; Priority=High";
-          break;
-        default:
-          throw new TypeError(`option priority is invalid: ${options.priority}`);
-      }
-    }
-    if (options.sameSite) {
-      const sameSite = typeof options.sameSite === "string" ? options.sameSite.toLowerCase() : options.sameSite;
-      switch (sameSite) {
-        case true:
-        case "strict":
-          str += "; SameSite=Strict";
-          break;
-        case "lax":
-          str += "; SameSite=Lax";
-          break;
-        case "none":
-          str += "; SameSite=None";
-          break;
-        default:
-          throw new TypeError(`option sameSite is invalid: ${options.sameSite}`);
-      }
-    }
-    return str;
-  }
-  function decode2(str) {
-    if (str.indexOf("%") === -1)
-      return str;
-    try {
-      return decodeURIComponent(str);
-    } catch (e) {
-      return str;
-    }
-  }
-  function isDate(val) {
-    return __toString.call(val) === "[object Date]";
-  }
-});
-
-// node_modules/fast-decode-uri-component/index.js
-var require_fast_decode_uri_component = __commonJS((exports, module) => {
-  var UTF8_ACCEPT = 12;
-  var UTF8_REJECT = 0;
-  var UTF8_DATA = [
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    4,
-    4,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    5,
-    6,
-    7,
-    7,
-    7,
-    7,
-    7,
-    7,
-    7,
-    7,
-    7,
-    7,
-    7,
-    7,
-    8,
-    7,
-    7,
-    10,
-    9,
-    9,
-    9,
-    11,
-    4,
-    4,
-    4,
-    4,
-    4,
-    4,
-    4,
-    4,
-    4,
-    4,
-    4,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    12,
-    0,
-    0,
-    0,
-    0,
-    24,
-    36,
-    48,
-    60,
-    72,
-    84,
-    96,
-    0,
-    12,
-    12,
-    12,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    24,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    24,
-    24,
-    24,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    24,
-    24,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    48,
-    48,
-    48,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    48,
-    48,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    48,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    127,
-    63,
-    63,
-    63,
-    0,
-    31,
-    15,
-    15,
-    15,
-    7,
-    7,
-    7
-  ];
-  function decodeURIComponent2(uri) {
-    var percentPosition = uri.indexOf("%");
-    if (percentPosition === -1)
-      return uri;
-    var length = uri.length;
-    var decoded = "";
-    var last = 0;
-    var codepoint = 0;
-    var startOfOctets = percentPosition;
-    var state = UTF8_ACCEPT;
-    while (percentPosition > -1 && percentPosition < length) {
-      var high = hexCodeToInt(uri[percentPosition + 1], 4);
-      var low = hexCodeToInt(uri[percentPosition + 2], 0);
-      var byte = high | low;
-      var type = UTF8_DATA[byte];
-      state = UTF8_DATA[256 + state + type];
-      codepoint = codepoint << 6 | byte & UTF8_DATA[364 + type];
-      if (state === UTF8_ACCEPT) {
-        decoded += uri.slice(last, startOfOctets);
-        decoded += codepoint <= 65535 ? String.fromCharCode(codepoint) : String.fromCharCode(55232 + (codepoint >> 10), 56320 + (codepoint & 1023));
-        codepoint = 0;
-        last = percentPosition + 3;
-        percentPosition = startOfOctets = uri.indexOf("%", last);
-      } else if (state === UTF8_REJECT) {
-        return null;
-      } else {
-        percentPosition += 3;
-        if (percentPosition < length && uri.charCodeAt(percentPosition) === 37)
-          continue;
-        return null;
-      }
-    }
-    return decoded + uri.slice(last);
-  }
-  var HEX = {
-    "0": 0,
-    "1": 1,
-    "2": 2,
-    "3": 3,
-    "4": 4,
-    "5": 5,
-    "6": 6,
-    "7": 7,
-    "8": 8,
-    "9": 9,
-    a: 10,
-    A: 10,
-    b: 11,
-    B: 11,
-    c: 12,
-    C: 12,
-    d: 13,
-    D: 13,
-    e: 14,
-    E: 14,
-    f: 15,
-    F: 15
-  };
-  function hexCodeToInt(c, shift) {
-    var i = HEX[c];
-    return i === undefined ? 255 : i << shift;
-  }
-  module.exports = decodeURIComponent2;
-});
-
-// node_modules/ieee754/index.js
-var init_ieee754 = __esm(() => {
-  /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
-});
-
-// node_modules/token-types/lib/index.js
-function dv(array) {
-  return new DataView(array.buffer, array.byteOffset);
-}
-
-class StringType2 {
-  constructor(len, encoding) {
-    this.len = len;
-    this.encoding = encoding;
-    this.textDecoder = new TextDecoder(encoding);
-  }
-  get(uint8Array, offset) {
-    return this.textDecoder.decode(uint8Array.subarray(offset, offset + this.len));
-  }
-}
-var UINT8, UINT16_LE, UINT16_BE, UINT32_LE, UINT32_BE, INT32_BE, UINT64_LE;
-var init_lib = __esm(() => {
-  init_ieee754();
-  UINT8 = {
-    len: 1,
-    get(array, offset) {
-      return dv(array).getUint8(offset);
-    },
-    put(array, offset, value) {
-      dv(array).setUint8(offset, value);
-      return offset + 1;
-    }
-  };
-  UINT16_LE = {
-    len: 2,
-    get(array, offset) {
-      return dv(array).getUint16(offset, true);
-    },
-    put(array, offset, value) {
-      dv(array).setUint16(offset, value, true);
-      return offset + 2;
-    }
-  };
-  UINT16_BE = {
-    len: 2,
-    get(array, offset) {
-      return dv(array).getUint16(offset);
-    },
-    put(array, offset, value) {
-      dv(array).setUint16(offset, value);
-      return offset + 2;
-    }
-  };
-  UINT32_LE = {
-    len: 4,
-    get(array, offset) {
-      return dv(array).getUint32(offset, true);
-    },
-    put(array, offset, value) {
-      dv(array).setUint32(offset, value, true);
-      return offset + 4;
-    }
-  };
-  UINT32_BE = {
-    len: 4,
-    get(array, offset) {
-      return dv(array).getUint32(offset);
-    },
-    put(array, offset, value) {
-      dv(array).setUint32(offset, value);
-      return offset + 4;
-    }
-  };
-  INT32_BE = {
-    len: 4,
-    get(array, offset) {
-      return dv(array).getInt32(offset);
-    },
-    put(array, offset, value) {
-      dv(array).setInt32(offset, value);
-      return offset + 4;
-    }
-  };
-  UINT64_LE = {
-    len: 8,
-    get(array, offset) {
-      return dv(array).getBigUint64(offset, true);
-    },
-    put(array, offset, value) {
-      dv(array).setBigUint64(offset, value, true);
-      return offset + 8;
-    }
-  };
-});
+var __require = import.meta.require;
 
 // node_modules/strtok3/lib/stream/Errors.js
 var defaultMessages = "End-Of-Stream", EndOfStreamError, AbortError;
@@ -746,6 +44,19 @@ var init_Errors = __esm(() => {
     }
   };
 });
+
+// node_modules/strtok3/lib/stream/Deferred.js
+class Deferred {
+  constructor() {
+    this.resolve = () => null;
+    this.reject = () => null;
+    this.promise = new Promise((resolve, reject) => {
+      this.reject = reject;
+      this.resolve = resolve;
+    });
+  }
+}
+
 // node_modules/strtok3/lib/stream/AbstractStreamReader.js
 class AbstractStreamReader {
   constructor() {
@@ -810,9 +121,72 @@ var init_AbstractStreamReader = __esm(() => {
 });
 
 // node_modules/strtok3/lib/stream/StreamReader.js
+var StreamReader;
 var init_StreamReader = __esm(() => {
   init_Errors();
   init_AbstractStreamReader();
+  StreamReader = class StreamReader extends AbstractStreamReader {
+    constructor(s) {
+      super();
+      this.s = s;
+      this.deferred = null;
+      if (!s.read || !s.once) {
+        throw new Error("Expected an instance of stream.Readable");
+      }
+      this.s.once("end", () => {
+        this.endOfStream = true;
+        if (this.deferred) {
+          this.deferred.resolve(0);
+        }
+      });
+      this.s.once("error", (err) => this.reject(err));
+      this.s.once("close", () => this.abort());
+    }
+    async readFromStream(buffer, mayBeLess) {
+      if (buffer.length === 0)
+        return 0;
+      const readBuffer = this.s.read(buffer.length);
+      if (readBuffer) {
+        buffer.set(readBuffer);
+        return readBuffer.length;
+      }
+      const request = {
+        buffer,
+        mayBeLess,
+        deferred: new Deferred
+      };
+      this.deferred = request.deferred;
+      this.s.once("readable", () => {
+        this.readDeferred(request);
+      });
+      return request.deferred.promise;
+    }
+    readDeferred(request) {
+      const readBuffer = this.s.read(request.buffer.length);
+      if (readBuffer) {
+        request.buffer.set(readBuffer);
+        request.deferred.resolve(readBuffer.length);
+        this.deferred = null;
+      } else {
+        this.s.once("readable", () => {
+          this.readDeferred(request);
+        });
+      }
+    }
+    reject(err) {
+      this.interrupted = true;
+      if (this.deferred) {
+        this.deferred.reject(err);
+        this.deferred = null;
+      }
+    }
+    async abort() {
+      this.reject(new AbortError);
+    }
+    async close() {
+      return this.abort();
+    }
+  };
 });
 
 // node_modules/strtok3/lib/stream/WebStreamReader.js
@@ -1146,6 +520,18 @@ var init_BlobTokenizer = __esm(() => {
 });
 
 // node_modules/strtok3/lib/core.js
+function fromStream(stream, options) {
+  const streamReader = new StreamReader(stream);
+  const _options = options ?? {};
+  const chainedClose = _options.onClose;
+  _options.onClose = async () => {
+    await streamReader.close();
+    if (chainedClose) {
+      return chainedClose();
+    }
+  };
+  return new ReadStreamTokenizer(streamReader, _options);
+}
 function fromWebStream(webStream, options) {
   const webStreamReader = makeWebStreamReader(webStream);
   const _options = options ?? {};
@@ -1170,7 +556,173 @@ var init_core = __esm(() => {
   init_AbstractTokenizer();
 });
 
-// node_modules/fflate/esm/browser.js
+// node_modules/strtok3/lib/FileTokenizer.js
+import { open as fsOpen } from "fs/promises";
+var FileTokenizer;
+var init_FileTokenizer = __esm(() => {
+  init_AbstractTokenizer();
+  init_stream();
+  FileTokenizer = class FileTokenizer extends AbstractTokenizer {
+    static async fromFile(sourceFilePath) {
+      const fileHandle = await fsOpen(sourceFilePath, "r");
+      const stat = await fileHandle.stat();
+      return new FileTokenizer(fileHandle, { fileInfo: { path: sourceFilePath, size: stat.size } });
+    }
+    constructor(fileHandle, options) {
+      super(options);
+      this.fileHandle = fileHandle;
+      this.fileInfo = options.fileInfo;
+    }
+    async readBuffer(uint8Array, options) {
+      const normOptions = this.normalizeOptions(uint8Array, options);
+      this.position = normOptions.position;
+      if (normOptions.length === 0)
+        return 0;
+      const res = await this.fileHandle.read(uint8Array, 0, normOptions.length, normOptions.position);
+      this.position += res.bytesRead;
+      if (res.bytesRead < normOptions.length && (!options || !options.mayBeLess)) {
+        throw new EndOfStreamError;
+      }
+      return res.bytesRead;
+    }
+    async peekBuffer(uint8Array, options) {
+      const normOptions = this.normalizeOptions(uint8Array, options);
+      const res = await this.fileHandle.read(uint8Array, 0, normOptions.length, normOptions.position);
+      if (!normOptions.mayBeLess && res.bytesRead < normOptions.length) {
+        throw new EndOfStreamError;
+      }
+      return res.bytesRead;
+    }
+    async close() {
+      await this.fileHandle.close();
+      return super.close();
+    }
+    setPosition(position) {
+      this.position = position;
+    }
+    supportsRandomAccess() {
+      return true;
+    }
+  };
+});
+
+// node_modules/strtok3/lib/index.js
+import { stat as fsStat } from "fs/promises";
+async function fromStream2(stream, options) {
+  const rst = fromStream(stream, options);
+  if (stream.path) {
+    const stat = await fsStat(stream.path);
+    rst.fileInfo.path = stream.path;
+    rst.fileInfo.size = stat.size;
+  }
+  return rst;
+}
+var fromFile;
+var init_lib = __esm(() => {
+  init_core();
+  init_FileTokenizer();
+  init_FileTokenizer();
+  init_core();
+  fromFile = FileTokenizer.fromFile;
+});
+
+// node_modules/ieee754/index.js
+var init_ieee754 = __esm(() => {
+  /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
+});
+
+// node_modules/token-types/lib/index.js
+function dv(array) {
+  return new DataView(array.buffer, array.byteOffset);
+}
+
+class StringType2 {
+  constructor(len, encoding) {
+    this.len = len;
+    this.encoding = encoding;
+    this.textDecoder = new TextDecoder(encoding);
+  }
+  get(uint8Array, offset) {
+    return this.textDecoder.decode(uint8Array.subarray(offset, offset + this.len));
+  }
+}
+var UINT8, UINT16_LE, UINT16_BE, UINT32_LE, UINT32_BE, INT32_BE, UINT64_LE;
+var init_lib2 = __esm(() => {
+  init_ieee754();
+  UINT8 = {
+    len: 1,
+    get(array, offset) {
+      return dv(array).getUint8(offset);
+    },
+    put(array, offset, value) {
+      dv(array).setUint8(offset, value);
+      return offset + 1;
+    }
+  };
+  UINT16_LE = {
+    len: 2,
+    get(array, offset) {
+      return dv(array).getUint16(offset, true);
+    },
+    put(array, offset, value) {
+      dv(array).setUint16(offset, value, true);
+      return offset + 2;
+    }
+  };
+  UINT16_BE = {
+    len: 2,
+    get(array, offset) {
+      return dv(array).getUint16(offset);
+    },
+    put(array, offset, value) {
+      dv(array).setUint16(offset, value);
+      return offset + 2;
+    }
+  };
+  UINT32_LE = {
+    len: 4,
+    get(array, offset) {
+      return dv(array).getUint32(offset, true);
+    },
+    put(array, offset, value) {
+      dv(array).setUint32(offset, value, true);
+      return offset + 4;
+    }
+  };
+  UINT32_BE = {
+    len: 4,
+    get(array, offset) {
+      return dv(array).getUint32(offset);
+    },
+    put(array, offset, value) {
+      dv(array).setUint32(offset, value);
+      return offset + 4;
+    }
+  };
+  INT32_BE = {
+    len: 4,
+    get(array, offset) {
+      return dv(array).getInt32(offset);
+    },
+    put(array, offset, value) {
+      dv(array).setInt32(offset, value);
+      return offset + 4;
+    }
+  };
+  UINT64_LE = {
+    len: 8,
+    get(array, offset) {
+      return dv(array).getBigUint64(offset, true);
+    },
+    put(array, offset, value) {
+      dv(array).setBigUint64(offset, value, true);
+      return offset + 8;
+    }
+  };
+});
+
+// node_modules/fflate/esm/index.mjs
+import { createRequire } from "module";
 function inflateSync(data, opts) {
   return inflt(data, { i: 2 }, opts && opts.out, opts && opts.dictionary);
 }
@@ -1186,7 +738,7 @@ function unzlibSync(data, opts) {
 function decompressSync(data, opts) {
   return data[0] == 31 && data[1] == 139 && data[2] == 8 ? gunzipSync(data, opts) : (data[0] & 15) != 8 || data[0] >> 4 > 7 || (data[0] << 8 | data[1]) % 31 ? inflateSync(data, opts) : unzlibSync(data, opts);
 }
-var u8, u16, i32, fleb, fdeb, clim, freb = function(eb, start) {
+var require2, Worker, u8, u16, i32, fleb, fdeb, clim, freb = function(eb, start) {
   var b = new u16(31);
   for (var i = 0;i < 31; ++i) {
     b[i] = start += 1 << eb[i - 1];
@@ -1422,7 +974,11 @@ var u8, u16, i32, fleb, fdeb, clim, freb = function(eb, start) {
     err(6, "invalid zlib data: " + (d[1] & 32 ? "need" : "unexpected") + " dictionary");
   return (d[1] >> 3 & 4) + 2;
 }, td, tds = 0;
-var init_browser = __esm(() => {
+var init_esm = __esm(() => {
+  require2 = createRequire("/");
+  try {
+    Worker = require2("worker_threads").Worker;
+  } catch (e) {}
   u8 = Uint8Array;
   u16 = Uint16Array;
   i32 = Int32Array;
@@ -1926,10 +1482,190 @@ var require_browser = __commonJS((exports, module) => {
   };
 });
 
+// node_modules/debug/src/node.js
+var require_node = __commonJS((exports, module) => {
+  var tty = __require("tty");
+  var util = __require("util");
+  exports.init = init;
+  exports.log = log;
+  exports.formatArgs = formatArgs;
+  exports.save = save;
+  exports.load = load;
+  exports.useColors = useColors;
+  exports.destroy = util.deprecate(() => {}, "Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.");
+  exports.colors = [6, 2, 3, 4, 5, 1];
+  try {
+    const supportsColor = (()=>{throw new Error("Cannot require module "+"supports-color");})();
+    if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
+      exports.colors = [
+        20,
+        21,
+        26,
+        27,
+        32,
+        33,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        56,
+        57,
+        62,
+        63,
+        68,
+        69,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        92,
+        93,
+        98,
+        99,
+        112,
+        113,
+        128,
+        129,
+        134,
+        135,
+        148,
+        149,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        178,
+        179,
+        184,
+        185,
+        196,
+        197,
+        198,
+        199,
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        214,
+        215,
+        220,
+        221
+      ];
+    }
+  } catch (error) {}
+  exports.inspectOpts = Object.keys(process.env).filter((key) => {
+    return /^debug_/i.test(key);
+  }).reduce((obj, key) => {
+    const prop = key.substring(6).toLowerCase().replace(/_([a-z])/g, (_, k) => {
+      return k.toUpperCase();
+    });
+    let val = process.env[key];
+    if (/^(yes|on|true|enabled)$/i.test(val)) {
+      val = true;
+    } else if (/^(no|off|false|disabled)$/i.test(val)) {
+      val = false;
+    } else if (val === "null") {
+      val = null;
+    } else {
+      val = Number(val);
+    }
+    obj[prop] = val;
+    return obj;
+  }, {});
+  function useColors() {
+    return "colors" in exports.inspectOpts ? Boolean(exports.inspectOpts.colors) : tty.isatty(process.stderr.fd);
+  }
+  function formatArgs(args) {
+    const { namespace: name, useColors: useColors2 } = this;
+    if (useColors2) {
+      const c = this.color;
+      const colorCode = "\x1B[3" + (c < 8 ? c : "8;5;" + c);
+      const prefix = `  ${colorCode};1m${name} \x1B[0m`;
+      args[0] = prefix + args[0].split(`
+`).join(`
+` + prefix);
+      args.push(colorCode + "m+" + module.exports.humanize(this.diff) + "\x1B[0m");
+    } else {
+      args[0] = getDate() + name + " " + args[0];
+    }
+  }
+  function getDate() {
+    if (exports.inspectOpts.hideDate) {
+      return "";
+    }
+    return new Date().toISOString() + " ";
+  }
+  function log(...args) {
+    return process.stderr.write(util.formatWithOptions(exports.inspectOpts, ...args) + `
+`);
+  }
+  function save(namespaces) {
+    if (namespaces) {
+      process.env.DEBUG = namespaces;
+    } else {
+      delete process.env.DEBUG;
+    }
+  }
+  function load() {
+    return process.env.DEBUG;
+  }
+  function init(debug) {
+    debug.inspectOpts = {};
+    const keys = Object.keys(exports.inspectOpts);
+    for (let i2 = 0;i2 < keys.length; i2++) {
+      debug.inspectOpts[keys[i2]] = exports.inspectOpts[keys[i2]];
+    }
+  }
+  module.exports = require_common()(exports);
+  var { formatters } = module.exports;
+  formatters.o = function(v) {
+    this.inspectOpts.colors = this.useColors;
+    return util.inspect(v, this.inspectOpts).split(`
+`).map((str) => str.trim()).join(" ");
+  };
+  formatters.O = function(v) {
+    this.inspectOpts.colors = this.useColors;
+    return util.inspect(v, this.inspectOpts);
+  };
+});
+
+// node_modules/debug/src/index.js
+var require_src = __commonJS((exports, module) => {
+  if (typeof process === "undefined" || process.type === "renderer" || false || process.__nwjs) {
+    module.exports = require_browser();
+  } else {
+    module.exports = require_node();
+  }
+});
+
 // node_modules/@tokenizer/inflate/lib/ZipToken.js
 var Signature, DataDescriptor, LocalFileHeaderToken, EndOfCentralDirectoryRecordToken, FileHeader;
 var init_ZipToken = __esm(() => {
-  init_lib();
+  init_lib2();
   Signature = {
     LocalFileHeader: 67324752,
     DataDescriptor: 134695760,
@@ -2185,10 +1921,10 @@ function mergeArrays(chunks) {
   return mergedArray;
 }
 var import_debug, debug, syncBufferSize, ddSignatureArray, eocdSignatureBytes;
-var init_lib2 = __esm(() => {
-  init_lib();
-  init_browser();
-  import_debug = __toESM(require_browser(), 1);
+var init_lib3 = __esm(() => {
+  init_lib2();
+  init_esm();
+  import_debug = __toESM(require_src(), 1);
   init_ZipToken();
   debug = import_debug.default("tokenizer:inflate");
   syncBufferSize = 256 * 1024;
@@ -2247,7 +1983,7 @@ function tarHeaderChecksumMatches(arrayBuffer, offset = 0) {
 }
 var uint32SyncSafeToken;
 var init_util = __esm(() => {
-  init_lib();
+  init_lib2();
   uint32SyncSafeToken = {
     get: (buffer, offset) => buffer[offset + 3] & 127 | buffer[offset + 2] << 7 | buffer[offset + 1] << 14 | buffer[offset] << 21,
     len: 4
@@ -2610,21 +2346,6 @@ var init_supported = __esm(() => {
 });
 
 // node_modules/file-type/core.js
-var exports_core = {};
-__export(exports_core, {
-  supportedMimeTypes: () => supportedMimeTypes,
-  supportedExtensions: () => supportedExtensions,
-  reasonableDetectionSizeInBytes: () => reasonableDetectionSizeInBytes,
-  fileTypeStream: () => fileTypeStream,
-  fileTypeFromTokenizer: () => fileTypeFromTokenizer,
-  fileTypeFromStream: () => fileTypeFromStream,
-  fileTypeFromBuffer: () => fileTypeFromBuffer,
-  fileTypeFromBlob: () => fileTypeFromBlob,
-  FileTypeParser: () => FileTypeParser
-});
-async function fileTypeFromStream(stream, options) {
-  return new FileTypeParser(options).fromStream(stream);
-}
 async function fileTypeFromBuffer(input, options) {
   return new FileTypeParser(options).fromBuffer(input);
 }
@@ -2780,9 +2501,6 @@ function _check(buffer, headers, options) {
 }
 async function fileTypeFromTokenizer(tokenizer, options) {
   return new FileTypeParser(options).fromTokenizer(tokenizer);
-}
-async function fileTypeStream(webStream, options) {
-  return new FileTypeParser(options).toDetectionStream(webStream, options);
 }
 
 class FileTypeParser {
@@ -4054,14 +3772,93 @@ class FileTypeParser {
 }
 var reasonableDetectionSizeInBytes = 4100, supportedExtensions, supportedMimeTypes;
 var init_core2 = __esm(() => {
-  init_lib();
-  init_core();
   init_lib2();
+  init_core();
+  init_lib3();
   init_uint8array_extras();
   init_util();
   init_supported();
   supportedExtensions = new Set(extensions);
   supportedMimeTypes = new Set(mimeTypes);
+});
+
+// node_modules/file-type/index.js
+var exports_file_type = {};
+__export(exports_file_type, {
+  supportedMimeTypes: () => supportedMimeTypes,
+  supportedExtensions: () => supportedExtensions,
+  fileTypeStream: () => fileTypeStream,
+  fileTypeFromTokenizer: () => fileTypeFromTokenizer,
+  fileTypeFromStream: () => fileTypeFromStream,
+  fileTypeFromFile: () => fileTypeFromFile,
+  fileTypeFromBuffer: () => fileTypeFromBuffer,
+  fileTypeFromBlob: () => fileTypeFromBlob,
+  FileTypeParser: () => FileTypeParser2
+});
+import { ReadableStream as WebReadableStream } from "stream/web";
+import { pipeline, PassThrough, Readable } from "stream";
+async function fileTypeFromFile(path, options) {
+  return new FileTypeParser2(options).fromFile(path, options);
+}
+async function fileTypeFromStream(stream, options) {
+  return new FileTypeParser2(options).fromStream(stream);
+}
+async function fileTypeStream(readableStream, options = {}) {
+  return new FileTypeParser2(options).toDetectionStream(readableStream, options);
+}
+var FileTypeParser2;
+var init_file_type = __esm(() => {
+  init_lib();
+  init_core2();
+  init_core2();
+  FileTypeParser2 = class FileTypeParser2 extends FileTypeParser {
+    async fromStream(stream) {
+      const tokenizer = await (stream instanceof WebReadableStream ? fromWebStream(stream, this.tokenizerOptions) : fromStream2(stream, this.tokenizerOptions));
+      try {
+        return await super.fromTokenizer(tokenizer);
+      } finally {
+        await tokenizer.close();
+      }
+    }
+    async fromFile(path) {
+      const tokenizer = await fromFile(path);
+      try {
+        return await super.fromTokenizer(tokenizer);
+      } finally {
+        await tokenizer.close();
+      }
+    }
+    async toDetectionStream(readableStream, options = {}) {
+      if (!(readableStream instanceof Readable)) {
+        return super.toDetectionStream(readableStream, options);
+      }
+      const { sampleSize = reasonableDetectionSizeInBytes } = options;
+      return new Promise((resolve, reject) => {
+        readableStream.on("error", reject);
+        readableStream.once("readable", () => {
+          (async () => {
+            try {
+              const pass = new PassThrough;
+              const outputStream = pipeline ? pipeline(readableStream, pass, () => {}) : readableStream.pipe(pass);
+              const chunk = readableStream.read(sampleSize) ?? readableStream.read() ?? new Uint8Array(0);
+              try {
+                pass.fileType = await this.fromBuffer(chunk);
+              } catch (error) {
+                if (error instanceof EndOfStreamError) {
+                  pass.fileType = undefined;
+                } else {
+                  reject(error);
+                }
+              }
+              resolve(outputStream);
+            } catch (error) {
+              reject(error);
+            }
+          })();
+        });
+      });
+    }
+  };
 });
 
 // node_modules/@sinclair/typebox/build/esm/type/guard/value.mjs
@@ -10637,539 +10434,369 @@ var TypeCompiler;
   TypeCompiler2.Compile = Compile;
 })(TypeCompiler || (TypeCompiler = {}));
 
-// node_modules/elysia/dist/index.mjs
-var import_cookie = __toESM(require_dist(), 1);
-var import_fast_decode_uri_component = __toESM(require_fast_decode_uri_component(), 1);
-var import_fast_decode_uri_component2 = __toESM(require_fast_decode_uri_component(), 1);
-var import_fast_decode_uri_component3 = __toESM(require_fast_decode_uri_component(), 1);
-
-// node_modules/exact-mirror/dist/index.mjs
-var Kind2 = Symbol.for("TypeBox.Kind");
-var Hint2 = Symbol.for("TypeBox.Hint");
-var isSpecialProperty = (name) => /(\ |-|\t|\n)/.test(name);
-var joinProperty = (v1, v2, isOptional = false) => {
-  if (typeof v2 === "number")
-    return `${v1}[${v2}]`;
-  if (isSpecialProperty(v2))
-    return `${v1}${isOptional ? "?." : ""}["${v2}"]`;
-  return `${v1}${isOptional ? "?" : ""}.${v2}`;
+// node_modules/elysia/dist/bun/index.js
+var __create2 = Object.create;
+var { getPrototypeOf: __getProtoOf2, defineProperty: __defProp2, getOwnPropertyNames: __getOwnPropNames2 } = Object;
+var __hasOwnProp2 = Object.prototype.hasOwnProperty;
+var __toESM2 = (mod, isNodeMode, target) => {
+  target = mod != null ? __create2(__getProtoOf2(mod)) : {};
+  let to = isNodeMode || !mod || !mod.__esModule ? __defProp2(target, "default", { value: mod, enumerable: true }) : target;
+  for (let key of __getOwnPropNames2(mod))
+    if (!__hasOwnProp2.call(to, key))
+      __defProp2(to, key, { get: () => mod[key], enumerable: true });
+  return to;
 };
-var encodeProperty = (v) => isSpecialProperty(v) ? `"${v}"` : v;
-var sanitize = (key, sanitize2 = 0, schema) => {
-  if (schema.type !== "string" || schema.const || schema.trusted)
-    return key;
-  let hof = "";
-  for (let i = sanitize2 - 1;i >= 0; i--)
-    hof += `d.h${i}(`;
-  return hof + key + ")".repeat(sanitize2);
-};
-var mergeObjectIntersection = (schema) => {
-  if (!schema.allOf || Kind2 in schema && (schema[Kind2] !== "Intersect" || schema.type !== "object"))
-    return schema;
-  const { allOf, ...newSchema } = schema;
-  newSchema.properties = {};
-  if (Kind2 in newSchema)
-    newSchema[Kind2] = "Object";
-  for (const type of allOf) {
-    if (type.type !== "object")
-      continue;
-    const { properties, required, type: _, [Kind2]: __, ...rest } = type;
-    if (required)
-      newSchema.required = newSchema.required ? newSchema.required.concat(required) : required;
-    Object.assign(newSchema, rest);
-    for (const property in type.properties)
-      newSchema.properties[property] = mergeObjectIntersection(type.properties[property]);
-  }
-  return newSchema;
-};
-var handleRecord = (schema, property, instruction) => {
-  const child = schema.patternProperties["^(.*)$"] ?? schema.patternProperties[Object.keys(schema.patternProperties)[0]];
-  if (!child)
-    return property;
-  const i = instruction.array;
-  instruction.array++;
-  return `(()=>{const ar${i}s=Object.keys(${property}),ar${i}v={};for(let i=0;i<ar${i}s.length;i++){const ar${i}p=${property}[ar${i}s[i]];ar${i}v[ar${i}s[i]]=${mirror(child, `ar${i}p`, instruction)}}return ar${i}v})()`;
-};
-var handleTuple = (schema, property, instruction) => {
-  const i = instruction.array;
-  instruction.array++;
-  const isRoot = property === "v" && !instruction.unions.length;
-  let v = "";
-  if (!isRoot)
-    v = `(()=>{`;
-  v += `const ar${i}v=[`;
-  for (let i2 = 0;i2 < schema.length; i2++) {
-    if (i2 !== 0)
-      v += ",";
-    v += mirror(schema[i2], joinProperty(property, i2, instruction.parentIsOptional), instruction);
-  }
-  v += `];`;
-  if (!isRoot)
-    v += `return ar${i}v})()`;
-  return v;
-};
-function deepClone(source, weak = /* @__PURE__ */ new WeakMap) {
-  if (source === null || typeof source !== "object" || typeof source === "function")
-    return source;
-  if (weak.has(source))
-    return weak.get(source);
-  if (Array.isArray(source)) {
-    const copy = new Array(source.length);
-    weak.set(source, copy);
-    for (let i = 0;i < source.length; i++)
-      copy[i] = deepClone(source[i], weak);
-    return copy;
-  }
-  if (typeof source === "object") {
-    const keys = Object.keys(source).concat(Object.getOwnPropertySymbols(source));
-    const cloned = {};
-    for (const key of keys)
-      cloned[key] = deepClone(source[key], weak);
-    return cloned;
-  }
-  return source;
-}
-var handleUnion = (schemas, property, instruction) => {
-  if (instruction.TypeCompiler === undefined) {
-    if (!instruction.typeCompilerWanred) {
-      console.warn(new Error("[exact-mirror] TypeBox's TypeCompiler is required to use Union"));
-      instruction.typeCompilerWanred = true;
-    }
-    return property;
-  }
-  instruction.unionKeys[property] = 1;
-  const ui = instruction.unions.length;
-  const typeChecks = instruction.unions[ui] = [];
-  let v = `(()=>{
-`;
-  const unwrapRef = (type) => {
-    if (!(Kind2 in type) || !type.$ref)
-      return type;
-    if (type[Kind2] === "This") {
-      return deepClone(instruction.definitions[type.$ref]);
-    } else if (type[Kind2] === "Ref") {
-      if (!instruction.modules)
-        console.warn(new Error("[exact-mirror] modules is required when using nested cyclic reference"));
-      else
-        return instruction.modules.Import(type.$ref);
-    }
-    return type;
-  };
-  for (let i = 0;i < schemas.length; i++) {
-    let type = unwrapRef(schemas[i]);
-    if (Array.isArray(type.anyOf))
-      for (let i2 = 0;i2 < type.anyOf.length; i2++)
-        type.anyOf[i2] = unwrapRef(type.anyOf[i2]);
-    else if (type.items) {
-      if (Array.isArray(type.items))
-        for (let i2 = 0;i2 < type.items.length; i2++)
-          type.items[i2] = unwrapRef(type.items[i2]);
-      else
-        type.items = unwrapRef(type.items);
-    }
-    typeChecks.push(TypeCompiler.Compile(type));
-    v += `if(d.unions[${ui}][${i}].Check(${property})){return ${mirror(type, property, {
-      ...instruction,
-      recursion: instruction.recursion + 1,
-      parentIsOptional: true
-    })}}
-`;
-  }
-  v += `return ${instruction.removeUnknownUnionType ? "undefined" : property}})()`;
-  return v;
-};
-var mirror = (schema, property, instruction) => {
-  if (!schema)
-    return "";
-  const isRoot = property === "v" && !instruction.unions.length;
-  if (Kind2 in schema && schema[Kind2] === "Import" && schema.$ref in schema.$defs)
-    return mirror(schema.$defs[schema.$ref], property, {
-      ...instruction,
-      definitions: Object.assign(instruction.definitions, schema.$defs)
-    });
-  if (isRoot && schema.type !== "object" && schema.type !== "array" && !schema.anyOf)
-    return `return ${sanitize("v", instruction.sanitize?.length, schema)}`;
-  if (instruction.recursion >= instruction.recursionLimit)
-    return property;
-  let v = "";
-  if (schema.$id && Hint2 in schema)
-    instruction.definitions[schema.$id] = schema;
-  switch (schema.type) {
-    case "object":
-      if (schema[Kind2] === "Record") {
-        v = handleRecord(schema, property, instruction);
+var __commonJS2 = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+var require_dist = __commonJS2((exports) => {
+  Object.defineProperty(exports, "__esModule", { value: true });
+  exports.parse = parse2;
+  exports.serialize = serialize;
+  var cookieNameRegExp = /^[\u0021-\u003A\u003C\u003E-\u007E]+$/, cookieValueRegExp = /^[\u0021-\u003A\u003C-\u007E]*$/, domainValueRegExp = /^([.]?[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i, pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/, __toString = Object.prototype.toString, NullObject = (() => {
+    let C = function() {};
+    return C.prototype = Object.create(null), C;
+  })();
+  function parse2(str, options) {
+    let obj = new NullObject, len = str.length;
+    if (len < 2)
+      return obj;
+    let dec = options?.decode || decode2, index = 0;
+    do {
+      let eqIdx = str.indexOf("=", index);
+      if (eqIdx === -1)
         break;
+      let colonIdx = str.indexOf(";", index), endIdx = colonIdx === -1 ? len : colonIdx;
+      if (eqIdx > endIdx) {
+        index = str.lastIndexOf(";", eqIdx - 1) + 1;
+        continue;
       }
-      schema = mergeObjectIntersection(schema);
-      v += "{";
-      if (schema.additionalProperties)
-        v += `...${property}`;
-      const keys = Object.keys(schema.properties);
-      for (let i2 = 0;i2 < keys.length; i2++) {
-        const key = keys[i2];
-        let isOptional = schema.required && !schema.required.includes(key) || Array.isArray(schema.properties[key].anyOf);
-        const name = joinProperty(property, key, instruction.parentIsOptional);
-        if (isOptional) {
-          const index = instruction.array;
-          if (property.startsWith("ar")) {
-            const refName = name.slice(name.indexOf(".") + 1);
-            const array = instruction.optionalsInArray;
-            if (array[index])
-              array[index].push(refName);
-            else
-              array[index] = [refName];
-          } else {
-            instruction.optionals.push(name);
-          }
-        }
-        const child = schema.properties[key];
-        if (schema.additionalProperties && child.type !== "object")
-          continue;
-        if (i2 !== 0)
-          v += ",";
-        v += `${encodeProperty(key)}:${isOptional ? `${name}===undefined?undefined:` : ""}${mirror(child, name, {
-          ...instruction,
-          recursion: instruction.recursion + 1,
-          parentIsOptional: isOptional
-        })}`;
+      let keyStartIdx = startIndex(str, index, eqIdx), keyEndIdx = endIndex(str, eqIdx, keyStartIdx), key = str.slice(keyStartIdx, keyEndIdx);
+      if (obj[key] === undefined) {
+        let valStartIdx = startIndex(str, eqIdx + 1, endIdx), valEndIdx = endIndex(str, endIdx, valStartIdx), value = dec(str.slice(valStartIdx, valEndIdx));
+        obj[key] = value;
       }
-      v += "}";
-      break;
-    case "array":
-      if (schema.items.type !== "object" && schema.items.type !== "array") {
-        if (Array.isArray(schema.items)) {
-          v = handleTuple(schema.items, property, instruction);
+      index = endIdx + 1;
+    } while (index < len);
+    return obj;
+  }
+  function startIndex(str, index, max2) {
+    do {
+      let code = str.charCodeAt(index);
+      if (code !== 32 && code !== 9)
+        return index;
+    } while (++index < max2);
+    return max2;
+  }
+  function endIndex(str, index, min) {
+    while (index > min) {
+      let code = str.charCodeAt(--index);
+      if (code !== 32 && code !== 9)
+        return index + 1;
+    }
+    return min;
+  }
+  function serialize(name, val, options) {
+    let enc = options?.encode || encodeURIComponent;
+    if (!cookieNameRegExp.test(name))
+      throw new TypeError(`argument name is invalid: ${name}`);
+    let value = enc(val);
+    if (!cookieValueRegExp.test(value))
+      throw new TypeError(`argument val is invalid: ${val}`);
+    let str = name + "=" + value;
+    if (!options)
+      return str;
+    if (options.maxAge !== undefined) {
+      if (!Number.isInteger(options.maxAge))
+        throw new TypeError(`option maxAge is invalid: ${options.maxAge}`);
+      str += "; Max-Age=" + options.maxAge;
+    }
+    if (options.domain) {
+      if (!domainValueRegExp.test(options.domain))
+        throw new TypeError(`option domain is invalid: ${options.domain}`);
+      str += "; Domain=" + options.domain;
+    }
+    if (options.path) {
+      if (!pathValueRegExp.test(options.path))
+        throw new TypeError(`option path is invalid: ${options.path}`);
+      str += "; Path=" + options.path;
+    }
+    if (options.expires) {
+      if (!isDate(options.expires) || !Number.isFinite(options.expires.valueOf()))
+        throw new TypeError(`option expires is invalid: ${options.expires}`);
+      str += "; Expires=" + options.expires.toUTCString();
+    }
+    if (options.httpOnly)
+      str += "; HttpOnly";
+    if (options.secure)
+      str += "; Secure";
+    if (options.partitioned)
+      str += "; Partitioned";
+    if (options.priority)
+      switch (typeof options.priority === "string" ? options.priority.toLowerCase() : undefined) {
+        case "low":
+          str += "; Priority=Low";
           break;
-        } else if (isRoot)
-          return "return v";
-        else if (Kind2 in schema.items && schema.items.$ref && (schema.items[Kind2] === "Ref" || schema.items[Kind2] === "This"))
-          v = mirror(deepClone(instruction.definitions[schema.items.$ref]), property, {
-            ...instruction,
-            parentIsOptional: true,
-            recursion: instruction.recursion + 1
-          });
-        else {
-          v = property;
+        case "medium":
+          str += "; Priority=Medium";
           break;
-        }
+        case "high":
+          str += "; Priority=High";
+          break;
+        default:
+          throw new TypeError(`option priority is invalid: ${options.priority}`);
       }
-      const i = instruction.array;
-      instruction.array++;
-      let reference = property;
-      if (isRoot)
-        v = `const ar${i}v=new Array(${property}.length);`;
+    if (options.sameSite)
+      switch (typeof options.sameSite === "string" ? options.sameSite.toLowerCase() : options.sameSite) {
+        case true:
+        case "strict":
+          str += "; SameSite=Strict";
+          break;
+        case "lax":
+          str += "; SameSite=Lax";
+          break;
+        case "none":
+          str += "; SameSite=None";
+          break;
+        default:
+          throw new TypeError(`option sameSite is invalid: ${options.sameSite}`);
+      }
+    return str;
+  }
+  function decode2(str) {
+    if (str.indexOf("%") === -1)
+      return str;
+    try {
+      return decodeURIComponent(str);
+    } catch (e) {
+      return str;
+    }
+  }
+  function isDate(val) {
+    return __toString.call(val) === "[object Date]";
+  }
+});
+var require_fast_decode_uri_component = __commonJS2((exports, module) => {
+  var UTF8_ACCEPT = 12, UTF8_REJECT = 0, UTF8_DATA = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 7, 7, 10, 9, 9, 9, 11, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 24, 36, 48, 60, 72, 84, 96, 0, 12, 12, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 24, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48, 48, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 63, 63, 63, 0, 31, 15, 15, 15, 7, 7, 7];
+  function decodeURIComponent2(uri2) {
+    var percentPosition = uri2.indexOf("%");
+    if (percentPosition === -1)
+      return uri2;
+    var length = uri2.length, decoded = "", last = 0, codepoint = 0, startOfOctets = percentPosition, state = UTF8_ACCEPT;
+    while (percentPosition > -1 && percentPosition < length) {
+      var high = hexCodeToInt(uri2[percentPosition + 1], 4), low = hexCodeToInt(uri2[percentPosition + 2], 0), byte2 = high | low, type = UTF8_DATA[byte2];
+      if (state = UTF8_DATA[256 + state + type], codepoint = codepoint << 6 | byte2 & UTF8_DATA[364 + type], state === UTF8_ACCEPT)
+        decoded += uri2.slice(last, startOfOctets), decoded += codepoint <= 65535 ? String.fromCharCode(codepoint) : String.fromCharCode(55232 + (codepoint >> 10), 56320 + (codepoint & 1023)), codepoint = 0, last = percentPosition + 3, percentPosition = startOfOctets = uri2.indexOf("%", last);
+      else if (state === UTF8_REJECT)
+        return null;
       else {
-        reference = `ar${i}s`;
-        v = `((${reference})=>{const ar${i}v=new Array(${reference}.length);`;
+        if (percentPosition += 3, percentPosition < length && uri2.charCodeAt(percentPosition) === 37)
+          continue;
+        return null;
       }
-      v += `for(let i=0;i<${reference}.length;i++){const ar${i}p=${reference}[i];ar${i}v[i]=${mirror(schema.items, `ar${i}p`, instruction)}`;
-      const optionals = instruction.optionalsInArray[i + 1];
-      if (optionals) {
-        for (let oi = 0;oi < optionals.length; oi++) {
-          const target = `ar${i}v[i].${optionals[oi]}`;
-          v += `;if(${target}===undefined)delete ${target}`;
-        }
-      }
-      v += `}`;
-      if (!isRoot)
-        v += `return ar${i}v})(${property})`;
-      break;
-    default:
-      if (schema.$ref && schema.$ref in instruction.definitions)
-        return mirror(instruction.definitions[schema.$ref], property, instruction);
-      if (Array.isArray(schema.anyOf)) {
-        v = handleUnion(schema.anyOf, property, instruction);
-        break;
-      }
-      v = sanitize(property, instruction.sanitize?.length, schema);
-      break;
+    }
+    return decoded + uri2.slice(last);
   }
-  if (!isRoot)
-    return v;
-  if (schema.type === "array")
-    return `${v}return ar0v`;
-  v = `const x=${v}
-`;
-  for (let i = 0;i < instruction.optionals.length; i++) {
-    const key = instruction.optionals[i];
-    const prop = key.slice(1);
-    v += `if(${key}===undefined`;
-    if (instruction.unionKeys[key])
-      v += `||x${prop}===undefined`;
-    v += `)delete x${prop.charCodeAt(0) !== 63 ? "?" : ""}${prop}
-`;
+  var HEX = { "0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, a: 10, A: 10, b: 11, B: 11, c: 12, C: 12, d: 13, D: 13, e: 14, E: 14, f: 15, F: 15 };
+  function hexCodeToInt(c, shift) {
+    var i2 = HEX[c];
+    return i2 === undefined ? 255 : i2 << shift;
   }
-  return `${v}return x`;
+  module.exports = decodeURIComponent2;
+});
+var Y = (A, b) => {
+  let v = b?.length ? {} : null;
+  if (v)
+    for (let K of b)
+      v[K.part.charCodeAt(0)] = K;
+  return { part: A, store: null, inert: v, params: null, wildcardStore: null };
 };
-var createMirror = (schema, {
-  TypeCompiler: TypeCompiler2,
-  modules,
-  definitions,
-  sanitize: sanitize2,
-  recursionLimit = 8,
-  removeUnknownUnionType = false
-} = {}) => {
-  const unions = [];
-  if (typeof sanitize2 === "function")
-    sanitize2 = [sanitize2];
-  const f = mirror(schema, "v", {
-    optionals: [],
-    optionalsInArray: [],
-    array: 0,
-    parentIsOptional: false,
-    unions,
-    unionKeys: {},
-    TypeCompiler: TypeCompiler2,
-    modules,
-    definitions: definitions ?? modules?.$defs ?? {},
-    sanitize: sanitize2,
-    recursion: 0,
-    recursionLimit,
-    removeUnknownUnionType
-  });
-  if (!unions.length && !sanitize2?.length)
-    return Function("v", f);
-  let hof;
-  if (sanitize2?.length) {
-    hof = {};
-    for (let i = 0;i < sanitize2.length; i++)
-      hof[`h${i}`] = sanitize2[i];
-  }
-  return Function("d", `return function mirror(v){${f}}`)({
-    unions,
-    ...hof
-  });
-};
+var k = (A, b) => ({ ...A, part: b });
+var T = (A) => ({ name: A, store: null, inert: null });
 
-// node_modules/elysia/dist/index.mjs
-var createNode = (part, inert) => {
-  let inertMap = inert?.length ? {} : null;
-  if (inertMap)
-    for (let child of inert)
-      inertMap[child.part.charCodeAt(0)] = child;
-  return {
-    part,
-    store: null,
-    inert: inertMap,
-    params: null,
-    wildcardStore: null
-  };
-};
-var cloneNode = (node, part) => ({
-  ...node,
-  part
-});
-var createParamNode = (name) => ({
-  name,
-  store: null,
-  inert: null
-});
-var Memoirist = class _Memoirist {
-  constructor(config = {}) {
-    this.config = config, config.lazy && (this.find = this.lazyFind);
-  }
+class _ {
+  config;
   root = {};
   history = [];
   deferred = [];
-  static regex = {
-    static: /:.+?(?=\/|$)/,
-    params: /:.+?(?=\/|$)/g,
-    optionalParams: /(\/:\w+\?)/g
-  };
-  lazyFind = (method, url) => this.config.lazy ? (this.build(), this.find(method, url)) : this.find;
-  build() {
-    if (this.config.lazy) {
-      for (let [method, path, store] of this.deferred)
-        this.add(method, path, store, { lazy: false, ignoreHistory: true });
-      this.deferred = [], this.find = (method, url) => {
-        let root = this.root[method];
-        return root ? matchRoute(url, url.length, root, 0) : null;
-      };
-    }
+  constructor(A = {}) {
+    if (this.config = A, A.lazy)
+      this.find = this.lazyFind;
   }
-  add(method, path, store, {
-    ignoreError = false,
-    ignoreHistory = false,
-    lazy = this.config.lazy
-  } = {}) {
-    if (lazy)
-      return this.find = this.lazyFind, this.deferred.push([method, path, store]), store;
-    if (typeof path != "string")
+  static regex = { static: /:.+?(?=\/|$)/, params: /:.+?(?=\/|$)/g, optionalParams: /(\/:\w+\?)/g };
+  lazyFind = (A, b) => {
+    if (!this.config.lazy)
+      return this.find;
+    return this.build(), this.find(A, b);
+  };
+  build() {
+    if (!this.config.lazy)
+      return;
+    for (let [A, b, v] of this.deferred)
+      this.add(A, b, v, { lazy: false, ignoreHistory: true });
+    this.deferred = [], this.find = (A, b) => {
+      let v = this.root[A];
+      if (!v)
+        return null;
+      return $(b, b.length, v, 0);
+    };
+  }
+  add(A, b, v, { ignoreError: K = false, ignoreHistory: V = false, lazy: U = this.config.lazy } = {}) {
+    if (U)
+      return this.find = this.lazyFind, this.deferred.push([A, b, v]), v;
+    if (typeof b !== "string")
       throw new TypeError("Route path must be a string");
-    path === "" ? path = "/" : path[0] !== "/" && (path = `/${path}`);
-    let isWildcard = path[path.length - 1] === "*", optionalParams = path.match(_Memoirist.regex.optionalParams);
-    if (optionalParams) {
-      let originalPath = path.replaceAll("?", "");
-      this.add(method, originalPath, store, {
-        ignoreError,
-        ignoreHistory,
-        lazy
-      });
-      for (let i2 = 0;i2 < optionalParams.length; i2++) {
-        let newPath = path.replace(optionalParams[i2], "");
-        this.add(method, newPath, store, {
-          ignoreError: true,
-          ignoreHistory,
-          lazy
-        });
+    if (b === "")
+      b = "/";
+    else if (b[0] !== "/")
+      b = `/${b}`;
+    let J = b[b.length - 1] === "*", F = b.match(_.regex.optionalParams);
+    if (F) {
+      let S = b.replaceAll("?", "");
+      this.add(A, S, v, { ignoreError: K, ignoreHistory: V, lazy: U });
+      for (let D = 0;D < F.length; D++) {
+        let B = b.replace(F[D], "");
+        this.add(A, B, v, { ignoreError: true, ignoreHistory: V, lazy: U });
       }
-      return store;
+      return v;
     }
-    if (optionalParams && (path = path.replaceAll("?", "")), this.history.find(([m, p, s]) => m === method && p === path))
-      return store;
-    (isWildcard || optionalParams && path.charCodeAt(path.length - 1) === 63) && (path = path.slice(0, -1)), ignoreHistory || this.history.push([method, path, store]);
-    let inertParts = path.split(_Memoirist.regex.static), paramParts = path.match(_Memoirist.regex.params) || [];
-    inertParts[inertParts.length - 1] === "" && inertParts.pop();
-    let node;
-    this.root[method] ? node = this.root[method] : node = this.root[method] = createNode("/");
-    let paramPartsIndex = 0;
-    for (let i2 = 0;i2 < inertParts.length; ++i2) {
-      let part = inertParts[i2];
-      if (i2 > 0) {
-        let param = paramParts[paramPartsIndex++].slice(1);
-        if (node.params === null)
-          node.params = createParamNode(param);
-        else if (node.params.name !== param) {
-          if (ignoreError)
-            return store;
-          throw new Error(`Cannot create route "${path}" with parameter "${param}" because a route already exists with a different parameter name ("${node.params.name}") in the same location`);
-        }
-        let params = node.params;
-        if (params.inert === null) {
-          node = params.inert = createNode(part);
+    if (F)
+      b = b.replaceAll("?", "");
+    if (this.history.find(([S, D, B]) => S === A && D === b))
+      return v;
+    if (J || F && b.charCodeAt(b.length - 1) === 63)
+      b = b.slice(0, -1);
+    if (!V)
+      this.history.push([A, b, v]);
+    let G = b.split(_.regex.static), X = b.match(_.regex.params) || [];
+    if (G[G.length - 1] === "")
+      G.pop();
+    let q;
+    if (!this.root[A])
+      q = this.root[A] = Y("/");
+    else
+      q = this.root[A];
+    let O = 0;
+    for (let S = 0;S < G.length; ++S) {
+      let D = G[S];
+      if (S > 0) {
+        let B = X[O++].slice(1);
+        if (q.params === null)
+          q.params = T(B);
+        else if (q.params.name !== B)
+          if (K)
+            return v;
+          else
+            throw new Error(`Cannot create route "${b}" with parameter "${B}" because a route already exists with a different parameter name ("${q.params.name}") in the same location`);
+        let Q = q.params;
+        if (Q.inert === null) {
+          q = Q.inert = Y(D);
           continue;
         }
-        node = params.inert;
+        q = Q.inert;
       }
-      for (let j = 0;; ) {
-        if (j === part.length) {
-          if (j < node.part.length) {
-            let childNode = cloneNode(node, node.part.slice(j));
-            Object.assign(node, createNode(part, [childNode]));
+      for (let B = 0;; ) {
+        if (B === D.length) {
+          if (B < q.part.length) {
+            let Q = k(q, q.part.slice(B));
+            Object.assign(q, Y(D, [Q]));
           }
           break;
         }
-        if (j === node.part.length) {
-          node.inert === null && (node.inert = {});
-          let inert = node.inert[part.charCodeAt(j)];
-          if (inert) {
-            node = inert, part = part.slice(j), j = 0;
+        if (B === q.part.length) {
+          if (q.inert === null)
+            q.inert = {};
+          let Q = q.inert[D.charCodeAt(B)];
+          if (Q) {
+            q = Q, D = D.slice(B), B = 0;
             continue;
           }
-          let childNode = createNode(part.slice(j));
-          node.inert[part.charCodeAt(j)] = childNode, node = childNode;
+          let Z = Y(D.slice(B));
+          q.inert[D.charCodeAt(B)] = Z, q = Z;
           break;
         }
-        if (part[j] !== node.part[j]) {
-          let existingChild = cloneNode(node, node.part.slice(j)), newChild = createNode(part.slice(j));
-          Object.assign(node, createNode(node.part.slice(0, j), [
-            existingChild,
-            newChild
-          ])), node = newChild;
+        if (D[B] !== q.part[B]) {
+          let Q = k(q, q.part.slice(B)), Z = Y(D.slice(B));
+          Object.assign(q, Y(q.part.slice(0, B), [Q, Z])), q = Z;
           break;
         }
-        ++j;
+        ++B;
       }
     }
-    if (paramPartsIndex < paramParts.length) {
-      let name = paramParts[paramPartsIndex].slice(1);
-      if (node.params === null)
-        node.params = createParamNode(name);
-      else if (node.params.name !== name) {
-        if (ignoreError)
-          return store;
-        throw new Error(`Cannot create route "${path}" with parameter "${name}" because a route already exists with a different parameter name ("${node.params.name}") in the same location`);
-      }
-      return node.params.store === null && (node.params.store = store), node.params.store;
+    if (O < X.length) {
+      let D = X[O].slice(1);
+      if (q.params === null)
+        q.params = T(D);
+      else if (q.params.name !== D)
+        if (K)
+          return v;
+        else
+          throw new Error(`Cannot create route "${b}" with parameter "${D}" because a route already exists with a different parameter name ("${q.params.name}") in the same location`);
+      if (q.params.store === null)
+        q.params.store = v;
+      return q.params.store;
     }
-    return isWildcard ? (node.wildcardStore === null && (node.wildcardStore = store), node.wildcardStore) : (node.store === null && (node.store = store), node.store);
+    if (J) {
+      if (q.wildcardStore === null)
+        q.wildcardStore = v;
+      return q.wildcardStore;
+    }
+    if (q.store === null)
+      q.store = v;
+    return q.store;
   }
-  find(method, url) {
-    let root = this.root[method];
-    return root ? matchRoute(url, url.length, root, 0) : null;
-  }
-};
-var matchRoute = (url, urlLength, node, startIndex) => {
-  let part = node.part, length = part.length, endIndex = startIndex + length;
-  if (length > 1) {
-    if (endIndex > urlLength)
+  find(A, b) {
+    let v = this.root[A];
+    if (!v)
       return null;
-    if (length < 15) {
-      for (let i2 = 1, j = startIndex + 1;i2 < length; ++i2, ++j)
-        if (part.charCodeAt(i2) !== url.charCodeAt(j))
+    return $(b, b.length, v, 0);
+  }
+}
+var $ = (A, b, v, K) => {
+  let V = v.part, U = V.length, J = K + U;
+  if (U > 1) {
+    if (J > b)
+      return null;
+    if (U < 15) {
+      for (let F = 1, G = K + 1;F < U; ++F, ++G)
+        if (V.charCodeAt(F) !== A.charCodeAt(G))
           return null;
-    } else if (url.slice(startIndex, endIndex) !== part)
+    } else if (A.slice(K, J) !== V)
       return null;
   }
-  if (endIndex === urlLength)
-    return node.store !== null ? {
-      store: node.store,
-      params: {}
-    } : node.wildcardStore !== null ? {
-      store: node.wildcardStore,
-      params: { "*": "" }
-    } : null;
-  if (node.inert !== null) {
-    let inert = node.inert[url.charCodeAt(endIndex)];
-    if (inert !== undefined) {
-      let route = matchRoute(url, urlLength, inert, endIndex);
-      if (route !== null)
-        return route;
+  if (J === b) {
+    if (v.store !== null)
+      return { store: v.store, params: {} };
+    if (v.wildcardStore !== null)
+      return { store: v.wildcardStore, params: { "*": "" } };
+    return null;
+  }
+  if (v.inert !== null) {
+    let F = v.inert[A.charCodeAt(J)];
+    if (F !== undefined) {
+      let G = $(A, b, F, J);
+      if (G !== null)
+        return G;
     }
   }
-  if (node.params !== null) {
-    let { store, name, inert } = node.params, slashIndex = url.indexOf("/", endIndex);
-    if (slashIndex !== endIndex) {
-      if (slashIndex === -1 || slashIndex >= urlLength) {
-        if (store !== null) {
-          let params = {};
-          return params[name] = url.substring(endIndex, urlLength), {
-            store,
-            params
-          };
+  if (v.params !== null) {
+    let { store: F, name: G, inert: X } = v.params, q = A.indexOf("/", J);
+    if (q !== J) {
+      if (q === -1 || q >= b) {
+        if (F !== null) {
+          let O = {};
+          return O[G] = A.substring(J, b), { store: F, params: O };
         }
-      } else if (inert !== null) {
-        let route = matchRoute(url, urlLength, inert, slashIndex);
-        if (route !== null)
-          return route.params[name] = url.substring(endIndex, slashIndex), route;
+      } else if (X !== null) {
+        let O = $(A, b, X, q);
+        if (O !== null)
+          return O.params[G] = A.substring(J, q), O;
       }
     }
   }
-  return node.wildcardStore !== null ? {
-    store: node.wildcardStore,
-    params: {
-      "*": url.substring(endIndex, urlLength)
-    }
-  } : null;
+  if (v.wildcardStore !== null)
+    return { store: v.wildcardStore, params: { "*": A.substring(J, b) } };
+  return null;
 };
-var fullFormats = {
-  date,
-  time: getTime(true),
-  "date-time": getDateTime(true),
-  "iso-time": getTime(false),
-  "iso-date-time": getDateTime(false),
-  duration: /^P(?!$)((\d+Y)?(\d+M)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+S)?)?|(\d+W)?)$/,
-  uri,
-  "uri-reference": /^(?:[a-z][a-z0-9+\-.]*:)?(?:\/?\/(?:(?:[a-z0-9\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?(?:\[(?:(?:(?:(?:[0-9a-f]{1,4}:){6}|::(?:[0-9a-f]{1,4}:){5}|(?:[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){4}|(?:(?:[0-9a-f]{1,4}:){0,1}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){3}|(?:(?:[0-9a-f]{1,4}:){0,2}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){2}|(?:(?:[0-9a-f]{1,4}:){0,3}[0-9a-f]{1,4})?::[0-9a-f]{1,4}:|(?:(?:[0-9a-f]{1,4}:){0,4}[0-9a-f]{1,4})?::)(?:[0-9a-f]{1,4}:[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?))|(?:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4})?::[0-9a-f]{1,4}|(?:(?:[0-9a-f]{1,4}:){0,6}[0-9a-f]{1,4})?::)|[Vv][0-9a-f]+\.[a-z0-9\-._~!$&'()*+,;=:]+)\]|(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)|(?:[a-z0-9\-._~!$&'"()*+,;=]|%[0-9a-f]{2})*)(?::\d*)?(?:\/(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})*)*|\/(?:(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})+(?:\/(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})*)*)?|(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})+(?:\/(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})*)*)?(?:\?(?:[a-z0-9\-._~!$&'"()*+,;=:@/?]|%[0-9a-f]{2})*)?(?:#(?:[a-z0-9\-._~!$&'"()*+,;=:@/?]|%[0-9a-f]{2})*)?$/i,
-  "uri-template": /^(?:(?:[^\x00-\x20"'<>%\\^`{|}]|%[0-9a-f]{2})|\{[+#./;?&=,!@|]?(?:[a-z0-9_]|%[0-9a-f]{2})+(?::[1-9][0-9]{0,3}|\*)?(?:,(?:[a-z0-9_]|%[0-9a-f]{2})+(?::[1-9][0-9]{0,3}|\*)?)*\})*$/i,
-  url: /^(?:https?|ftp):\/\/(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u{00a1}-\u{ffff}]+-)*[a-z0-9\u{00a1}-\u{ffff}]+)(?:\.(?:[a-z0-9\u{00a1}-\u{ffff}]+-)*[a-z0-9\u{00a1}-\u{ffff}]+)*(?:\.(?:[a-z\u{00a1}-\u{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/iu,
-  email: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i,
-  hostname: /^(?=.{1,253}\.?$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[-0-9a-z]{0,61}[0-9a-z])?)*\.?$/i,
-  ipv4: /^(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)$/,
-  ipv6: /^((([0-9a-f]{1,4}:){7}([0-9a-f]{1,4}|:))|(([0-9a-f]{1,4}:){6}(:[0-9a-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9a-f]{1,4}:){5}(((:[0-9a-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9a-f]{1,4}:){4}(((:[0-9a-f]{1,4}){1,3})|((:[0-9a-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9a-f]{1,4}:){3}(((:[0-9a-f]{1,4}){1,4})|((:[0-9a-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9a-f]{1,4}:){2}(((:[0-9a-f]{1,4}){1,5})|((:[0-9a-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9a-f]{1,4}:){1}(((:[0-9a-f]{1,4}){1,6})|((:[0-9a-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9a-f]{1,4}){1,7})|((:[0-9a-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))$/i,
-  regex,
-  uuid: /^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i,
-  "json-pointer": /^(?:\/(?:[^~/]|~0|~1)*)*$/,
-  "json-pointer-uri-fragment": /^#(?:\/(?:[a-z0-9_\-.!$&'()*+,;:=@]|%[0-9a-f]{2}|~0|~1)*)*$/i,
-  "relative-json-pointer": /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/,
-  byte,
-  int32: { type: "number", validate: validateInt32 },
-  int64: { type: "number", validate: validateInt64 },
-  float: { type: "number", validate: validateNumber },
-  double: { type: "number", validate: validateNumber },
-  password: true,
-  binary: true
-};
+var fullFormats = { date, time: getTime(true), "date-time": getDateTime(true), "iso-time": getTime(false), "iso-date-time": getDateTime(false), duration: /^P(?!$)((\d+Y)?(\d+M)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+S)?)?|(\d+W)?)$/, uri, "uri-reference": /^(?:[a-z][a-z0-9+\-.]*:)?(?:\/?\/(?:(?:[a-z0-9\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?(?:\[(?:(?:(?:(?:[0-9a-f]{1,4}:){6}|::(?:[0-9a-f]{1,4}:){5}|(?:[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){4}|(?:(?:[0-9a-f]{1,4}:){0,1}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){3}|(?:(?:[0-9a-f]{1,4}:){0,2}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){2}|(?:(?:[0-9a-f]{1,4}:){0,3}[0-9a-f]{1,4})?::[0-9a-f]{1,4}:|(?:(?:[0-9a-f]{1,4}:){0,4}[0-9a-f]{1,4})?::)(?:[0-9a-f]{1,4}:[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?))|(?:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4})?::[0-9a-f]{1,4}|(?:(?:[0-9a-f]{1,4}:){0,6}[0-9a-f]{1,4})?::)|[Vv][0-9a-f]+\.[a-z0-9\-._~!$&'()*+,;=:]+)\]|(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)|(?:[a-z0-9\-._~!$&'"()*+,;=]|%[0-9a-f]{2})*)(?::\d*)?(?:\/(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})*)*|\/(?:(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})+(?:\/(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})*)*)?|(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})+(?:\/(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})*)*)?(?:\?(?:[a-z0-9\-._~!$&'"()*+,;=:@/?]|%[0-9a-f]{2})*)?(?:#(?:[a-z0-9\-._~!$&'"()*+,;=:@/?]|%[0-9a-f]{2})*)?$/i, "uri-template": /^(?:(?:[^\x00-\x20"'<>%\\^`{|}]|%[0-9a-f]{2})|\{[+#./;?&=,!@|]?(?:[a-z0-9_]|%[0-9a-f]{2})+(?::[1-9][0-9]{0,3}|\*)?(?:,(?:[a-z0-9_]|%[0-9a-f]{2})+(?::[1-9][0-9]{0,3}|\*)?)*\})*$/i, url: /^(?:https?|ftp):\/\/(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u{00a1}-\u{ffff}]+-)*[a-z0-9\u{00a1}-\u{ffff}]+)(?:\.(?:[a-z0-9\u{00a1}-\u{ffff}]+-)*[a-z0-9\u{00a1}-\u{ffff}]+)*(?:\.(?:[a-z\u{00a1}-\u{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/iu, email: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i, hostname: /^(?=.{1,253}\.?$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[-0-9a-z]{0,61}[0-9a-z])?)*\.?$/i, ipv4: /^(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)$/, ipv6: /^((([0-9a-f]{1,4}:){7}([0-9a-f]{1,4}|:))|(([0-9a-f]{1,4}:){6}(:[0-9a-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9a-f]{1,4}:){5}(((:[0-9a-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9a-f]{1,4}:){4}(((:[0-9a-f]{1,4}){1,3})|((:[0-9a-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9a-f]{1,4}:){3}(((:[0-9a-f]{1,4}){1,4})|((:[0-9a-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9a-f]{1,4}:){2}(((:[0-9a-f]{1,4}){1,5})|((:[0-9a-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9a-f]{1,4}:){1}(((:[0-9a-f]{1,4}){1,6})|((:[0-9a-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9a-f]{1,4}){1,7})|((:[0-9a-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))$/i, regex, uuid: /^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i, "json-pointer": /^(?:\/(?:[^~/]|~0|~1)*)*$/, "json-pointer-uri-fragment": /^#(?:\/(?:[a-z0-9_\-.!$&'()*+,;:=@]|%[0-9a-f]{2}|~0|~1)*)*$/i, "relative-json-pointer": /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/, byte, int32: { type: "number", validate: validateInt32 }, int64: { type: "number", validate: validateInt64 }, float: { type: "number", validate: validateNumber }, double: { type: "number", validate: validateNumber }, password: true, binary: true };
 function isLeapYear(year) {
   return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
 }
@@ -11184,7 +10811,7 @@ function date(str) {
 }
 var TIME = /^(\d\d):(\d\d):(\d\d(?:\.\d+)?)(z|([+-])(\d\d)(?::?(\d\d))?)?$/i;
 function getTime(strictTimeZone) {
-  return function(str) {
+  return function time(str) {
     let matches = TIME.exec(str);
     if (!matches)
       return false;
@@ -11197,11 +10824,15 @@ function getTime(strictTimeZone) {
     return (utcHr === 23 || utcHr === -1) && (utcMin === 59 || utcMin === -1) && sec < 61;
   };
 }
-var parseDateTimeEmptySpace = (str) => str.charCodeAt(str.length - 6) === 32 ? str.slice(0, -6) + "+" + str.slice(-5) : str;
+var parseDateTimeEmptySpace = (str) => {
+  if (str.charCodeAt(str.length - 6) === 32)
+    return str.slice(0, -6) + "+" + str.slice(-5);
+  return str;
+};
 var DATE_TIME_SEPARATOR = /t|\s/i;
 function getDateTime(strictTimeZone) {
   let time = getTime(strictTimeZone);
-  return function(str) {
+  return function date_time(str) {
     let dateTime = str.split(DATE_TIME_SEPARATOR);
     return dateTime.length === 2 && date(dateTime[0]) && time(dateTime[1]);
   };
@@ -11215,8 +10846,8 @@ var BYTE = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/gm;
 function byte(str) {
   return BYTE.lastIndex = 0, BYTE.test(str);
 }
-var MIN_INT32 = -(2 ** 31);
-var MAX_INT32 = 2 ** 31 - 1;
+var MIN_INT32 = -2147483648;
+var MAX_INT32 = 2147483647;
 function validateInt32(value) {
   return Number.isInteger(value) && value <= MAX_INT32 && value >= MIN_INT32;
 }
@@ -11232,7 +10863,7 @@ function regex(str) {
     return false;
   try {
     return new RegExp(str), true;
-  } catch {
+  } catch (e) {
     return false;
   }
 }
@@ -11241,145 +10872,95 @@ var isFormalDate = /(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s(?:Jan|Feb|Mar|Apr|May|Jun|
 var isShortenDate = /^(?:(?:(?:(?:0?[1-9]|[12][0-9]|3[01])[/\s-](?:0?[1-9]|1[0-2])[/\s-](?:19|20)\d{2})|(?:(?:19|20)\d{2}[/\s-](?:0?[1-9]|1[0-2])[/\s-](?:0?[1-9]|[12][0-9]|3[01]))))(?:\s(?:1[012]|0?[1-9]):[0-5][0-9](?::[0-5][0-9])?(?:\s[AP]M)?)?$/;
 var _validateDate = fullFormats.date;
 var _validateDateTime = fullFormats["date-time"];
-exports_format.Has("date") || exports_format.Set("date", (value) => {
-  let temp = parseDateTimeEmptySpace(value).replace(/"/g, "");
-  if (isISO8601.test(temp) || isFormalDate.test(temp) || isShortenDate.test(temp) || _validateDate(temp)) {
-    let date2 = new Date(temp);
-    if (!Number.isNaN(date2.getTime()))
-      return true;
-  }
-  return false;
-});
-exports_format.Has("date-time") || exports_format.Set("date-time", (value) => {
-  let temp = value.replace(/"/g, "");
-  if (isISO8601.test(temp) || isFormalDate.test(temp) || isShortenDate.test(temp) || _validateDateTime(temp)) {
-    let date2 = new Date(temp);
-    if (!Number.isNaN(date2.getTime()))
-      return true;
-  }
-  return false;
-});
+if (!exports_format.Has("date"))
+  exports_format.Set("date", (value) => {
+    let temp = parseDateTimeEmptySpace(value).replace(/"/g, "");
+    if (isISO8601.test(temp) || isFormalDate.test(temp) || isShortenDate.test(temp) || _validateDate(temp)) {
+      let date2 = new Date(temp);
+      if (!Number.isNaN(date2.getTime()))
+        return true;
+    }
+    return false;
+  });
+if (!exports_format.Has("date-time"))
+  exports_format.Set("date-time", (value) => {
+    let temp = value.replace(/"/g, "");
+    if (isISO8601.test(temp) || isFormalDate.test(temp) || isShortenDate.test(temp) || _validateDateTime(temp)) {
+      let date2 = new Date(temp);
+      if (!Number.isNaN(date2.getTime()))
+        return true;
+    }
+    return false;
+  });
 Object.entries(fullFormats).forEach((formatEntry) => {
   let [formatName, formatValue] = formatEntry;
-  exports_format.Has(formatName) || (formatValue instanceof RegExp ? exports_format.Set(formatName, (value) => formatValue.test(value)) : typeof formatValue == "function" && exports_format.Set(formatName, formatValue));
-});
-exports_format.Has("numeric") || exports_format.Set("numeric", (value) => !!value && !isNaN(+value));
-exports_format.Has("integer") || exports_format.Set("integer", (value) => !!value && Number.isInteger(+value));
-exports_format.Has("boolean") || exports_format.Set("boolean", (value) => value === "true" || value === "false");
-exports_format.Has("ObjectString") || exports_format.Set("ObjectString", (value) => {
-  let start = value.charCodeAt(0);
-  if ((start === 9 || start === 10 || start === 32) && (start = value.trimStart().charCodeAt(0)), start !== 123 && start !== 91)
-    return false;
-  try {
-    return JSON.parse(value), true;
-  } catch {
-    return false;
+  if (!exports_format.Has(formatName)) {
+    if (formatValue instanceof RegExp)
+      exports_format.Set(formatName, (value) => formatValue.test(value));
+    else if (typeof formatValue === "function")
+      exports_format.Set(formatName, formatValue);
   }
 });
-exports_format.Has("ArrayString") || exports_format.Set("ArrayString", (value) => {
-  let start = value.charCodeAt(0);
-  if ((start === 9 || start === 10 || start === 32) && (start = value.trimStart().charCodeAt(0)), start !== 123 && start !== 91)
-    return false;
-  try {
-    return JSON.parse(value), true;
-  } catch {
-    return false;
-  }
-});
-var isBun = typeof Bun < "u";
-var mime = {
-  aac: "audio/aac",
-  abw: "application/x-abiword",
-  ai: "application/postscript",
-  arc: "application/octet-stream",
-  avi: "video/x-msvideo",
-  azw: "application/vnd.amazon.ebook",
-  bin: "application/octet-stream",
-  bz: "application/x-bzip",
-  bz2: "application/x-bzip2",
-  csh: "application/x-csh",
-  css: "text/css",
-  csv: "text/csv",
-  doc: "application/msword",
-  dll: "application/octet-stream",
-  eot: "application/vnd.ms-fontobject",
-  epub: "application/epub+zip",
-  gif: "image/gif",
-  htm: "text/html",
-  html: "text/html",
-  ico: "image/x-icon",
-  ics: "text/calendar",
-  jar: "application/java-archive",
-  jpeg: "image/jpeg",
-  jpg: "image/jpeg",
-  js: "application/javascript",
-  json: "application/json",
-  mid: "audio/midi",
-  midi: "audio/midi",
-  mp2: "audio/mpeg",
-  mp3: "audio/mpeg",
-  mp4: "video/mp4",
-  mpa: "video/mpeg",
-  mpe: "video/mpeg",
-  mpeg: "video/mpeg",
-  mpkg: "application/vnd.apple.installer+xml",
-  odp: "application/vnd.oasis.opendocument.presentation",
-  ods: "application/vnd.oasis.opendocument.spreadsheet",
-  odt: "application/vnd.oasis.opendocument.text",
-  oga: "audio/ogg",
-  ogv: "video/ogg",
-  ogx: "application/ogg",
-  otf: "font/otf",
-  png: "image/png",
-  pdf: "application/pdf",
-  ppt: "application/vnd.ms-powerpoint",
-  rar: "application/x-rar-compressed",
-  rtf: "application/rtf",
-  sh: "application/x-sh",
-  svg: "image/svg+xml",
-  swf: "application/x-shockwave-flash",
-  tar: "application/x-tar",
-  tif: "image/tiff",
-  tiff: "image/tiff",
-  ts: "application/typescript",
-  ttf: "font/ttf",
-  txt: "text/plain",
-  vsd: "application/vnd.visio",
-  wav: "audio/x-wav",
-  weba: "audio/webm",
-  webm: "video/webm",
-  webp: "image/webp",
-  woff: "font/woff",
-  woff2: "font/woff2",
-  xhtml: "application/xhtml+xml",
-  xls: "application/vnd.ms-excel",
-  xlsx: "application/vnd.ms-excel",
-  xlsx_OLD: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  xml: "application/xml",
-  xul: "application/vnd.mozilla.xul+xml",
-  zip: "application/zip",
-  "3gp": "video/3gpp",
-  "3gp_DOES_NOT_CONTAIN_VIDEO": "audio/3gpp",
-  "3gp2": "video/3gpp2",
-  "3gp2_DOES_NOT_CONTAIN_VIDEO": "audio/3gpp2",
-  "7z": "application/x-7z-compressed"
-};
+if (!exports_format.Has("numeric"))
+  exports_format.Set("numeric", (value) => !!value && !isNaN(+value));
+if (!exports_format.Has("integer"))
+  exports_format.Set("integer", (value) => !!value && Number.isInteger(+value));
+if (!exports_format.Has("boolean"))
+  exports_format.Set("boolean", (value) => value === "true" || value === "false");
+if (!exports_format.Has("ObjectString"))
+  exports_format.Set("ObjectString", (value) => {
+    let start = value.charCodeAt(0);
+    if (start === 9 || start === 10 || start === 32)
+      start = value.trimStart().charCodeAt(0);
+    if (start !== 123 && start !== 91)
+      return false;
+    try {
+      return JSON.parse(value), true;
+    } catch {
+      return false;
+    }
+  });
+if (!exports_format.Has("ArrayString"))
+  exports_format.Set("ArrayString", (value) => {
+    let start = value.charCodeAt(0);
+    if (start === 9 || start === 10 || start === 32)
+      start = value.trimStart().charCodeAt(0);
+    if (start !== 123 && start !== 91)
+      return false;
+    try {
+      return JSON.parse(value), true;
+    } catch {
+      return false;
+    }
+  });
+var isBun = typeof Bun !== "undefined";
+var mime = { aac: "audio/aac", abw: "application/x-abiword", ai: "application/postscript", arc: "application/octet-stream", avi: "video/x-msvideo", azw: "application/vnd.amazon.ebook", bin: "application/octet-stream", bz: "application/x-bzip", bz2: "application/x-bzip2", csh: "application/x-csh", css: "text/css", csv: "text/csv", doc: "application/msword", dll: "application/octet-stream", eot: "application/vnd.ms-fontobject", epub: "application/epub+zip", gif: "image/gif", htm: "text/html", html: "text/html", ico: "image/x-icon", ics: "text/calendar", jar: "application/java-archive", jpeg: "image/jpeg", jpg: "image/jpeg", js: "application/javascript", json: "application/json", mid: "audio/midi", midi: "audio/midi", mp2: "audio/mpeg", mp3: "audio/mpeg", mp4: "video/mp4", mpa: "video/mpeg", mpe: "video/mpeg", mpeg: "video/mpeg", mpkg: "application/vnd.apple.installer+xml", odp: "application/vnd.oasis.opendocument.presentation", ods: "application/vnd.oasis.opendocument.spreadsheet", odt: "application/vnd.oasis.opendocument.text", oga: "audio/ogg", ogv: "video/ogg", ogx: "application/ogg", otf: "font/otf", png: "image/png", pdf: "application/pdf", ppt: "application/vnd.ms-powerpoint", rar: "application/x-rar-compressed", rtf: "application/rtf", sh: "application/x-sh", svg: "image/svg+xml", swf: "application/x-shockwave-flash", tar: "application/x-tar", tif: "image/tiff", tiff: "image/tiff", ts: "application/typescript", ttf: "font/ttf", txt: "text/plain", vsd: "application/vnd.visio", wav: "audio/x-wav", weba: "audio/webm", webm: "video/webm", webp: "image/webp", woff: "font/woff", woff2: "font/woff2", xhtml: "application/xhtml+xml", xls: "application/vnd.ms-excel", xlsx: "application/vnd.ms-excel", xlsx_OLD: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", xml: "application/xml", xul: "application/vnd.mozilla.xul+xml", zip: "application/zip", "3gp": "video/3gpp", "3gp_DOES_NOT_CONTAIN_VIDEO": "audio/3gpp", "3gp2": "video/3gpp2", "3gp2_DOES_NOT_CONTAIN_VIDEO": "audio/3gpp2", "7z": "application/x-7z-compressed" };
 var getFileExtension = (path) => {
   let index = path.lastIndexOf(".");
-  return index === -1 ? "" : path.slice(index + 1);
+  if (index === -1)
+    return "";
+  return path.slice(index + 1);
 };
 var createReadStream;
 var stat;
-var ElysiaFile = class {
+
+class ElysiaFile {
+  path;
+  value;
+  stats;
   constructor(path) {
     this.path = path;
     if (isBun)
       this.value = Bun.file(path);
-    else if (typeof window < "u")
+    else if (typeof window !== "undefined")
       console.warn("Browser environment does not support file");
     else if (!createReadStream || !stat)
       try {
-        this.value = import("fs").then((fs) => (createReadStream = fs.createReadStream, fs.createReadStream(path))), this.stats = import("fs/promises").then((fs) => (stat = fs.stat, fs.stat(path)));
+        this.value = import("fs").then((fs) => {
+          return createReadStream = fs.createReadStream, fs.createReadStream(path);
+        }), this.stats = import("fs/promises").then((fs) => {
+          return stat = fs.stat, fs.stat(path);
+        });
       } catch {}
     else
       this.value = createReadStream(path), this.stats = stat(path);
@@ -11388,125 +10969,112 @@ var ElysiaFile = class {
     return mime[getFileExtension(this.path)] || "application/octet-stream";
   }
   get length() {
-    return isBun ? this.value.size : this.stats?.then((x2) => x2.size) ?? 0;
+    if (isBun)
+      return this.value.size;
+    return this.stats?.then((x2) => x2.size) ?? 0;
   }
-};
+}
 var hasHeaderShorthand = "toJSON" in new Headers;
 var replaceUrlPath = (url, pathname) => {
   let urlObject = new URL(url);
   return urlObject.pathname = pathname, urlObject.toString();
 };
-var isClass = (v) => typeof v == "function" && /^\s*class\s+/.test(v.toString()) || v.toString && v.toString().startsWith("[object ") && v.toString() !== "[object Object]" || isNotEmpty(Object.getPrototypeOf(v));
-var isObject = (item) => item && typeof item == "object" && !Array.isArray(item);
+var isClass = (v) => typeof v === "function" && /^\s*class\s+/.test(v.toString()) || v.toString && v.toString().startsWith("[object ") && v.toString() !== "[object Object]" || isNotEmpty(Object.getPrototypeOf(v));
+var isObject = (item) => item && typeof item === "object" && !Array.isArray(item);
 var mergeDeep = (target, source, options) => {
   let skipKeys = options?.skipKeys, override = options?.override ?? true;
   if (!isObject(target) || !isObject(source))
     return target;
-  for (let [key, value] of Object.entries(source))
-    if (!skipKeys?.includes(key)) {
-      if (!isObject(value) || !(key in target) || isClass(value)) {
-        (override || !(key in target)) && (target[key] = value);
-        continue;
-      }
-      target[key] = mergeDeep(target[key], value, { skipKeys, override });
+  for (let [key, value] of Object.entries(source)) {
+    if (skipKeys?.includes(key))
+      continue;
+    if (!isObject(value) || !(key in target) || isClass(value)) {
+      if (override || !(key in target))
+        target[key] = value;
+      continue;
     }
+    target[key] = mergeDeep(target[key], value, { skipKeys, override });
+  }
   return target;
 };
 var mergeCookie = (a, b) => {
-  let v = mergeDeep(Object.assign({}, a), b, {
-    skipKeys: ["properties"]
-  });
-  return v.properties && delete v.properties, v;
+  let v = mergeDeep(Object.assign({}, a), b, { skipKeys: ["properties"] });
+  if (v.properties)
+    delete v.properties;
+  return v;
 };
 var mergeObjectArray = (a, b) => {
   if (!b)
     return a;
   let array = [], checksums = [];
   if (a) {
-    Array.isArray(a) || (a = [a]);
+    if (!Array.isArray(a))
+      a = [a];
     for (let item of a)
-      array.push(item), item.checksum && checksums.push(item.checksum);
+      if (array.push(item), item.checksum)
+        checksums.push(item.checksum);
   }
   if (b) {
-    Array.isArray(b) || (b = [b]);
+    if (!Array.isArray(b))
+      b = [b];
     for (let item of b)
-      checksums.includes(item.checksum) || array.push(item);
+      if (!checksums.includes(item.checksum))
+        array.push(item);
   }
   return array;
 };
-var primitiveHooks = [
-  "start",
-  "request",
-  "parse",
-  "transform",
-  "resolve",
-  "beforeHandle",
-  "afterHandle",
-  "mapResponse",
-  "afterResponse",
-  "trace",
-  "error",
-  "stop",
-  "body",
-  "headers",
-  "params",
-  "query",
-  "response",
-  "type",
-  "detail"
-];
+var primitiveHooks = ["start", "request", "parse", "transform", "resolve", "beforeHandle", "afterHandle", "mapResponse", "afterResponse", "trace", "error", "stop", "body", "headers", "params", "query", "response", "type", "detail"];
 var primitiveHookMap = primitiveHooks.reduce((acc, x2) => (acc[x2] = true, acc), {});
 var mergeResponse = (a, b) => {
-  let isRecordNumber = (x2) => typeof x2 == "object" && Object.keys(x2).every(isNumericString);
-  return isRecordNumber(a) && isRecordNumber(b) ? Object.assign(a, b) : a && !isRecordNumber(a) && isRecordNumber(b) ? Object.assign({ 200: a }, b) : b ?? a;
+  let isRecordNumber = (x2) => typeof x2 === "object" && Object.keys(x2).every(isNumericString);
+  if (isRecordNumber(a) && isRecordNumber(b))
+    return Object.assign(a, b);
+  else if (a && !isRecordNumber(a) && isRecordNumber(b))
+    return Object.assign({ 200: a }, b);
+  return b ?? a;
 };
-var mergeSchemaValidator = (a, b) => !a && !b ? {
-  body: undefined,
-  headers: undefined,
-  params: undefined,
-  query: undefined,
-  cookie: undefined,
-  response: undefined
-} : {
-  body: b?.body ?? a?.body,
-  headers: b?.headers ?? a?.headers,
-  params: b?.params ?? a?.params,
-  query: b?.query ?? a?.query,
-  cookie: b?.cookie ?? a?.cookie,
-  response: mergeResponse(a?.response, b?.response)
+var mergeSchemaValidator = (a, b) => {
+  if (!a && !b)
+    return { body: undefined, headers: undefined, params: undefined, query: undefined, cookie: undefined, response: undefined };
+  return { body: b?.body ?? a?.body, headers: b?.headers ?? a?.headers, params: b?.params ?? a?.params, query: b?.query ?? a?.query, cookie: b?.cookie ?? a?.cookie, response: mergeResponse(a?.response, b?.response) };
 };
 var mergeHook = (a, b) => {
-  if (!Object.values(b).find((x2) => x2 != null))
+  if (!Object.values(b).find((x2) => x2 !== undefined && x2 !== null))
     return { ...a };
-  let hook = {
-    ...a,
-    ...b,
-    body: b?.body ?? a?.body,
-    headers: b?.headers ?? a?.headers,
-    params: b?.params ?? a?.params,
-    query: b?.query ?? a?.query,
-    cookie: b?.cookie ?? a?.cookie,
-    response: mergeResponse(a?.response, b?.response),
-    type: a?.type || b?.type,
-    detail: mergeDeep(b?.detail ?? {}, a?.detail ?? {}),
-    parse: mergeObjectArray(a?.parse, b?.parse),
-    transform: mergeObjectArray(a?.transform, b?.transform),
-    beforeHandle: mergeObjectArray(mergeObjectArray(fnToContainer(a?.resolve, "resolve"), a?.beforeHandle), mergeObjectArray(fnToContainer(b.resolve, "resolve"), b?.beforeHandle)),
-    afterHandle: mergeObjectArray(a?.afterHandle, b?.afterHandle),
-    mapResponse: mergeObjectArray(a?.mapResponse, b?.mapResponse),
-    afterResponse: mergeObjectArray(a?.afterResponse, b?.afterResponse),
-    trace: mergeObjectArray(a?.trace, b?.trace),
-    error: mergeObjectArray(a?.error, b?.error)
-  };
-  return hook.resolve && delete hook.resolve, hook;
+  let hook = { ...a, ...b, body: b?.body ?? a?.body, headers: b?.headers ?? a?.headers, params: b?.params ?? a?.params, query: b?.query ?? a?.query, cookie: b?.cookie ?? a?.cookie, response: mergeResponse(a?.response, b?.response), type: a?.type || b?.type, detail: mergeDeep(b?.detail ?? {}, a?.detail ?? {}), parse: mergeObjectArray(a?.parse, b?.parse), transform: mergeObjectArray(a?.transform, b?.transform), beforeHandle: mergeObjectArray(mergeObjectArray(fnToContainer(a?.resolve, "resolve"), a?.beforeHandle), mergeObjectArray(fnToContainer(b.resolve, "resolve"), b?.beforeHandle)), afterHandle: mergeObjectArray(a?.afterHandle, b?.afterHandle), mapResponse: mergeObjectArray(a?.mapResponse, b?.mapResponse), afterResponse: mergeObjectArray(a?.afterResponse, b?.afterResponse), trace: mergeObjectArray(a?.trace, b?.trace), error: mergeObjectArray(a?.error, b?.error) };
+  if (hook.resolve)
+    delete hook.resolve;
+  return hook;
 };
 var lifeCycleToArray = (a) => {
-  a.parse && !Array.isArray(a.parse) && (a.parse = [a.parse]), a.transform && !Array.isArray(a.transform) && (a.transform = [a.transform]), a.afterHandle && !Array.isArray(a.afterHandle) && (a.afterHandle = [a.afterHandle]), a.mapResponse && !Array.isArray(a.mapResponse) && (a.mapResponse = [a.mapResponse]), a.afterResponse && !Array.isArray(a.afterResponse) && (a.afterResponse = [a.afterResponse]), a.trace && !Array.isArray(a.trace) && (a.trace = [a.trace]), a.error && !Array.isArray(a.error) && (a.error = [a.error]);
+  if (a.parse && !Array.isArray(a.parse))
+    a.parse = [a.parse];
+  if (a.transform && !Array.isArray(a.transform))
+    a.transform = [a.transform];
+  if (a.afterHandle && !Array.isArray(a.afterHandle))
+    a.afterHandle = [a.afterHandle];
+  if (a.mapResponse && !Array.isArray(a.mapResponse))
+    a.mapResponse = [a.mapResponse];
+  if (a.afterResponse && !Array.isArray(a.afterResponse))
+    a.afterResponse = [a.afterResponse];
+  if (a.trace && !Array.isArray(a.trace))
+    a.trace = [a.trace];
+  if (a.error && !Array.isArray(a.error))
+    a.error = [a.error];
   let beforeHandle = [];
-  return a.resolve && (beforeHandle = fnToContainer(Array.isArray(a.resolve) ? a.resolve : [a.resolve], "resolve"), delete a.resolve), a.beforeHandle && (beforeHandle.length ? beforeHandle = beforeHandle.concat(Array.isArray(a.beforeHandle) ? a.beforeHandle : [a.beforeHandle]) : beforeHandle = Array.isArray(a.beforeHandle) ? a.beforeHandle : [a.beforeHandle]), beforeHandle.length && (a.beforeHandle = beforeHandle), a;
+  if (a.resolve)
+    beforeHandle = fnToContainer(Array.isArray(a.resolve) ? a.resolve : [a.resolve], "resolve"), delete a.resolve;
+  if (a.beforeHandle)
+    if (beforeHandle.length)
+      beforeHandle = beforeHandle.concat(Array.isArray(a.beforeHandle) ? a.beforeHandle : [a.beforeHandle]);
+    else
+      beforeHandle = Array.isArray(a.beforeHandle) ? a.beforeHandle : [a.beforeHandle];
+  if (beforeHandle.length)
+    a.beforeHandle = beforeHandle;
+  return a;
 };
-var isBun2 = typeof Bun < "u";
-var hasBunHash = isBun2 && typeof Bun.hash == "function";
+var isBun2 = typeof Bun !== "undefined";
+var hasBunHash = isBun2 && typeof Bun.hash === "function";
 var checksum = (s) => {
   let h = 9;
   for (let i2 = 0;i2 < s.length; )
@@ -11518,33 +11086,39 @@ var injectChecksum = (checksum2, x2) => {
     return;
   if (!Array.isArray(x2)) {
     let fn = x2;
-    return checksum2 && !fn.checksum && (fn.checksum = checksum2), fn.scope === "scoped" && (fn.scope = "local"), fn;
+    if (checksum2 && !fn.checksum)
+      fn.checksum = checksum2;
+    if (fn.scope === "scoped")
+      fn.scope = "local";
+    return fn;
   }
   let fns = [...x2];
-  for (let fn of fns)
-    checksum2 && !fn.checksum && (fn.checksum = checksum2), fn.scope === "scoped" && (fn.scope = "local");
+  for (let fn of fns) {
+    if (checksum2 && !fn.checksum)
+      fn.checksum = checksum2;
+    if (fn.scope === "scoped")
+      fn.scope = "local";
+  }
   return fns;
 };
-var mergeLifeCycle = (a, b, checksum2) => ({
-  start: mergeObjectArray(a.start, injectChecksum(checksum2, b?.start)),
-  request: mergeObjectArray(a.request, injectChecksum(checksum2, b?.request)),
-  parse: mergeObjectArray(a.parse, injectChecksum(checksum2, b?.parse)),
-  transform: mergeObjectArray(a.transform, injectChecksum(checksum2, b?.transform)),
-  beforeHandle: mergeObjectArray(mergeObjectArray(fnToContainer(a.resolve, "resolve"), a.beforeHandle), injectChecksum(checksum2, mergeObjectArray(fnToContainer(b?.resolve, "resolve"), b?.beforeHandle))),
-  afterHandle: mergeObjectArray(a.afterHandle, injectChecksum(checksum2, b?.afterHandle)),
-  mapResponse: mergeObjectArray(a.mapResponse, injectChecksum(checksum2, b?.mapResponse)),
-  afterResponse: mergeObjectArray(a.afterResponse, injectChecksum(checksum2, b?.afterResponse)),
-  trace: mergeObjectArray(a.trace, injectChecksum(checksum2, b?.trace)),
-  error: mergeObjectArray(a.error, injectChecksum(checksum2, b?.error)),
-  stop: mergeObjectArray(a.stop, injectChecksum(checksum2, b?.stop))
-});
+var mergeLifeCycle = (a, b, checksum2) => {
+  return { start: mergeObjectArray(a.start, injectChecksum(checksum2, b?.start)), request: mergeObjectArray(a.request, injectChecksum(checksum2, b?.request)), parse: mergeObjectArray(a.parse, injectChecksum(checksum2, b?.parse)), transform: mergeObjectArray(a.transform, injectChecksum(checksum2, b?.transform)), beforeHandle: mergeObjectArray(mergeObjectArray(fnToContainer(a.resolve, "resolve"), a.beforeHandle), injectChecksum(checksum2, mergeObjectArray(fnToContainer(b?.resolve, "resolve"), b?.beforeHandle))), afterHandle: mergeObjectArray(a.afterHandle, injectChecksum(checksum2, b?.afterHandle)), mapResponse: mergeObjectArray(a.mapResponse, injectChecksum(checksum2, b?.mapResponse)), afterResponse: mergeObjectArray(a.afterResponse, injectChecksum(checksum2, b?.afterResponse)), trace: mergeObjectArray(a.trace, injectChecksum(checksum2, b?.trace)), error: mergeObjectArray(a.error, injectChecksum(checksum2, b?.error)), stop: mergeObjectArray(a.stop, injectChecksum(checksum2, b?.stop)) };
+};
 var asHookType = (fn, inject, { skipIfHasType = false }) => {
   if (!fn)
     return fn;
-  if (!Array.isArray(fn))
-    return skipIfHasType ? fn.scope ??= inject : fn.scope = inject, fn;
+  if (!Array.isArray(fn)) {
+    if (skipIfHasType)
+      fn.scope ??= inject;
+    else
+      fn.scope = inject;
+    return fn;
+  }
   for (let x2 of fn)
-    skipIfHasType ? x2.scope ??= inject : x2.scope = inject;
+    if (skipIfHasType)
+      x2.scope ??= inject;
+    else
+      x2.scope = inject;
   return fn;
 };
 var filterGlobal = (fn) => {
@@ -11563,98 +11137,25 @@ var filterGlobal = (fn) => {
     switch (x2.scope) {
       case "global":
       case "scoped":
-        array.push({
-          ...x2
-        });
+        array.push({ ...x2 });
         break;
     }
   return array;
 };
-var filterGlobalHook = (hook) => ({
-  ...hook,
-  type: hook?.type,
-  detail: hook?.detail,
-  parse: filterGlobal(hook?.parse),
-  transform: filterGlobal(hook?.transform),
-  beforeHandle: filterGlobal(hook?.beforeHandle),
-  afterHandle: filterGlobal(hook?.afterHandle),
-  mapResponse: filterGlobal(hook?.mapResponse),
-  afterResponse: filterGlobal(hook?.afterResponse),
-  error: filterGlobal(hook?.error),
-  trace: filterGlobal(hook?.trace)
-});
-var StatusMap = {
-  Continue: 100,
-  "Switching Protocols": 101,
-  Processing: 102,
-  "Early Hints": 103,
-  OK: 200,
-  Created: 201,
-  Accepted: 202,
-  "Non-Authoritative Information": 203,
-  "No Content": 204,
-  "Reset Content": 205,
-  "Partial Content": 206,
-  "Multi-Status": 207,
-  "Already Reported": 208,
-  "Multiple Choices": 300,
-  "Moved Permanently": 301,
-  Found: 302,
-  "See Other": 303,
-  "Not Modified": 304,
-  "Temporary Redirect": 307,
-  "Permanent Redirect": 308,
-  "Bad Request": 400,
-  Unauthorized: 401,
-  "Payment Required": 402,
-  Forbidden: 403,
-  "Not Found": 404,
-  "Method Not Allowed": 405,
-  "Not Acceptable": 406,
-  "Proxy Authentication Required": 407,
-  "Request Timeout": 408,
-  Conflict: 409,
-  Gone: 410,
-  "Length Required": 411,
-  "Precondition Failed": 412,
-  "Payload Too Large": 413,
-  "URI Too Long": 414,
-  "Unsupported Media Type": 415,
-  "Range Not Satisfiable": 416,
-  "Expectation Failed": 417,
-  "I'm a teapot": 418,
-  "Misdirected Request": 421,
-  "Unprocessable Content": 422,
-  Locked: 423,
-  "Failed Dependency": 424,
-  "Too Early": 425,
-  "Upgrade Required": 426,
-  "Precondition Required": 428,
-  "Too Many Requests": 429,
-  "Request Header Fields Too Large": 431,
-  "Unavailable For Legal Reasons": 451,
-  "Internal Server Error": 500,
-  "Not Implemented": 501,
-  "Bad Gateway": 502,
-  "Service Unavailable": 503,
-  "Gateway Timeout": 504,
-  "HTTP Version Not Supported": 505,
-  "Variant Also Negotiates": 506,
-  "Insufficient Storage": 507,
-  "Loop Detected": 508,
-  "Not Extended": 510,
-  "Network Authentication Required": 511
+var filterGlobalHook = (hook) => {
+  return { ...hook, type: hook?.type, detail: hook?.detail, parse: filterGlobal(hook?.parse), transform: filterGlobal(hook?.transform), beforeHandle: filterGlobal(hook?.beforeHandle), afterHandle: filterGlobal(hook?.afterHandle), mapResponse: filterGlobal(hook?.mapResponse), afterResponse: filterGlobal(hook?.afterResponse), error: filterGlobal(hook?.error), trace: filterGlobal(hook?.trace) };
 };
-var InvertedStatusMap = Object.fromEntries(Object.entries(StatusMap).map(([k, v]) => [v, k]));
+var StatusMap = { Continue: 100, "Switching Protocols": 101, Processing: 102, "Early Hints": 103, OK: 200, Created: 201, Accepted: 202, "Non-Authoritative Information": 203, "No Content": 204, "Reset Content": 205, "Partial Content": 206, "Multi-Status": 207, "Already Reported": 208, "Multiple Choices": 300, "Moved Permanently": 301, Found: 302, "See Other": 303, "Not Modified": 304, "Temporary Redirect": 307, "Permanent Redirect": 308, "Bad Request": 400, Unauthorized: 401, "Payment Required": 402, Forbidden: 403, "Not Found": 404, "Method Not Allowed": 405, "Not Acceptable": 406, "Proxy Authentication Required": 407, "Request Timeout": 408, Conflict: 409, Gone: 410, "Length Required": 411, "Precondition Failed": 412, "Payload Too Large": 413, "URI Too Long": 414, "Unsupported Media Type": 415, "Range Not Satisfiable": 416, "Expectation Failed": 417, "I'm a teapot": 418, "Misdirected Request": 421, "Unprocessable Content": 422, Locked: 423, "Failed Dependency": 424, "Too Early": 425, "Upgrade Required": 426, "Precondition Required": 428, "Too Many Requests": 429, "Request Header Fields Too Large": 431, "Unavailable For Legal Reasons": 451, "Internal Server Error": 500, "Not Implemented": 501, "Bad Gateway": 502, "Service Unavailable": 503, "Gateway Timeout": 504, "HTTP Version Not Supported": 505, "Variant Also Negotiates": 506, "Insufficient Storage": 507, "Loop Detected": 508, "Not Extended": 510, "Network Authentication Required": 511 };
+var InvertedStatusMap = Object.fromEntries(Object.entries(StatusMap).map(([k2, v]) => [v, k2]));
 function removeTrailingEquals(digest) {
   let trimmedDigest = digest;
-  for (;trimmedDigest.endsWith("="); )
+  while (trimmedDigest.endsWith("="))
     trimmedDigest = trimmedDigest.slice(0, -1);
   return trimmedDigest;
 }
 var encoder = new TextEncoder;
 var signCookie = async (val, secret) => {
-  if (typeof val != "string")
+  if (typeof val !== "string")
     throw new TypeError("Cookie value must be provided as a string.");
   if (secret === null)
     throw new TypeError("Secret key must be provided.");
@@ -11662,7 +11163,7 @@ var signCookie = async (val, secret) => {
   return val + "." + removeTrailingEquals(Buffer.from(hmacBuffer).toString("base64"));
 };
 var unsignCookie = async (input, secret) => {
-  if (typeof input != "string")
+  if (typeof input !== "string")
     throw new TypeError("Signed cookie string must be provided.");
   if (secret === null)
     throw new TypeError("Secret key must be provided.");
@@ -11670,75 +11171,108 @@ var unsignCookie = async (input, secret) => {
   return await signCookie(tentativeValue, secret) === input ? tentativeValue : false;
 };
 var traceBackMacro = (extension, property, manage) => {
-  if (!(!extension || typeof extension != "object" || !property))
-    for (let [key, value] of Object.entries(property)) {
-      if (primitiveHookMap[key] || !(key in extension))
-        continue;
-      let v = extension[key];
-      if (typeof v == "function") {
-        let hook = v(value);
-        if (typeof hook == "object")
-          for (let [k, v2] of Object.entries(hook))
-            manage(k)({
-              fn: v2
-            });
-      }
-      delete property[key];
+  if (!extension || typeof extension !== "object" || !property)
+    return;
+  for (let [key, value] of Object.entries(property)) {
+    if (primitiveHookMap[key] || !(key in extension))
+      continue;
+    let v = extension[key];
+    if (typeof v === "function") {
+      let hook = v(value);
+      if (typeof hook === "object")
+        for (let [k2, v2] of Object.entries(hook))
+          manage(k2)({ fn: v2 });
     }
+    delete property[key];
+  }
 };
-var createMacroManager = ({
-  globalHook,
-  localHook
-}) => (stackName) => (type, fn) => {
-  if (typeof type == "function" && (type = {
-    fn: type
-  }), stackName === "resolve" && (type = {
-    ...type,
-    subType: "resolve"
-  }), localHook[stackName] || (localHook[stackName] = []), typeof localHook[stackName] == "function" && (localHook[stackName] = [localHook[stackName]]), Array.isArray(localHook[stackName]) || (localHook[stackName] = [localHook[stackName]]), "fn" in type || Array.isArray(type)) {
-    Array.isArray(type) ? localHook[stackName] = localHook[stackName].concat(type) : localHook[stackName].push(type);
+var createMacroManager = ({ globalHook, localHook }) => (stackName) => (type, fn) => {
+  if (typeof type === "function")
+    type = { fn: type };
+  if (stackName === "resolve")
+    type = { ...type, subType: "resolve" };
+  if (!localHook[stackName])
+    localHook[stackName] = [];
+  if (typeof localHook[stackName] === "function")
+    localHook[stackName] = [localHook[stackName]];
+  if (!Array.isArray(localHook[stackName]))
+    localHook[stackName] = [localHook[stackName]];
+  if ("fn" in type || Array.isArray(type)) {
+    if (Array.isArray(type))
+      localHook[stackName] = localHook[stackName].concat(type);
+    else
+      localHook[stackName].push(type);
     return;
   }
   let { insert = "after", stack = "local" } = type;
-  typeof fn == "function" && (fn = { fn }), stack === "global" ? Array.isArray(fn) ? insert === "before" ? globalHook[stackName] = fn.concat(globalHook[stackName]) : globalHook[stackName] = globalHook[stackName].concat(fn) : insert === "before" ? globalHook[stackName].unshift(fn) : globalHook[stackName].push(fn) : Array.isArray(fn) ? insert === "before" ? localHook[stackName] = fn.concat(localHook[stackName]) : localHook[stackName] = localHook[stackName].concat(fn) : insert === "before" ? localHook[stackName].unshift(fn) : localHook[stackName].push(fn);
+  if (typeof fn === "function")
+    fn = { fn };
+  if (stack === "global")
+    if (!Array.isArray(fn))
+      if (insert === "before")
+        globalHook[stackName].unshift(fn);
+      else
+        globalHook[stackName].push(fn);
+    else if (insert === "before")
+      globalHook[stackName] = fn.concat(globalHook[stackName]);
+    else
+      globalHook[stackName] = globalHook[stackName].concat(fn);
+  else if (!Array.isArray(fn))
+    if (insert === "before")
+      localHook[stackName].unshift(fn);
+    else
+      localHook[stackName].push(fn);
+  else if (insert === "before")
+    localHook[stackName] = fn.concat(localHook[stackName]);
+  else
+    localHook[stackName] = localHook[stackName].concat(fn);
 };
 var parseNumericString = (message) => {
-  if (typeof message == "number")
+  if (typeof message === "number")
     return message;
   if (message.length < 16) {
     if (message.trim().length === 0)
       return null;
     let length = Number(message);
-    return Number.isNaN(length) ? null : length;
+    if (Number.isNaN(length))
+      return null;
+    return length;
   }
   if (message.length === 16) {
     if (message.trim().length === 0)
       return null;
     let number = Number(message);
-    return Number.isNaN(number) || number.toString() !== message ? null : number;
+    if (Number.isNaN(number) || number.toString() !== message)
+      return null;
+    return number;
   }
   return null;
 };
 var isNumericString = (message) => parseNumericString(message) !== null;
-var PromiseGroup = class {
+
+class PromiseGroup {
+  onError;
+  onFinally;
+  root = null;
+  promises = [];
   constructor(onError = console.error, onFinally = () => {}) {
     this.onError = onError;
     this.onFinally = onFinally;
-    this.root = null;
-    this.promises = [];
   }
   get size() {
     return this.promises.length;
   }
   add(promise) {
-    return this.promises.push(promise), this.root ||= this.drain(), this.promises.length === 1 && this.then(this.onFinally), promise;
+    if (this.promises.push(promise), this.root ||= this.drain(), this.promises.length === 1)
+      this.then(this.onFinally);
+    return promise;
   }
   async drain() {
-    for (;this.promises.length > 0; ) {
+    while (this.promises.length > 0) {
       try {
         await this.promises[0];
-      } catch (error2) {
-        this.onError(error2);
+      } catch (error) {
+        this.onError(error);
       }
       this.promises.shift();
     }
@@ -11747,35 +11281,78 @@ var PromiseGroup = class {
   then(onfulfilled, onrejected) {
     return (this.root ?? Promise.resolve()).then(onfulfilled, onrejected);
   }
-};
+}
 var fnToContainer = (fn, subType) => {
   if (!fn)
     return fn;
   if (!Array.isArray(fn)) {
-    if (typeof fn == "function" || typeof fn == "string")
+    if (typeof fn === "function" || typeof fn === "string")
       return subType ? { fn, subType } : { fn };
-    if ("fn" in fn)
+    else if ("fn" in fn)
       return fn;
   }
   let fns = [];
   for (let x2 of fn)
-    typeof x2 == "function" || typeof x2 == "string" ? fns.push(subType ? { fn: x2, subType } : { fn: x2 }) : ("fn" in x2) && fns.push(x2);
+    if (typeof x2 === "function" || typeof x2 === "string")
+      fns.push(subType ? { fn: x2, subType } : { fn: x2 });
+    else if ("fn" in x2)
+      fns.push(x2);
   return fns;
 };
-var localHookToLifeCycleStore = (a) => (a.start && (a.start = fnToContainer(a.start)), a.request && (a.request = fnToContainer(a.request)), a.parse && (a.parse = fnToContainer(a.parse)), a.transform && (a.transform = fnToContainer(a.transform)), a.beforeHandle && (a.beforeHandle = fnToContainer(a.beforeHandle)), a.afterHandle && (a.afterHandle = fnToContainer(a.afterHandle)), a.mapResponse && (a.mapResponse = fnToContainer(a.mapResponse)), a.afterResponse && (a.afterResponse = fnToContainer(a.afterResponse)), a.trace && (a.trace = fnToContainer(a.trace)), a.error && (a.error = fnToContainer(a.error)), a.stop && (a.stop = fnToContainer(a.stop)), a);
-var lifeCycleToFn = (a) => (a.start?.map && (a.start = a.start.map((x2) => x2.fn)), a.request?.map && (a.request = a.request.map((x2) => x2.fn)), a.parse?.map && (a.parse = a.parse.map((x2) => x2.fn)), a.transform?.map && (a.transform = a.transform.map((x2) => x2.fn)), a.beforeHandle?.map && (a.beforeHandle = a.beforeHandle.map((x2) => x2.fn)), a.afterHandle?.map && (a.afterHandle = a.afterHandle.map((x2) => x2.fn)), a.mapResponse?.map && (a.mapResponse = a.mapResponse.map((x2) => x2.fn)), a.afterResponse?.map && (a.afterResponse = a.afterResponse.map((x2) => x2.fn)), a.trace?.map ? a.trace = a.trace.map((x2) => x2.fn) : a.trace = [], a.error?.map && (a.error = a.error.map((x2) => x2.fn)), a.stop?.map && (a.stop = a.stop.map((x2) => x2.fn)), a);
-var cloneInference = (inference) => ({
-  body: inference.body,
-  cookie: inference.cookie,
-  headers: inference.headers,
-  query: inference.query,
-  set: inference.set,
-  server: inference.server,
-  path: inference.path,
-  route: inference.route,
-  url: inference.url
-});
-var redirect = (url, status2 = 302) => Response.redirect(url, status2);
+var localHookToLifeCycleStore = (a) => {
+  if (a.start)
+    a.start = fnToContainer(a.start);
+  if (a.request)
+    a.request = fnToContainer(a.request);
+  if (a.parse)
+    a.parse = fnToContainer(a.parse);
+  if (a.transform)
+    a.transform = fnToContainer(a.transform);
+  if (a.beforeHandle)
+    a.beforeHandle = fnToContainer(a.beforeHandle);
+  if (a.afterHandle)
+    a.afterHandle = fnToContainer(a.afterHandle);
+  if (a.mapResponse)
+    a.mapResponse = fnToContainer(a.mapResponse);
+  if (a.afterResponse)
+    a.afterResponse = fnToContainer(a.afterResponse);
+  if (a.trace)
+    a.trace = fnToContainer(a.trace);
+  if (a.error)
+    a.error = fnToContainer(a.error);
+  if (a.stop)
+    a.stop = fnToContainer(a.stop);
+  return a;
+};
+var lifeCycleToFn = (a) => {
+  if (a.start?.map)
+    a.start = a.start.map((x2) => x2.fn);
+  if (a.request?.map)
+    a.request = a.request.map((x2) => x2.fn);
+  if (a.parse?.map)
+    a.parse = a.parse.map((x2) => x2.fn);
+  if (a.transform?.map)
+    a.transform = a.transform.map((x2) => x2.fn);
+  if (a.beforeHandle?.map)
+    a.beforeHandle = a.beforeHandle.map((x2) => x2.fn);
+  if (a.afterHandle?.map)
+    a.afterHandle = a.afterHandle.map((x2) => x2.fn);
+  if (a.mapResponse?.map)
+    a.mapResponse = a.mapResponse.map((x2) => x2.fn);
+  if (a.afterResponse?.map)
+    a.afterResponse = a.afterResponse.map((x2) => x2.fn);
+  if (a.trace?.map)
+    a.trace = a.trace.map((x2) => x2.fn);
+  else
+    a.trace = [];
+  if (a.error?.map)
+    a.error = a.error.map((x2) => x2.fn);
+  if (a.stop?.map)
+    a.stop = a.stop.map((x2) => x2.fn);
+  return a;
+};
+var cloneInference = (inference) => ({ body: inference.body, cookie: inference.cookie, headers: inference.headers, query: inference.query, set: inference.set, server: inference.server, path: inference.path, route: inference.route, url: inference.url });
+var redirect = (url, status = 302) => Response.redirect(url, status);
 var ELYSIA_FORM_DATA = Symbol("ElysiaFormData");
 var ELYSIA_REQUEST_ID = Symbol("ElysiaRequestId");
 var form = (items) => {
@@ -11784,11 +11361,24 @@ var form = (items) => {
     for (let [key, value] of Object.entries(items)) {
       if (Array.isArray(value)) {
         formData[ELYSIA_FORM_DATA][key] = [];
-        for (let v of value)
-          value instanceof File ? formData.append(key, value, value.name) : value instanceof ElysiaFile ? formData.append(key, value.value, value.value?.name) : formData.append(key, value), formData[ELYSIA_FORM_DATA][key].push(value);
+        for (let v of value) {
+          if (value instanceof File)
+            formData.append(key, value, value.name);
+          else if (value instanceof ElysiaFile)
+            formData.append(key, value.value, value.value?.name);
+          else
+            formData.append(key, value);
+          formData[ELYSIA_FORM_DATA][key].push(value);
+        }
         continue;
       }
-      value instanceof File ? formData.append(key, value, value.name) : value instanceof ElysiaFile ? formData.append(key, value.value, value.value?.name) : formData.append(key, value), formData[ELYSIA_FORM_DATA][key] = value;
+      if (value instanceof File)
+        formData.append(key, value, value.name);
+      else if (value instanceof ElysiaFile)
+        formData.append(key, value.value, value.value?.name);
+      else
+        formData.append(key, value);
+      formData[ELYSIA_FORM_DATA][key] = value;
     }
   return formData;
 };
@@ -11802,197 +11392,163 @@ var deduplicateChecksum = (array) => {
   let hashes = [];
   for (let i2 = 0;i2 < array.length; i2++) {
     let item = array[i2];
-    item.checksum && (hashes.includes(item.checksum) && (array.splice(i2, 1), i2--), hashes.push(item.checksum));
+    if (item.checksum) {
+      if (hashes.includes(item.checksum))
+        array.splice(i2, 1), i2--;
+      hashes.push(item.checksum);
+    }
   }
   return array;
 };
 var promoteEvent = (events, as = "scoped") => {
-  if (events) {
-    if (as === "scoped") {
-      for (let event of events)
-        "scope" in event && event.scope === "local" && (event.scope = "scoped");
-      return;
-    }
+  if (!events)
+    return;
+  if (as === "scoped") {
     for (let event of events)
-      "scope" in event && (event.scope = "global");
+      if ("scope" in event && event.scope === "local")
+        event.scope = "scoped";
+    return;
   }
+  for (let event of events)
+    if ("scope" in event)
+      event.scope = "global";
 };
-var getLoosePath = (path) => path.charCodeAt(path.length - 1) === 47 ? path.slice(0, path.length - 1) : path + "/";
+var getLoosePath = (path) => {
+  if (path.charCodeAt(path.length - 1) === 47)
+    return path.slice(0, path.length - 1);
+  return path + "/";
+};
 var isNotEmpty = (obj) => {
   if (!obj)
     return false;
-  for (let _ in obj)
+  for (let _2 in obj)
     return true;
   return false;
 };
 var encodePath = (path, { dynamic = false } = {}) => {
   let encoded = encodeURIComponent(path).replace(/%2F/g, "/");
-  return dynamic && (encoded = encoded.replace(/%3A/g, ":").replace(/%3F/g, "?")), encoded;
+  if (dynamic)
+    encoded = encoded.replace(/%3A/g, ":").replace(/%3F/g, "?");
+  return encoded;
 };
 var supportPerMethodInlineHandler = (() => {
-  if (typeof Bun > "u")
+  if (typeof Bun === "undefined")
     return true;
   let semver = Bun.version.split(".");
-  return !(+semver[0] < 1 || +semver[1] < 2 || +semver[2] < 14);
+  if (+semver[0] < 1 || +semver[1] < 2 || +semver[2] < 14)
+    return false;
+  return true;
 })();
-var env = typeof Bun < "u" ? Bun.env : typeof process < "u" ? process?.env : undefined;
+var env = typeof Bun !== "undefined" ? Bun.env : typeof process !== "undefined" ? process?.env : undefined;
 var ERROR_CODE = Symbol("ElysiaErrorCode");
 var isProduction = (env?.NODE_ENV ?? env?.ENV) === "production";
-var ElysiaCustomStatusResponse = class {
+
+class ElysiaCustomStatusResponse {
+  code;
+  response;
   constructor(code, response) {
     let res = response ?? (code in InvertedStatusMap ? InvertedStatusMap[code] : code);
     this.code = StatusMap[code] ?? code, this.response = res;
   }
-};
+}
 var status = (code, response) => new ElysiaCustomStatusResponse(code, response);
-var NotFoundError = class extends Error {
+class NotFoundError extends Error {
+  code = "NOT_FOUND";
+  status = 404;
   constructor(message) {
     super(message ?? "NOT_FOUND");
-    this.code = "NOT_FOUND";
-    this.status = 404;
   }
-};
-var ParseError2 = class extends Error {
+}
+
+class ParseError2 extends Error {
+  code = "PARSE";
+  status = 400;
   constructor(cause) {
-    super("Bad Request", {
-      cause
-    });
-    this.code = "PARSE";
-    this.status = 400;
+    super("Bad Request", { cause });
   }
-};
-var InvalidCookieSignature = class extends Error {
+}
+
+class InvalidCookieSignature extends Error {
+  key;
+  code = "INVALID_COOKIE_SIGNATURE";
+  status = 400;
   constructor(key, message) {
     super(message ?? `"${key}" has invalid cookie signature`);
     this.key = key;
-    this.code = "INVALID_COOKIE_SIGNATURE";
-    this.status = 400;
   }
-};
+}
 var mapValueError = (error2) => {
   if (!error2)
-    return {
-      summary: undefined
-    };
+    return { summary: undefined };
   let { message, path, value, type } = error2, property = path.slice(1).replaceAll("/", "."), isRoot = path === "";
   switch (type) {
     case 42:
-      return {
-        ...error2,
-        summary: isRoot ? "Value should not be provided" : `Property '${property}' should not be provided`
-      };
+      return { ...error2, summary: isRoot ? "Value should not be provided" : `Property '${property}' should not be provided` };
     case 45:
-      return {
-        ...error2,
-        summary: isRoot ? "Value is missing" : `Property '${property}' is missing`
-      };
+      return { ...error2, summary: isRoot ? "Value is missing" : `Property '${property}' is missing` };
     case 50:
       let quoteIndex = message.indexOf("'"), format = message.slice(quoteIndex + 1, message.indexOf("'", quoteIndex + 1));
-      return {
-        ...error2,
-        summary: isRoot ? "Value should be an email" : `Property '${property}' should be ${format}`
-      };
+      return { ...error2, summary: isRoot ? "Value should be an email" : `Property '${property}' should be ${format}` };
     case 54:
-      return {
-        ...error2,
-        summary: `${message.slice(0, 9).trim()} property '${property}' to be ${message.slice(8).trim()} but found: ${value}`
-      };
+      return { ...error2, summary: `${message.slice(0, 9).trim()} property '${property}' to be ${message.slice(8).trim()} but found: ${value}` };
     case 62:
       let union = error2.schema.anyOf.map((x2) => `'${x2?.format ?? x2.type}'`).join(", ");
-      return {
-        ...error2,
-        summary: isRoot ? `Value should be one of ${union}` : `Property '${property}' should be one of: ${union}`
-      };
+      return { ...error2, summary: isRoot ? `Value should be one of ${union}` : `Property '${property}' should be one of: ${union}` };
     default:
       return { summary: message, ...error2 };
   }
 };
-var InvalidFileType = class _InvalidFileType extends Error {
+
+class InvalidFileType extends Error {
+  property;
+  expected;
+  message;
+  code = "INVALID_FILE_TYPE";
+  status = 422;
   constructor(property, expected, message = `"${property}" has invalid file type`) {
     super(message);
     this.property = property;
     this.expected = expected;
     this.message = message;
-    this.code = "INVALID_FILE_TYPE";
-    this.status = 422;
-    Object.setPrototypeOf(this, _InvalidFileType.prototype);
+    Object.setPrototypeOf(this, InvalidFileType.prototype);
   }
   toResponse(headers) {
-    return isProduction ? new Response(JSON.stringify({
-      type: "validation",
-      on: "body"
-    }), {
-      status: 422,
-      headers: {
-        ...headers,
-        "content-type": "application/json"
-      }
-    }) : new Response(JSON.stringify({
-      type: "validation",
-      on: "body",
-      summary: "Invalid file type",
-      message: this.message,
-      property: this.property,
-      expected: this.expected
-    }), {
-      status: 422,
-      headers: {
-        ...headers,
-        "content-type": "application/json"
-      }
-    });
+    if (isProduction)
+      return new Response(JSON.stringify({ type: "validation", on: "body" }), { status: 422, headers: { ...headers, "content-type": "application/json" } });
+    return new Response(JSON.stringify({ type: "validation", on: "body", summary: "Invalid file type", message: this.message, property: this.property, expected: this.expected }), { status: 422, headers: { ...headers, "content-type": "application/json" } });
   }
-};
-var ValidationError = class _ValidationError extends Error {
+}
+
+class ValidationError extends Error {
+  type;
+  validator;
+  value;
+  code = "VALIDATION";
+  status = 422;
   constructor(type, validator, value, errors) {
-    value && typeof value == "object" && value instanceof ElysiaCustomStatusResponse && (value = value.response);
-    let error2 = errors?.First() || (isProduction ? undefined : ("Errors" in validator) ? validator.Errors(value).First() : exports_value2.Errors(validator, value).First()), customError = error2?.schema?.message || error2?.schema?.error !== undefined ? typeof error2.schema.error == "function" ? error2.schema.error({
-      type,
-      validator,
-      value,
-      get errors() {
-        return [...validator.Errors(value)].map(mapValueError);
-      }
-    }) : error2.schema.error : undefined, accessor = error2?.path || "root", message = "";
+    if (value && typeof value === "object" && value instanceof ElysiaCustomStatusResponse)
+      value = value.response;
+    let error2 = errors?.First() || (isProduction ? undefined : ("Errors" in validator) ? validator.Errors(value).First() : exports_value2.Errors(validator, value).First()), customError = error2?.schema?.message || error2?.schema?.error !== undefined ? typeof error2.schema.error === "function" ? error2.schema.error({ type, validator, value, get errors() {
+      return [...validator.Errors(value)].map(mapValueError);
+    } }) : error2.schema.error : undefined, accessor = error2?.path || "root", message = "";
     if (customError !== undefined)
-      message = typeof customError == "object" ? JSON.stringify(customError) : customError + "";
+      message = typeof customError === "object" ? JSON.stringify(customError) : customError + "";
     else if (isProduction)
-      message = JSON.stringify({
-        type: "validation",
-        on: type,
-        summary: mapValueError(error2).summary,
-        message: error2?.message,
-        found: value
-      });
+      message = JSON.stringify({ type: "validation", on: type, summary: mapValueError(error2).summary, message: error2?.message, found: value });
     else {
       let schema = validator?.schema ?? validator, errors2 = "Errors" in validator ? [...validator.Errors(value)].map(mapValueError) : [...exports_value2.Errors(validator, value)].map(mapValueError), expected;
       try {
         expected = exports_value2.Create(schema);
       } catch (error3) {
-        expected = {
-          type: "Could not create expected value",
-          message: error3?.message,
-          error: error3
-        };
+        expected = { type: "Could not create expected value", message: error3?.message, error: error3 };
       }
-      message = JSON.stringify({
-        type: "validation",
-        on: type,
-        summary: mapValueError(error2).summary,
-        property: accessor,
-        message: error2?.message,
-        expected,
-        found: value,
-        errors: errors2
-      }, null, 2);
+      message = JSON.stringify({ type: "validation", on: type, summary: mapValueError(error2).summary, property: accessor, message: error2?.message, expected, found: value, errors: errors2 }, null, 2);
     }
     super(message);
     this.type = type;
     this.validator = validator;
     this.value = value;
-    this.code = "VALIDATION";
-    this.status = 422;
-    Object.setPrototypeOf(this, _ValidationError.prototype);
+    Object.setPrototypeOf(this, ValidationError.prototype);
   }
   get all() {
     return "Errors" in this.validator ? [...this.validator.Errors(this.value)].map(mapValueError) : [...exports_value2.Errors(this.validator, this.value)].map(mapValueError);
@@ -12006,18 +11562,12 @@ var ValidationError = class _ValidationError extends Error {
     }
   }
   get model() {
-    return _ValidationError.simplifyModel(this.validator);
+    return ValidationError.simplifyModel(this.validator);
   }
   toResponse(headers) {
-    return new Response(this.message, {
-      status: 400,
-      headers: {
-        ...headers,
-        "content-type": "application/json"
-      }
-    });
+    return new Response(this.message, { status: 400, headers: { ...headers, "content-type": "application/json" } });
   }
-};
+}
 var tryParse = (v, schema) => {
   try {
     return JSON.parse(v);
@@ -12026,27 +11576,23 @@ var tryParse = (v, schema) => {
   }
 };
 function createType(kind, func) {
-  return exports_type2.Has(kind) || exports_type2.Set(kind, func), (options = {}) => Unsafe({ ...options, [Kind]: kind });
+  if (!exports_type2.Has(kind))
+    exports_type2.Set(kind, func);
+  return (options = {}) => Unsafe({ ...options, [Kind]: kind });
 }
 var compile = (schema) => {
   try {
     let compiler = TypeCompiler.Compile(schema);
     return compiler.Create = () => exports_value2.Create(schema), compiler.Error = (v) => new ValidationError("property", schema, v, compiler.Errors(v)), compiler;
   } catch {
-    return {
-      Check: (v) => exports_value2.Check(schema, v),
-      CheckThrow: (v) => {
-        if (!exports_value2.Check(schema, v))
-          throw new ValidationError("property", schema, v, exports_value2.Errors(schema, v));
-      },
-      Decode: (v) => exports_value2.Decode(schema, v),
-      Create: () => exports_value2.Create(schema),
-      Error: (v) => new ValidationError("property", schema, v, exports_value2.Errors(schema, v))
-    };
+    return { Check: (v) => exports_value2.Check(schema, v), CheckThrow: (v) => {
+      if (!exports_value2.Check(schema, v))
+        throw new ValidationError("property", schema, v, exports_value2.Errors(schema, v));
+    }, Decode: (v) => exports_value2.Decode(schema, v), Create: () => exports_value2.Create(schema), Error: (v) => new ValidationError("property", schema, v, exports_value2.Errors(schema, v)) };
   }
 };
 var parseFileUnit = (size) => {
-  if (typeof size == "string")
+  if (typeof size === "string")
     switch (size.slice(-1)) {
       case "k":
         return +size.slice(0, size.length - 1) * 1024;
@@ -12057,17 +11603,28 @@ var parseFileUnit = (size) => {
     }
   return size;
 };
-var checkFileExtension = (type, extension) => type.startsWith(extension) ? true : extension.charCodeAt(extension.length - 1) === 42 && extension.charCodeAt(extension.length - 2) === 47 && type.startsWith(extension.slice(0, -1));
+var checkFileExtension = (type, extension) => {
+  if (type.startsWith(extension))
+    return true;
+  return extension.charCodeAt(extension.length - 1) === 42 && extension.charCodeAt(extension.length - 2) === 47 && type.startsWith(extension.slice(0, -1));
+};
 var _fileTypeFromBlobWarn = false;
 var warnIfFileTypeIsNotInstalled = () => {
-  _fileTypeFromBlobWarn || (console.warn("[Elysia] Attempt to validate file type without 'file-type'. This may lead to security risks. We recommend installing 'file-type' to properly validate file extension."), _fileTypeFromBlobWarn = true);
+  if (!_fileTypeFromBlobWarn)
+    console.warn("[Elysia] Attempt to validate file type without 'file-type'. This may lead to security risks. We recommend installing 'file-type' to properly validate file extension."), _fileTypeFromBlobWarn = true;
 };
-var loadFileType = async () => Promise.resolve().then(() => (init_core2(), exports_core)).then((x2) => (_fileTypeFromBlob = x2.fileTypeFromBlob, _fileTypeFromBlob)).catch(warnIfFileTypeIsNotInstalled);
+var loadFileType = async () => Promise.resolve().then(() => (init_file_type(), exports_file_type)).then((x2) => {
+  return _fileTypeFromBlob = x2.fileTypeFromBlob, _fileTypeFromBlob;
+}).catch(warnIfFileTypeIsNotInstalled);
 var _fileTypeFromBlob;
-var fileTypeFromBlob2 = (file2) => _fileTypeFromBlob ? _fileTypeFromBlob(file2) : loadFileType().then((mod) => {
-  if (mod)
-    return mod(file2);
-});
+var fileTypeFromBlob2 = (file2) => {
+  if (_fileTypeFromBlob)
+    return _fileTypeFromBlob(file2);
+  return loadFileType().then((mod) => {
+    if (mod)
+      return mod(file2);
+  });
+};
 var validateFileExtension = async (file2, extension, name = file2?.name ?? "") => {
   if (Array.isArray(file2))
     return await Promise.all(file2.map((f) => validateFileExtension(f, extension, name))), true;
@@ -12076,8 +11633,10 @@ var validateFileExtension = async (file2, extension, name = file2?.name ?? "") =
   let result = await fileTypeFromBlob2(file2);
   if (!result)
     throw new InvalidFileType(name, extension);
-  if (typeof extension == "string" && !checkFileExtension(result.mime, extension))
-    throw new InvalidFileType(name, extension);
+  if (typeof extension === "string") {
+    if (!checkFileExtension(result.mime, extension))
+      throw new InvalidFileType(name, extension);
+  }
   for (let i2 = 0;i2 < extension.length; i2++)
     if (checkFileExtension(result.mime, extension[i2]))
       return true;
@@ -12086,10 +11645,14 @@ var validateFileExtension = async (file2, extension, name = file2?.name ?? "") =
 var validateFile = (options, value) => {
   if (value instanceof ElysiaFile)
     return true;
-  if (!(value instanceof Blob) || options.minSize && value.size < parseFileUnit(options.minSize) || options.maxSize && value.size > parseFileUnit(options.maxSize))
+  if (!(value instanceof Blob))
+    return false;
+  if (options.minSize && value.size < parseFileUnit(options.minSize))
+    return false;
+  if (options.maxSize && value.size > parseFileUnit(options.maxSize))
     return false;
   if (options.extension) {
-    if (typeof options.extension == "string")
+    if (typeof options.extension === "string")
       return checkFileExtension(value.type, options.extension);
     for (let i2 = 0;i2 < options.extension.length; i2++)
       if (checkFileExtension(value.type, options.extension[i2]))
@@ -12099,11 +11662,13 @@ var validateFile = (options, value) => {
   return true;
 };
 var t = Object.assign({}, Type);
-createType("UnionEnum", (schema, value) => (typeof value == "number" || typeof value == "string" || value === null) && schema.enum.includes(value));
+createType("UnionEnum", (schema, value) => (typeof value === "number" || typeof value === "string" || value === null) && schema.enum.includes(value));
 var internalFiles = createType("Files", (options, value) => {
   if (!Array.isArray(value))
     return validateFile(options, value);
-  if (options.minItems && value.length < options.minItems || options.maxItems && value.length > options.maxItems)
+  if (options.minItems && value.length < options.minItems)
+    return false;
+  if (options.maxItems && value.length > options.maxItems)
     return false;
   for (let i2 = 0;i2 < value.length; i2++)
     if (!validateFile(options, value[i2]))
@@ -12121,236 +11686,147 @@ var internalFormData = createType("ElysiaForm", ({ compiler, ...schema }, value)
   }
   return true;
 });
-var ElysiaType = {
-  String: (property) => Type.String(property),
-  Numeric: (property) => {
-    let schema = Type.Number(property), compiler = compile(schema);
-    return t.Transform(t.Union([
-      t.String({
-        format: "numeric",
-        default: 0
-      }),
-      t.Number(property)
-    ], property)).Decode((value) => {
-      let number = +value;
-      if (isNaN(number))
-        return value;
-      if (property && !compiler.Check(number))
-        throw compiler.Error(value);
-      return number;
-    }).Encode((value) => value);
-  },
-  Integer: (property) => {
-    let schema = Type.Integer(property), compiler = compile(schema);
-    return t.Transform(t.Union([
-      t.String({
-        format: "integer",
-        default: 0
-      }),
-      Type.Integer(property)
-    ], property)).Decode((value) => {
-      let number = +value;
-      if (!compiler.Check(number))
-        throw compiler.Error(number);
-      return number;
-    }).Encode((value) => value);
-  },
-  Date: (property) => {
-    let schema = Type.Date(property), compiler = compile(schema), _default = property?.default ? new Date(property.default) : undefined;
-    return t.Transform(t.Union([
-      Type.Date(property),
-      t.String({
-        format: "date-time",
-        default: _default?.toISOString()
-      }),
-      t.String({
-        format: "date",
-        default: _default?.toISOString()
-      }),
-      t.Number({ default: _default?.getTime() })
-    ], property)).Decode((value) => {
-      if (typeof value == "number") {
-        let date3 = new Date(value);
-        if (!compiler.Check(date3))
-          throw compiler.Error(date3);
-        return date3;
-      }
-      if (value instanceof Date)
-        return value;
-      let date2 = new Date(parseDateTimeEmptySpace(value));
-      if (!date2 || isNaN(date2.getTime()))
-        throw new ValidationError("property", schema, date2);
-      if (!compiler.Check(date2))
-        throw compiler.Error(date2);
-      return date2;
-    }).Encode((value) => value.toISOString());
-  },
-  BooleanString: (property) => {
-    let schema = Type.Boolean(property), compiler = compile(schema);
-    return t.Transform(t.Union([
-      t.Boolean(property),
-      t.String({
-        format: "boolean",
-        default: false
-      })
-    ], property)).Decode((value) => {
-      if (typeof value == "string")
-        return value === "true";
-      if (value !== undefined && !compiler.Check(value))
-        throw compiler.Error(value);
+var ElysiaType = { String: (property) => Type.String(property), Numeric: (property) => {
+  let schema = Type.Number(property), compiler = compile(schema);
+  return t.Transform(t.Union([t.String({ format: "numeric", default: 0 }), t.Number(property)], property)).Decode((value) => {
+    let number = +value;
+    if (isNaN(number))
       return value;
-    }).Encode((value) => value);
-  },
-  ObjectString: (properties, options) => {
-    let schema = t.Object(properties, options), compiler = compile(schema), defaultValue = JSON.stringify(compiler.Create());
-    return t.Transform(t.Union([
-      t.String({
-        format: "ObjectString",
-        default: defaultValue
-      }),
-      schema
-    ])).Decode((value) => {
-      if (typeof value == "string") {
-        if (value.charCodeAt(0) !== 123)
-          throw new ValidationError("property", schema, value);
-        if (!compiler.Check(value = tryParse(value, schema)))
-          throw compiler.Error(value);
-        return compiler.Decode(value);
-      }
+    if (property && !compiler.Check(number))
+      throw compiler.Error(value);
+    return number;
+  }).Encode((value) => value);
+}, Integer: (property) => {
+  let schema = Type.Integer(property), compiler = compile(schema);
+  return t.Transform(t.Union([t.String({ format: "integer", default: 0 }), Type.Integer(property)], property)).Decode((value) => {
+    let number = +value;
+    if (!compiler.Check(number))
+      throw compiler.Error(number);
+    return number;
+  }).Encode((value) => value);
+}, Date: (property) => {
+  let schema = Type.Date(property), compiler = compile(schema), _default = property?.default ? new Date(property.default) : undefined;
+  return t.Transform(t.Union([Type.Date(property), t.String({ format: "date-time", default: _default?.toISOString() }), t.String({ format: "date", default: _default?.toISOString() }), t.Number({ default: _default?.getTime() })], property)).Decode((value) => {
+    if (typeof value === "number") {
+      let date3 = new Date(value);
+      if (!compiler.Check(date3))
+        throw compiler.Error(date3);
+      return date3;
+    }
+    if (value instanceof Date)
       return value;
-    }).Encode((value) => {
-      let original;
-      if (typeof value == "string" && (value = tryParse(original = value, schema)), !compiler.Check(value))
-        throw compiler.Error(value);
-      return original ?? JSON.stringify(value);
-    });
-  },
-  ArrayString: (children = t.String(), options) => {
-    let schema = t.Array(children, options), compiler = compile(schema), decode4 = (value, isProperty = false) => {
-      if (value.charCodeAt(0) === 91) {
-        if (!compiler.Check(value = tryParse(value, schema)))
-          throw compiler.Error(value);
-        return compiler.Decode(value);
-      }
-      if (value.indexOf(",") !== -1) {
-        if (!compiler.Check(value))
-          throw compiler.Error(value);
-        return compiler.Decode(value);
-      }
-      if (isProperty)
-        return value;
-      throw new ValidationError("property", schema, value);
-    };
-    return t.Transform(t.Union([
-      t.String({
-        format: "ArrayString",
-        default: options?.default
-      }),
-      schema
-    ])).Decode((value) => {
-      if (Array.isArray(value)) {
-        let values = [];
-        for (let i2 = 0;i2 < value.length; i2++) {
-          let v = value[i2];
-          if (typeof v == "string") {
-            let t2 = decode4(v, true);
-            Array.isArray(t2) ? values = values.concat(t2) : values.push(t2);
-            continue;
-          }
-          values.push(v);
-        }
-        return values;
-      }
-      return typeof value == "string" ? decode4(value) : value;
-    }).Encode((value) => {
-      let original;
-      if (typeof value == "string" && (value = tryParse(original = value, schema)), !compiler.Check(value))
+    let date2 = new Date(parseDateTimeEmptySpace(value));
+    if (!date2 || isNaN(date2.getTime()))
+      throw new ValidationError("property", schema, date2);
+    if (!compiler.Check(date2))
+      throw compiler.Error(date2);
+    return date2;
+  }).Encode((value) => value.toISOString());
+}, BooleanString: (property) => {
+  let schema = Type.Boolean(property), compiler = compile(schema);
+  return t.Transform(t.Union([t.Boolean(property), t.String({ format: "boolean", default: false })], property)).Decode((value) => {
+    if (typeof value === "string")
+      return value === "true";
+    if (value !== undefined && !compiler.Check(value))
+      throw compiler.Error(value);
+    return value;
+  }).Encode((value) => value);
+}, ObjectString: (properties, options) => {
+  let schema = t.Object(properties, options), compiler = compile(schema), defaultValue = JSON.stringify(compiler.Create());
+  return t.Transform(t.Union([t.String({ format: "ObjectString", default: defaultValue }), schema])).Decode((value) => {
+    if (typeof value === "string") {
+      if (value.charCodeAt(0) !== 123)
         throw new ValidationError("property", schema, value);
-      return original ?? JSON.stringify(value);
-    });
-  },
-  File: createType("File", validateFile),
-  Files: (options = {}) => t.Transform(internalFiles(options)).Decode((value) => Array.isArray(value) ? value : [value]).Encode((value) => value),
-  Nullable: (schema, options) => t.Union([schema, t.Null()], options),
-  MaybeEmpty: (schema, options) => t.Union([schema, t.Null(), t.Undefined()], options),
-  Cookie: (properties, {
-    domain,
-    expires,
-    httpOnly,
-    maxAge,
-    path,
-    priority,
-    sameSite,
-    secure,
-    secrets,
-    sign,
-    ...options
-  } = {}) => {
-    let v = t.Object(properties, options);
-    return v.config = {
-      domain,
-      expires,
-      httpOnly,
-      maxAge,
-      path,
-      priority,
-      sameSite,
-      secure,
-      secrets,
-      sign
-    }, v;
-  },
-  UnionEnum: (values, options = {}) => {
-    let type = values.every((value) => typeof value == "string") ? { type: "string" } : values.every((value) => typeof value == "number") ? { type: "number" } : values.every((value) => value === null) ? { type: "null" } : {};
-    if (values.some((x2) => typeof x2 == "object" && x2 !== null))
-      throw new Error("This type does not support objects or arrays");
-    return {
-      default: values[0],
-      ...options,
-      [Kind]: "UnionEnum",
-      ...type,
-      enum: values
-    };
-  },
-  NoValidate: (v, enabled = true) => (v.noValidate = enabled, v),
-  Form: (v, options = {}) => {
-    let schema = t.Object(v, {
-      default: form({}),
-      ...options
-    }), compiler = compile(schema);
-    return t.Union([
-      schema,
-      internalFormData({
-        compiler
-      })
-    ]);
-  }
-};
+      if (!compiler.Check(value = tryParse(value, schema)))
+        throw compiler.Error(value);
+      return compiler.Decode(value);
+    }
+    return value;
+  }).Encode((value) => {
+    let original;
+    if (typeof value === "string")
+      value = tryParse(original = value, schema);
+    if (!compiler.Check(value))
+      throw compiler.Error(value);
+    return original ?? JSON.stringify(value);
+  });
+}, ArrayString: (children = t.String(), options) => {
+  let schema = t.Array(children, options), compiler = compile(schema), decode2 = (value, isProperty = false) => {
+    if (value.charCodeAt(0) === 91) {
+      if (!compiler.Check(value = tryParse(value, schema)))
+        throw compiler.Error(value);
+      return compiler.Decode(value);
+    }
+    if (value.indexOf(",") !== -1) {
+      if (!compiler.Check(value))
+        throw compiler.Error(value);
+      return compiler.Decode(value);
+    }
+    if (isProperty)
+      return value;
+    throw new ValidationError("property", schema, value);
+  };
+  return t.Transform(t.Union([t.String({ format: "ArrayString", default: options?.default }), schema])).Decode((value) => {
+    if (Array.isArray(value)) {
+      let values = [];
+      for (let i2 = 0;i2 < value.length; i2++) {
+        let v = value[i2];
+        if (typeof v === "string") {
+          let t2 = decode2(v, true);
+          if (Array.isArray(t2))
+            values = values.concat(t2);
+          else
+            values.push(t2);
+          continue;
+        }
+        values.push(v);
+      }
+      return values;
+    }
+    if (typeof value === "string")
+      return decode2(value);
+    return value;
+  }).Encode((value) => {
+    let original;
+    if (typeof value === "string")
+      value = tryParse(original = value, schema);
+    if (!compiler.Check(value))
+      throw new ValidationError("property", schema, value);
+    return original ?? JSON.stringify(value);
+  });
+}, File: createType("File", validateFile), Files: (options = {}) => t.Transform(internalFiles(options)).Decode((value) => {
+  if (Array.isArray(value))
+    return value;
+  return [value];
+}).Encode((value) => value), Nullable: (schema, options) => t.Union([schema, t.Null()], options), MaybeEmpty: (schema, options) => t.Union([schema, t.Null(), t.Undefined()], options), Cookie: (properties, { domain, expires, httpOnly, maxAge, path, priority, sameSite, secure, secrets, sign, ...options } = {}) => {
+  let v = t.Object(properties, options);
+  return v.config = { domain, expires, httpOnly, maxAge, path, priority, sameSite, secure, secrets, sign }, v;
+}, UnionEnum: (values, options = {}) => {
+  let type = values.every((value) => typeof value === "string") ? { type: "string" } : values.every((value) => typeof value === "number") ? { type: "number" } : values.every((value) => value === null) ? { type: "null" } : {};
+  if (values.some((x2) => typeof x2 === "object" && x2 !== null))
+    throw new Error("This type does not support objects or arrays");
+  return { default: values[0], ...options, [Kind]: "UnionEnum", ...type, enum: values };
+}, NoValidate: (v, enabled = true) => {
+  return v.noValidate = enabled, v;
+}, Form: (v, options = {}) => {
+  let schema = t.Object(v, { default: form({}), ...options }), compiler = compile(schema);
+  return t.Union([schema, internalFormData({ compiler })]);
+} };
 t.BooleanString = ElysiaType.BooleanString;
 t.ObjectString = ElysiaType.ObjectString;
 t.ArrayString = ElysiaType.ArrayString;
 t.Numeric = ElysiaType.Numeric;
 t.Integer = ElysiaType.Integer;
-t.File = (arg) => (arg?.type && loadFileType(), ElysiaType.File({
-  default: "File",
-  ...arg,
-  extension: arg?.type,
-  type: "string",
-  format: "binary"
-}));
-t.Files = (arg) => (arg?.type && loadFileType(), ElysiaType.Files({
-  ...arg,
-  elysiaMeta: "Files",
-  default: "Files",
-  extension: arg?.type,
-  type: "array",
-  items: {
-    ...arg,
-    default: "Files",
-    type: "string",
-    format: "binary"
-  }
-}));
+t.File = (arg) => {
+  if (arg?.type)
+    loadFileType();
+  return ElysiaType.File({ default: "File", ...arg, extension: arg?.type, type: "string", format: "binary" });
+};
+t.Files = (arg) => {
+  if (arg?.type)
+    loadFileType();
+  return ElysiaType.Files({ ...arg, elysiaMeta: "Files", default: "Files", extension: arg?.type, type: "array", items: { ...arg, default: "Files", type: "string", format: "binary" } });
+};
 t.Nullable = (schema) => ElysiaType.Nullable(schema);
 t.MaybeEmpty = ElysiaType.MaybeEmpty;
 t.Cookie = ElysiaType.Cookie;
@@ -12359,53 +11835,40 @@ t.UnionEnum = ElysiaType.UnionEnum;
 t.NoValidate = ElysiaType.NoValidate;
 t.Form = ElysiaType.Form;
 var separateFunction = (code) => {
-  code.startsWith("async") && (code = code.slice(5)), code = code.trimStart();
+  if (code.startsWith("async"))
+    code = code.slice(5);
+  code = code.trimStart();
   let index = -1;
-  if (code.charCodeAt(0) === 40 && (index = code.indexOf("=>", code.indexOf(")")), index !== -1)) {
-    let bracketEndIndex = index;
-    for (;bracketEndIndex > 0 && code.charCodeAt(--bracketEndIndex) !== 41; )
-      ;
-    let body = code.slice(index + 2);
-    return body.charCodeAt(0) === 32 && (body = body.trimStart()), [
-      code.slice(1, bracketEndIndex),
-      body,
-      {
-        isArrowReturn: body.charCodeAt(0) !== 123
-      }
-    ];
+  if (code.charCodeAt(0) === 40) {
+    if (index = code.indexOf("=>", code.indexOf(")")), index !== -1) {
+      let bracketEndIndex = index;
+      while (bracketEndIndex > 0)
+        if (code.charCodeAt(--bracketEndIndex) === 41)
+          break;
+      let body = code.slice(index + 2);
+      if (body.charCodeAt(0) === 32)
+        body = body.trimStart();
+      return [code.slice(1, bracketEndIndex), body, { isArrowReturn: body.charCodeAt(0) !== 123 }];
+    }
   }
-  if (/^(\w+)=>/g.test(code) && (index = code.indexOf("=>"), index !== -1)) {
-    let body = code.slice(index + 2);
-    return body.charCodeAt(0) === 32 && (body = body.trimStart()), [
-      code.slice(0, index),
-      body,
-      {
-        isArrowReturn: body.charCodeAt(0) !== 123
-      }
-    ];
+  if (/^(\w+)=>/g.test(code)) {
+    if (index = code.indexOf("=>"), index !== -1) {
+      let body = code.slice(index + 2);
+      if (body.charCodeAt(0) === 32)
+        body = body.trimStart();
+      return [code.slice(0, index), body, { isArrowReturn: body.charCodeAt(0) !== 123 }];
+    }
   }
   if (code.startsWith("function")) {
     index = code.indexOf("(");
     let end = code.indexOf(")");
-    return [
-      code.slice(index + 1, end),
-      code.slice(end + 2),
-      {
-        isArrowReturn: false
-      }
-    ];
+    return [code.slice(index + 1, end), code.slice(end + 2), { isArrowReturn: false }];
   }
   let start = code.indexOf("(");
   if (start !== -1) {
     let sep = code.indexOf(`
 `, 2), parameter = code.slice(0, sep), end = parameter.lastIndexOf(")") + 1, body = code.slice(sep + 1);
-    return [
-      parameter.slice(start, end),
-      "{" + body,
-      {
-        isArrowReturn: false
-      }
-    ];
+    return [parameter.slice(start, end), "{" + body, { isArrowReturn: false }];
   }
   let x2 = code.split(`
 `, 2);
@@ -12418,10 +11881,16 @@ var bracketPairRange = (parameter) => {
   let end = start + 1, deep = 1;
   for (;end < parameter.length; end++) {
     let char = parameter.charCodeAt(end);
-    if (char === 123 ? deep++ : char === 125 && deep--, deep === 0)
+    if (char === 123)
+      deep++;
+    else if (char === 125)
+      deep--;
+    if (deep === 0)
       break;
   }
-  return deep !== 0 ? [0, parameter.length] : [start, end + 1];
+  if (deep !== 0)
+    return [0, parameter.length];
+  return [start, end + 1];
 };
 var bracketPairRangeReverse = (parameter) => {
   let end = parameter.lastIndexOf("}");
@@ -12430,33 +11899,50 @@ var bracketPairRangeReverse = (parameter) => {
   let start = end - 1, deep = 1;
   for (;start >= 0; start--) {
     let char = parameter.charCodeAt(start);
-    if (char === 125 ? deep++ : char === 123 && deep--, deep === 0)
+    if (char === 125)
+      deep++;
+    else if (char === 123)
+      deep--;
+    if (deep === 0)
       break;
   }
-  return deep !== 0 ? [-1, 0] : [start, end + 1];
+  if (deep !== 0)
+    return [-1, 0];
+  return [start, end + 1];
 };
 var removeColonAlias = (parameter) => {
-  for (;; ) {
+  while (true) {
     let start = parameter.indexOf(":");
     if (start === -1)
       break;
     let end = parameter.indexOf(",", start);
-    end === -1 && (end = parameter.indexOf("}", start) - 1), end === -2 && (end = parameter.length), parameter = parameter.slice(0, start) + parameter.slice(end);
+    if (end === -1)
+      end = parameter.indexOf("}", start) - 1;
+    if (end === -2)
+      end = parameter.length;
+    parameter = parameter.slice(0, start) + parameter.slice(end);
   }
   return parameter;
 };
 var retrieveRootParamters = (parameter) => {
   let hasParenthesis = false;
-  parameter.charCodeAt(0) === 40 && (parameter = parameter.slice(1, -1)), parameter.charCodeAt(0) === 123 && (hasParenthesis = true, parameter = parameter.slice(1, -1)), parameter = parameter.replace(/( |\t|\n)/g, "").trim();
+  if (parameter.charCodeAt(0) === 40)
+    parameter = parameter.slice(1, -1);
+  if (parameter.charCodeAt(0) === 123)
+    hasParenthesis = true, parameter = parameter.slice(1, -1);
+  parameter = parameter.replace(/( |\t|\n)/g, "").trim();
   let parameters = [];
-  for (;; ) {
+  while (true) {
     let [start, end] = bracketPairRange(parameter);
     if (start === -1)
       break;
-    parameters.push(parameter.slice(0, start - 1)), parameter.charCodeAt(end) === 44 && end++, parameter = parameter.slice(end);
+    if (parameters.push(parameter.slice(0, start - 1)), parameter.charCodeAt(end) === 44)
+      end++;
+    parameter = parameter.slice(end);
   }
-  parameter = removeColonAlias(parameter), parameter && (parameters = parameters.concat(parameter.split(",")));
-  let parameterMap = /* @__PURE__ */ Object.create(null);
+  if (parameter = removeColonAlias(parameter), parameter)
+    parameters = parameters.concat(parameter.split(","));
+  let parameterMap = Object.create(null);
   for (let p of parameters) {
     if (p.indexOf(",") === -1) {
       parameterMap[p] = true;
@@ -12465,18 +11951,36 @@ var retrieveRootParamters = (parameter) => {
     for (let q of p.split(","))
       parameterMap[q.trim()] = true;
   }
-  return {
-    hasParenthesis,
-    parameters: parameterMap
-  };
+  return { hasParenthesis, parameters: parameterMap };
 };
 var findParameterReference = (parameter, inference) => {
   let { parameters, hasParenthesis } = retrieveRootParamters(parameter);
-  return parameters.query && (inference.query = true), parameters.headers && (inference.headers = true), parameters.body && (inference.body = true), parameters.cookie && (inference.cookie = true), parameters.set && (inference.set = true), parameters.server && (inference.server = true), parameters.route && (inference.route = true), parameters.url && (inference.url = true), parameters.path && (inference.path = true), hasParenthesis ? `{ ${Object.keys(parameters).join(", ")} }` : Object.keys(parameters).join(", ");
+  if (parameters.query)
+    inference.query = true;
+  if (parameters.headers)
+    inference.headers = true;
+  if (parameters.body)
+    inference.body = true;
+  if (parameters.cookie)
+    inference.cookie = true;
+  if (parameters.set)
+    inference.set = true;
+  if (parameters.server)
+    inference.server = true;
+  if (parameters.route)
+    inference.route = true;
+  if (parameters.url)
+    inference.url = true;
+  if (parameters.path)
+    inference.path = true;
+  if (hasParenthesis)
+    return `{ ${Object.keys(parameters).join(", ")} }`;
+  return Object.keys(parameters).join(", ");
 };
 var findEndIndex = (type, content, index) => {
   let regex2 = new RegExp(`${type.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[\\n\\t,; ]`);
-  index !== undefined && (regex2.lastIndex = index);
+  if (index !== undefined)
+    regex2.lastIndex = index;
   let match = regex2.exec(content);
   return match ? match.index : -1;
 };
@@ -12484,11 +11988,15 @@ var findAlias = (type, body, depth = 0) => {
   if (depth > 5)
     return [];
   let aliases = [], content = body;
-  for (;; ) {
+  while (true) {
     let index = findEndIndex(" = " + type, content);
-    if (index === -1 && (index = findEndIndex("=" + type, content)), index === -1) {
+    if (index === -1)
+      index = findEndIndex("=" + type, content);
+    if (index === -1) {
       let lastIndex = content.indexOf(" = " + type);
-      if (lastIndex === -1 && (lastIndex = content.indexOf("=" + type)), lastIndex + 3 + type.length !== content.length)
+      if (lastIndex === -1)
+        lastIndex = content.indexOf("=" + type);
+      if (lastIndex + 3 + type.length !== content.length)
         break;
       index = lastIndex;
     }
@@ -12498,17 +12006,20 @@ var findAlias = (type, body, depth = 0) => {
       aliases.push(removeColonAlias(content.slice(start, end))), content = content.slice(index + 3 + type.length);
       continue;
     }
-    for (;variable.charCodeAt(0) === 44; )
+    while (variable.charCodeAt(0) === 44)
       variable = variable.slice(1);
-    for (;variable.charCodeAt(0) === 9; )
+    while (variable.charCodeAt(0) === 9)
       variable = variable.slice(1);
-    variable.includes("(") || aliases.push(variable), content = content.slice(index + 3 + type.length);
+    if (!variable.includes("("))
+      aliases.push(variable);
+    content = content.slice(index + 3 + type.length);
   }
   for (let alias of aliases) {
     if (alias.charCodeAt(0) === 123)
       continue;
     let deepAlias = findAlias(alias, body);
-    deepAlias.length > 0 && aliases.push(...deepAlias);
+    if (deepAlias.length > 0)
+      aliases.push(...deepAlias);
   }
   return aliases;
 };
@@ -12517,24 +12028,64 @@ var extractMainParameter = (parameter) => {
     return;
   if (parameter.charCodeAt(0) !== 123)
     return parameter;
-  if (parameter = parameter.slice(2, -2), !parameter.includes(","))
-    return parameter.indexOf("...") !== -1 ? parameter.slice(parameter.indexOf("...") + 3) : undefined;
+  if (parameter = parameter.slice(2, -2), !parameter.includes(",")) {
+    if (parameter.indexOf("...") !== -1)
+      return parameter.slice(parameter.indexOf("...") + 3);
+    return;
+  }
   let spreadIndex = parameter.indexOf("...");
-  if (spreadIndex !== -1)
-    return parameter.slice(spreadIndex + 3).trimEnd();
+  if (spreadIndex === -1)
+    return;
+  return parameter.slice(spreadIndex + 3).trimEnd();
 };
 var inferBodyReference = (code, aliases, inference) => {
   let access = (type, alias) => new RegExp(`${alias}\\.(${type})|${alias}\\["${type}"\\]|${alias}\\['${type}'\\]`).test(code);
-  for (let alias of aliases)
-    if (alias) {
-      if (alias.charCodeAt(0) === 123) {
-        let parameters = retrieveRootParamters(alias).parameters;
-        parameters.query && (inference.query = true), parameters.headers && (inference.headers = true), parameters.body && (inference.body = true), parameters.cookie && (inference.cookie = true), parameters.set && (inference.set = true), parameters.server && (inference.server = true), parameters.url && (inference.url = true), parameters.route && (inference.route = true), parameters.path && (inference.path = true);
-        continue;
-      }
-      if (!inference.query && (access("query", alias) || code.includes("return " + alias) || code.includes("return " + alias + ".query")) && (inference.query = true), !inference.headers && access("headers", alias) && (inference.headers = true), !inference.body && access("body", alias) && (inference.body = true), !inference.cookie && access("cookie", alias) && (inference.cookie = true), !inference.set && access("set", alias) && (inference.set = true), !inference.server && access("server", alias) && (inference.server = true), !inference.route && access("route", alias) && (inference.route = true), !inference.url && access("url", alias) && (inference.url = true), !inference.path && access("path", alias) && (inference.path = true), inference.query && inference.headers && inference.body && inference.cookie && inference.set && inference.server && inference.route && inference.url && inference.path)
-        break;
+  for (let alias of aliases) {
+    if (!alias)
+      continue;
+    if (alias.charCodeAt(0) === 123) {
+      let parameters = retrieveRootParamters(alias).parameters;
+      if (parameters.query)
+        inference.query = true;
+      if (parameters.headers)
+        inference.headers = true;
+      if (parameters.body)
+        inference.body = true;
+      if (parameters.cookie)
+        inference.cookie = true;
+      if (parameters.set)
+        inference.set = true;
+      if (parameters.server)
+        inference.server = true;
+      if (parameters.url)
+        inference.url = true;
+      if (parameters.route)
+        inference.route = true;
+      if (parameters.path)
+        inference.path = true;
+      continue;
     }
+    if (!inference.query && (access("query", alias) || code.includes("return " + alias) || code.includes("return " + alias + ".query")))
+      inference.query = true;
+    if (!inference.headers && access("headers", alias))
+      inference.headers = true;
+    if (!inference.body && access("body", alias))
+      inference.body = true;
+    if (!inference.cookie && access("cookie", alias))
+      inference.cookie = true;
+    if (!inference.set && access("set", alias))
+      inference.set = true;
+    if (!inference.server && access("server", alias))
+      inference.server = true;
+    if (!inference.route && access("route", alias))
+      inference.route = true;
+    if (!inference.url && access("url", alias))
+      inference.url = true;
+    if (!inference.path && access("path", alias))
+      inference.path = true;
+    if (inference.query && inference.headers && inference.body && inference.cookie && inference.set && inference.server && inference.route && inference.url && inference.path)
+      break;
+  }
   return aliases;
 };
 var isContextPassToFunction = (context, body, inference) => {
@@ -12542,77 +12093,84 @@ var isContextPassToFunction = (context, body, inference) => {
     let captureFunction = new RegExp(`\\w\\((.*?)?${context}`, "gs");
     captureFunction.test(body);
     let nextChar = body.charCodeAt(captureFunction.lastIndex);
-    return nextChar === 41 || nextChar === 44 ? (inference.query = true, inference.headers = true, inference.body = true, inference.cookie = true, inference.set = true, inference.server = true, inference.url = true, inference.route = true, inference.path = true, true) : false;
-  } catch {
+    if (nextChar === 41 || nextChar === 44)
+      return inference.query = true, inference.headers = true, inference.body = true, inference.cookie = true, inference.set = true, inference.server = true, inference.url = true, inference.route = true, inference.path = true, true;
+    return false;
+  } catch (error2) {
     return console.log("[Sucrose] warning: unexpected isContextPassToFunction error, you may continue development as usual but please report the following to maintainers:"), console.log("--- body ---"), console.log(body), console.log("--- context ---"), console.log(context), true;
   }
 };
 var pendingGC;
 var caches = {};
 var clearSucroseCache = (delay = 0) => {
-  pendingGC && clearTimeout(pendingGC), pendingGC = setTimeout(() => {
-    caches = {}, pendingGC = undefined, isBun && Bun.gc(false);
+  if (pendingGC)
+    clearTimeout(pendingGC);
+  pendingGC = setTimeout(() => {
+    if (caches = {}, pendingGC = undefined, isBun)
+      Bun.gc(false);
   }, delay);
 };
-var mergeInference = (a, b) => ({
-  body: a.body || b.body,
-  cookie: a.cookie || b.cookie,
-  headers: a.headers || b.headers,
-  query: a.query || b.query,
-  set: a.set || b.set,
-  server: a.server || b.server,
-  url: a.url || b.url,
-  route: a.route || b.route,
-  path: a.path || b.path
-});
-var sucrose = (lifeCycle, inference = {
-  query: false,
-  headers: false,
-  body: false,
-  cookie: false,
-  set: false,
-  server: false,
-  url: false,
-  route: false,
-  path: false
-}) => {
+var mergeInference = (a, b) => {
+  return { body: a.body || b.body, cookie: a.cookie || b.cookie, headers: a.headers || b.headers, query: a.query || b.query, set: a.set || b.set, server: a.server || b.server, url: a.url || b.url, route: a.route || b.route, path: a.path || b.path };
+};
+var sucrose = (lifeCycle, inference = { query: false, headers: false, body: false, cookie: false, set: false, server: false, url: false, route: false, path: false }) => {
   let events = [];
-  lifeCycle.request?.length && events.push(...lifeCycle.request), lifeCycle.beforeHandle?.length && events.push(...lifeCycle.beforeHandle), lifeCycle.parse?.length && events.push(...lifeCycle.parse), lifeCycle.error?.length && events.push(...lifeCycle.error), lifeCycle.transform?.length && events.push(...lifeCycle.transform), lifeCycle.afterHandle?.length && events.push(...lifeCycle.afterHandle), lifeCycle.mapResponse?.length && events.push(...lifeCycle.mapResponse), lifeCycle.afterResponse?.length && events.push(...lifeCycle.afterResponse), lifeCycle.handler && typeof lifeCycle.handler == "function" && events.push(lifeCycle.handler);
+  if (lifeCycle.request?.length)
+    events.push(...lifeCycle.request);
+  if (lifeCycle.beforeHandle?.length)
+    events.push(...lifeCycle.beforeHandle);
+  if (lifeCycle.parse?.length)
+    events.push(...lifeCycle.parse);
+  if (lifeCycle.error?.length)
+    events.push(...lifeCycle.error);
+  if (lifeCycle.transform?.length)
+    events.push(...lifeCycle.transform);
+  if (lifeCycle.afterHandle?.length)
+    events.push(...lifeCycle.afterHandle);
+  if (lifeCycle.mapResponse?.length)
+    events.push(...lifeCycle.mapResponse);
+  if (lifeCycle.afterResponse?.length)
+    events.push(...lifeCycle.afterResponse);
+  if (lifeCycle.handler && typeof lifeCycle.handler === "function")
+    events.push(lifeCycle.handler);
   for (let i2 = 0;i2 < events.length; i2++) {
     let e = events[i2];
     if (!e)
       continue;
-    let event = typeof e == "object" ? e.fn : e;
-    if (typeof event != "function")
+    let event = typeof e === "object" ? e.fn : e;
+    if (typeof event !== "function")
       continue;
     let content = event.toString(), key = checksum(content), cachedInference = caches[key];
     if (cachedInference) {
       inference = mergeInference(inference, cachedInference);
       continue;
     }
-    let fnInference = {
-      query: false,
-      headers: false,
-      body: false,
-      cookie: false,
-      set: false,
-      server: false,
-      url: false,
-      route: false,
-      path: false
-    }, [parameter, body] = separateFunction(content), rootParameters = findParameterReference(parameter, fnInference), mainParameter = extractMainParameter(rootParameters);
+    let fnInference = { query: false, headers: false, body: false, cookie: false, set: false, server: false, url: false, route: false, path: false }, [parameter, body] = separateFunction(content), rootParameters = findParameterReference(parameter, fnInference), mainParameter = extractMainParameter(rootParameters);
     if (mainParameter) {
       let aliases = findAlias(mainParameter, body.slice(1, -1));
       aliases.splice(0, -1, mainParameter);
       let code = body;
-      code.charCodeAt(0) === 123 && code.charCodeAt(body.length - 1) === 125 && (code = code.slice(1, -1)), isContextPassToFunction(mainParameter, code, fnInference) || inferBodyReference(code, aliases, fnInference), !fnInference.query && code.includes("return " + mainParameter + ".query") && (fnInference.query = true);
+      if (code.charCodeAt(0) === 123 && code.charCodeAt(body.length - 1) === 125)
+        code = code.slice(1, -1);
+      if (!isContextPassToFunction(mainParameter, code, fnInference))
+        inferBodyReference(code, aliases, fnInference);
+      if (!fnInference.query && code.includes("return " + mainParameter + ".query"))
+        fnInference.query = true;
     }
-    if (caches[key] || (caches[key] = fnInference), inference = mergeInference(inference, fnInference), inference.query && inference.headers && inference.body && inference.cookie && inference.set && inference.server && inference.url && inference.route && inference.path)
+    if (!caches[key])
+      caches[key] = fnInference;
+    if (inference = mergeInference(inference, fnInference), inference.query && inference.headers && inference.body && inference.cookie && inference.set && inference.server && inference.url && inference.route && inference.path)
       break;
   }
   return inference;
 };
-var Cookie = class {
+var import_cookie = __toESM2(require_dist(), 1);
+var import_fast_decode_uri_component = __toESM2(require_fast_decode_uri_component(), 1);
+
+class Cookie {
+  name;
+  jar;
+  initial;
   constructor(name, jar, initial = {}) {
     this.name = name;
     this.jar = jar;
@@ -12622,10 +12180,14 @@ var Cookie = class {
     return this.jar[this.name] ?? this.initial;
   }
   set cookie(jar) {
-    this.name in this.jar || (this.jar[this.name] = this.initial), this.jar[this.name] = jar;
+    if (!(this.name in this.jar))
+      this.jar[this.name] = this.initial;
+    this.jar[this.name] = jar;
   }
   get setCookie() {
-    return this.name in this.jar || (this.jar[this.name] = this.initial), this.jar[this.name];
+    if (!(this.name in this.jar))
+      this.jar[this.name] = this.initial;
+    return this.jar[this.name];
   }
   set setCookie(jar) {
     this.cookie = jar;
@@ -12697,40 +12259,35 @@ var Cookie = class {
     this.setCookie.secrets = secrets;
   }
   update(config) {
-    return this.setCookie = Object.assign(this.cookie, typeof config == "function" ? config(this.cookie) : config), this;
+    return this.setCookie = Object.assign(this.cookie, typeof config === "function" ? config(this.cookie) : config), this;
   }
   set(config) {
-    return this.setCookie = Object.assign({
-      ...this.initial,
-      value: this.value
-    }, typeof config == "function" ? config(this.cookie) : config), this;
+    return this.setCookie = Object.assign({ ...this.initial, value: this.value }, typeof config === "function" ? config(this.cookie) : config), this;
   }
   remove() {
-    if (this.value !== undefined)
-      return this.set({
-        expires: /* @__PURE__ */ new Date(0),
-        maxAge: 0,
-        value: ""
-      }), this;
+    if (this.value === undefined)
+      return;
+    return this.set({ expires: new Date(0), maxAge: 0, value: "" }), this;
   }
   toString() {
-    return typeof this.value == "object" ? JSON.stringify(this.value) : this.value?.toString() ?? "";
+    return typeof this.value === "object" ? JSON.stringify(this.value) : this.value?.toString() ?? "";
   }
+}
+var createCookieJar = (set2, store, initial) => {
+  if (!set2.cookie)
+    set2.cookie = {};
+  return new Proxy(store, { get(_2, key) {
+    if (key in store)
+      return new Cookie(key, set2.cookie, Object.assign({}, initial ?? {}, store[key]));
+    return new Cookie(key, set2.cookie, Object.assign({}, initial));
+  } });
 };
-var createCookieJar = (set2, store, initial) => (set2.cookie || (set2.cookie = {}), new Proxy(store, {
-  get(_, key) {
-    return key in store ? new Cookie(key, set2.cookie, Object.assign({}, initial ?? {}, store[key])) : new Cookie(key, set2.cookie, Object.assign({}, initial));
-  }
-}));
-var parseCookie = async (set2, cookieString, {
-  secrets,
-  sign,
-  ...initial
-} = {}) => {
+var parseCookie = async (set2, cookieString, { secrets, sign, ...initial } = {}) => {
   if (!cookieString)
     return createCookieJar(set2, {}, initial);
-  let isStringKey = typeof secrets == "string";
-  sign && sign !== true && !Array.isArray(sign) && (sign = [sign]);
+  let isStringKey = typeof secrets === "string";
+  if (sign && sign !== true && !Array.isArray(sign))
+    sign = [sign];
   let jar = {}, cookies = import_cookie.parse(cookieString);
   for (let [name, v] of Object.entries(cookies)) {
     if (v === undefined)
@@ -12757,9 +12314,7 @@ var parseCookie = async (set2, cookieString, {
           throw new InvalidCookieSignature(name);
       }
     }
-    jar[name] = {
-      value
-    };
+    jar[name] = { value };
   }
   return createCookieJar(set2, jar, initial);
 };
@@ -12771,10 +12326,15 @@ var serializeCookie = (cookies) => {
     if (!key || !property)
       continue;
     let value = property.value;
-    value != null && set2.push(import_cookie.serialize(key, typeof value == "object" ? JSON.stringify(value) : value + "", property));
+    if (value === undefined || value === null)
+      continue;
+    set2.push(import_cookie.serialize(key, typeof value === "object" ? JSON.stringify(value) : value + "", property));
   }
-  if (set2.length !== 0)
-    return set2.length === 1 ? set2[0] : set2;
+  if (set2.length === 0)
+    return;
+  if (set2.length === 1)
+    return set2[0];
+  return set2;
 };
 var handleFile = (response, set2) => {
   if (!isBun && response instanceof Promise)
@@ -12783,40 +12343,21 @@ var handleFile = (response, set2) => {
   if (!set2 && size || size && set2 && set2.status !== 206 && set2.status !== 304 && set2.status !== 412 && set2.status !== 416) {
     if (set2) {
       if (set2.headers instanceof Headers) {
-        let setHeaders = {
-          "accept-ranges": "bytes",
-          "content-range": `bytes 0-${size - 1}/${size}`,
-          "transfer-encoding": "chunked"
-        };
+        let setHeaders = { "accept-ranges": "bytes", "content-range": `bytes 0-${size - 1}/${size}`, "transfer-encoding": "chunked" };
         if (hasHeaderShorthand)
           setHeaders = set2.headers.toJSON();
         else {
           setHeaders = {};
           for (let [key, value] of set2.headers.entries())
-            key in set2.headers && (setHeaders[key] = value);
+            if (key in set2.headers)
+              setHeaders[key] = value;
         }
-        return new Response(response, {
-          status: set2.status,
-          headers: setHeaders
-        });
+        return new Response(response, { status: set2.status, headers: setHeaders });
       }
       if (isNotEmpty(set2.headers))
-        return new Response(response, {
-          status: set2.status,
-          headers: Object.assign({
-            "accept-ranges": "bytes",
-            "content-range": `bytes 0-${size - 1}/${size}`,
-            "transfer-encoding": "chunked"
-          }, set2.headers)
-        });
+        return new Response(response, { status: set2.status, headers: Object.assign({ "accept-ranges": "bytes", "content-range": `bytes 0-${size - 1}/${size}`, "transfer-encoding": "chunked" }, set2.headers) });
     }
-    return new Response(response, {
-      headers: {
-        "accept-ranges": "bytes",
-        "content-range": `bytes 0-${size - 1}/${size}`,
-        "transfer-encoding": "chunked"
-      }
-    });
+    return new Response(response, { headers: { "accept-ranges": "bytes", "content-range": `bytes 0-${size - 1}/${size}`, "transfer-encoding": "chunked" } });
   }
   return new Response(response);
 };
@@ -12832,86 +12373,94 @@ var parseSetCookies = (headers, setCookie) => {
 };
 var responseToSetHeaders = (response, set2) => {
   if (set2?.headers) {
-    if (response)
+    if (response) {
       if (hasHeaderShorthand)
         Object.assign(set2.headers, response.headers.toJSON());
       else
         for (let [key, value] of response.headers.entries())
-          key in set2.headers && (set2.headers[key] = value);
-    return set2.status === 200 && (set2.status = response.status), set2.headers["content-encoding"] && delete set2.headers["content-encoding"], set2;
+          if (key in set2.headers)
+            set2.headers[key] = value;
+    }
+    if (set2.status === 200)
+      set2.status = response.status;
+    if (set2.headers["content-encoding"])
+      delete set2.headers["content-encoding"];
+    return set2;
   }
   if (!response)
-    return {
-      headers: {},
-      status: set2?.status ?? 200
-    };
-  if (hasHeaderShorthand)
-    return set2 = {
-      headers: response.headers.toJSON(),
-      status: set2?.status ?? 200
-    }, set2.headers["content-encoding"] && delete set2.headers["content-encoding"], set2;
-  set2 = {
-    headers: {},
-    status: set2?.status ?? 200
-  };
-  for (let [key, value] of response.headers.entries())
-    key !== "content-encoding" && key in set2.headers && (set2.headers[key] = value);
+    return { headers: {}, status: set2?.status ?? 200 };
+  if (hasHeaderShorthand) {
+    if (set2 = { headers: response.headers.toJSON(), status: set2?.status ?? 200 }, set2.headers["content-encoding"])
+      delete set2.headers["content-encoding"];
+    return set2;
+  }
+  set2 = { headers: {}, status: set2?.status ?? 200 };
+  for (let [key, value] of response.headers.entries()) {
+    if (key === "content-encoding")
+      continue;
+    if (key in set2.headers)
+      set2.headers[key] = value;
+  }
   return set2;
 };
-var createStreamHandler = ({ mapResponse: mapResponse3, mapCompactResponse: mapCompactResponse3 }) => async (generator, set2, request) => {
+var createStreamHandler = ({ mapResponse, mapCompactResponse }) => async (generator, set2, request) => {
   let init = generator.next();
-  if (init instanceof Promise && (init = await init), typeof init?.done > "u" || init?.done)
-    return set2 ? mapResponse3(init.value, set2, request) : mapCompactResponse3(init.value, request);
-  let contentType = init.value && typeof init.value?.stream ? "text/event-stream" : init.value && typeof init.value == "object" ? "application/json" : "text/plain";
-  return set2?.headers ? (set2.headers["transfer-encoding"] || (set2.headers["transfer-encoding"] = "chunked"), set2.headers["content-type"] || (set2.headers["content-type"] = contentType), set2.headers["cache-control"] || (set2.headers["cache-control"] = "no-cache")) : set2 = {
-    status: 200,
-    headers: {
-      "content-type": contentType,
-      "transfer-encoding": "chunked",
-      "cache-control": "no-cache",
-      connection: "keep-alive"
-    }
-  }, new Response(new ReadableStream({
-    async start(controller) {
-      let end = false;
-      if (request?.signal?.addEventListener("abort", () => {
-        end = true;
-        try {
-          controller.close();
-        } catch {}
-      }), init.value !== undefined && init.value !== null)
-        if (init.value.toStream)
-          controller.enqueue(init.value.toStream());
-        else if (typeof init.value == "object")
-          try {
-            controller.enqueue(Buffer.from(JSON.stringify(init.value)));
-          } catch {
-            controller.enqueue(Buffer.from(init.value.toString()));
-          }
-        else
-          controller.enqueue(Buffer.from(init.value.toString()));
-      for await (let chunk of generator) {
-        if (end)
-          break;
-        if (chunk != null) {
-          if (chunk.toStream)
-            controller.enqueue(chunk.toStream());
-          else if (typeof chunk == "object")
-            try {
-              controller.enqueue(Buffer.from(JSON.stringify(chunk)));
-            } catch {
-              controller.enqueue(Buffer.from(chunk.toString()));
-            }
-          else
-            controller.enqueue(Buffer.from(chunk.toString()));
-          await new Promise((resolve) => setTimeout(() => resolve(), 0));
-        }
-      }
+  if (init instanceof Promise)
+    init = await init;
+  if (typeof init?.done === "undefined" || init?.done) {
+    if (set2)
+      return mapResponse(init.value, set2, request);
+    return mapCompactResponse(init.value, request);
+  }
+  let contentType = init.value && typeof init.value?.stream ? "text/event-stream" : init.value && typeof init.value === "object" ? "application/json" : "text/plain";
+  if (set2?.headers) {
+    if (!set2.headers["transfer-encoding"])
+      set2.headers["transfer-encoding"] = "chunked";
+    if (!set2.headers["content-type"])
+      set2.headers["content-type"] = contentType;
+    if (!set2.headers["cache-control"])
+      set2.headers["cache-control"] = "no-cache";
+  } else
+    set2 = { status: 200, headers: { "content-type": contentType, "transfer-encoding": "chunked", "cache-control": "no-cache", connection: "keep-alive" } };
+  return new Response(new ReadableStream({ async start(controller) {
+    let end = false;
+    if (request?.signal?.addEventListener("abort", () => {
+      end = true;
       try {
         controller.close();
       } catch {}
+    }), init.value !== undefined && init.value !== null)
+      if (init.value.toStream)
+        controller.enqueue(init.value.toStream());
+      else if (typeof init.value === "object")
+        try {
+          controller.enqueue(Buffer.from(JSON.stringify(init.value)));
+        } catch {
+          controller.enqueue(Buffer.from(init.value.toString()));
+        }
+      else
+        controller.enqueue(Buffer.from(init.value.toString()));
+    for await (let chunk of generator) {
+      if (end)
+        break;
+      if (chunk === undefined || chunk === null)
+        continue;
+      if (chunk.toStream)
+        controller.enqueue(chunk.toStream());
+      else if (typeof chunk === "object")
+        try {
+          controller.enqueue(Buffer.from(JSON.stringify(chunk)));
+        } catch {
+          controller.enqueue(Buffer.from(chunk.toString()));
+        }
+      else
+        controller.enqueue(Buffer.from(chunk.toString()));
+      await new Promise((resolve) => setTimeout(() => resolve(), 0));
     }
-  }), set2);
+    try {
+      controller.close();
+    } catch {}
+  } }), set2);
 };
 async function* streamResponse(response) {
   let body = response.body;
@@ -12919,7 +12468,7 @@ async function* streamResponse(response) {
     return;
   let reader = body.getReader(), decoder = new TextDecoder;
   try {
-    for (;; ) {
+    while (true) {
       let { done, value } = await reader.read();
       if (done)
         break;
@@ -12930,14 +12479,18 @@ async function* streamResponse(response) {
   }
 }
 var handleSet = (set2) => {
-  if (typeof set2.status == "string" && (set2.status = StatusMap[set2.status]), set2.cookie && isNotEmpty(set2.cookie)) {
+  if (typeof set2.status === "string")
+    set2.status = StatusMap[set2.status];
+  if (set2.cookie && isNotEmpty(set2.cookie)) {
     let cookie = serializeCookie(set2.cookie);
-    cookie && (set2.headers["set-cookie"] = cookie);
+    if (cookie)
+      set2.headers["set-cookie"] = cookie;
   }
-  set2.headers["set-cookie"] && Array.isArray(set2.headers["set-cookie"]) && (set2.headers = parseSetCookies(new Headers(set2.headers), set2.headers["set-cookie"]));
+  if (set2.headers["set-cookie"] && Array.isArray(set2.headers["set-cookie"]))
+    set2.headers = parseSetCookies(new Headers(set2.headers), set2.headers["set-cookie"]);
 };
 var createResponseHandler = (handler) => {
-  let handleStream3 = createStreamHandler(handler);
+  let handleStream = createStreamHandler(handler);
   return (response, set2, request) => {
     let isCookieSet = false;
     if (set2.headers instanceof Headers)
@@ -12954,13 +12507,16 @@ var createResponseHandler = (handler) => {
       for (let key in set2.headers)
         response.headers.append(key, set2.headers[key]);
     let status2 = set2.status ?? 200;
-    return response.status !== status2 && status2 !== 200 && (response.status <= 300 || response.status > 400) ? response.text().then((value) => {
-      let newResponse = new Response(value, {
-        headers: response.headers,
-        status: set2.status
+    if (response.status !== status2 && status2 !== 200 && (response.status <= 300 || response.status > 400))
+      return response.text().then((value) => {
+        let newResponse = new Response(value, { headers: response.headers, status: set2.status });
+        if (!newResponse.headers.has("content-length") && newResponse.headers.get("transfer-encoding") === "chunked")
+          return handleStream(streamResponse(newResponse), responseToSetHeaders(newResponse, set2), request);
+        return newResponse;
       });
-      return !newResponse.headers.has("content-length") && newResponse.headers.get("transfer-encoding") === "chunked" ? handleStream3(streamResponse(newResponse), responseToSetHeaders(newResponse, set2), request) : newResponse;
-    }) : !response.headers.has("content-length") && response.headers.get("transfer-encoding") === "chunked" ? handleStream3(streamResponse(response), responseToSetHeaders(response, set2), request) : response;
+    if (!response.headers.has("content-length") && response.headers.get("transfer-encoding") === "chunked")
+      return handleStream(streamResponse(response), responseToSetHeaders(response, set2), request);
+    return response;
   };
 };
 var mapResponse = (response, set2, request) => {
@@ -12980,15 +12536,16 @@ var mapResponse = (response, set2, request) => {
       case "ElysiaCustomStatusResponse":
         return set2.status = response.code, mapResponse(response.response, set2, request);
       case "ReadableStream":
-        return set2.headers["content-type"]?.startsWith("text/event-stream") || (set2.headers["content-type"] = "text/event-stream; charset=utf-8"), request?.signal?.addEventListener("abort", {
-          handleEvent() {
-            request?.signal && !request?.signal?.aborted && response.cancel();
-          }
-        }, {
-          once: true
-        }), new Response(response, set2);
+        if (!set2.headers["content-type"]?.startsWith("text/event-stream"))
+          set2.headers["content-type"] = "text/event-stream; charset=utf-8";
+        return request?.signal?.addEventListener("abort", { handleEvent() {
+          if (request?.signal && !request?.signal?.aborted)
+            response.cancel();
+        } }, { once: true }), new Response(response, set2);
       case undefined:
-        return response ? new Response(JSON.stringify(response), set2) : new Response("", set2);
+        if (!response)
+          return new Response("", set2);
+        return new Response(JSON.stringify(response), set2);
       case "Response":
         return handleResponse(response, set2, request);
       case "Error":
@@ -13001,7 +12558,9 @@ var mapResponse = (response, set2, request) => {
       case "Boolean":
         return new Response(response.toString(), set2);
       case "Cookie":
-        return response instanceof Cookie ? new Response(response.value, set2) : new Response(response?.toString(), set2);
+        if (response instanceof Cookie)
+          return new Response(response.value, set2);
+        return new Response(response?.toString(), set2);
       case "FormData":
         return new Response(response, set2);
       default:
@@ -13013,175 +12572,179 @@ var mapResponse = (response, set2, request) => {
           return errorToResponse(response, set2);
         if (response instanceof ElysiaCustomStatusResponse)
           return set2.status = response.code, mapResponse(response.response, set2, request);
-        if (typeof response?.next == "function")
+        if (typeof response?.next === "function")
           return handleStream(response, set2, request);
-        if (typeof response?.then == "function")
+        if (typeof response?.then === "function")
           return response.then((x2) => mapResponse(x2, set2));
-        if (typeof response?.toResponse == "function")
+        if (typeof response?.toResponse === "function")
           return mapResponse(response.toResponse(), set2);
         if ("charCodeAt" in response) {
           let code = response.charCodeAt(0);
-          if (code === 123 || code === 91)
-            return set2.headers["Content-Type"] || (set2.headers["Content-Type"] = "application/json"), new Response(JSON.stringify(response), set2);
+          if (code === 123 || code === 91) {
+            if (!set2.headers["Content-Type"])
+              set2.headers["Content-Type"] = "application/json";
+            return new Response(JSON.stringify(response), set2);
+          }
         }
         return new Response(response, set2);
     }
-  return response instanceof Response && !response.headers.has("content-length") && response.headers.get("transfer-encoding") === "chunked" ? handleStream(streamResponse(response), responseToSetHeaders(response, set2), request) : typeof response?.next == "function" || response instanceof ReadableStream ? handleStream(response, set2, request) : mapCompactResponse(response, request);
+  if (response instanceof Response && !response.headers.has("content-length") && response.headers.get("transfer-encoding") === "chunked")
+    return handleStream(streamResponse(response), responseToSetHeaders(response, set2), request);
+  if (typeof response?.next === "function" || response instanceof ReadableStream)
+    return handleStream(response, set2, request);
+  return mapCompactResponse(response, request);
 };
 var mapEarlyResponse = (response, set2, request) => {
-  if (response != null)
-    if (isNotEmpty(set2.headers) || set2.status !== 200 || set2.cookie)
-      switch (handleSet(set2), response?.constructor?.name) {
-        case "String":
-          return set2.headers["content-type"] = "text/plain", new Response(response, set2);
-        case "Array":
-        case "Object":
-          return set2.headers["content-type"] = "application/json", new Response(JSON.stringify(response), set2);
-        case "ElysiaFile":
-          return handleFile(response.value);
-        case "File":
-          return handleFile(response, set2);
-        case "Blob":
-          return handleFile(response, set2);
-        case "ElysiaCustomStatusResponse":
-          return set2.status = response.code, mapEarlyResponse(response.response, set2, request);
-        case "ReadableStream":
-          return set2.headers["content-type"]?.startsWith("text/event-stream") || (set2.headers["content-type"] = "text/event-stream; charset=utf-8"), request?.signal?.addEventListener("abort", {
-            handleEvent() {
-              request?.signal && !request?.signal?.aborted && response.cancel();
-            }
-          }, {
-            once: true
-          }), new Response(response, set2);
-        case undefined:
-          return response ? new Response(JSON.stringify(response), set2) : undefined;
-        case "Response":
+  if (response === undefined || response === null)
+    return;
+  if (isNotEmpty(set2.headers) || set2.status !== 200 || set2.cookie)
+    switch (handleSet(set2), response?.constructor?.name) {
+      case "String":
+        return set2.headers["content-type"] = "text/plain", new Response(response, set2);
+      case "Array":
+      case "Object":
+        return set2.headers["content-type"] = "application/json", new Response(JSON.stringify(response), set2);
+      case "ElysiaFile":
+        return handleFile(response.value);
+      case "File":
+        return handleFile(response, set2);
+      case "Blob":
+        return handleFile(response, set2);
+      case "ElysiaCustomStatusResponse":
+        return set2.status = response.code, mapEarlyResponse(response.response, set2, request);
+      case "ReadableStream":
+        if (!set2.headers["content-type"]?.startsWith("text/event-stream"))
+          set2.headers["content-type"] = "text/event-stream; charset=utf-8";
+        return request?.signal?.addEventListener("abort", { handleEvent() {
+          if (request?.signal && !request?.signal?.aborted)
+            response.cancel();
+        } }, { once: true }), new Response(response, set2);
+      case undefined:
+        if (!response)
+          return;
+        return new Response(JSON.stringify(response), set2);
+      case "Response":
+        return handleResponse(response, set2, request);
+      case "Promise":
+        return response.then((x2) => mapEarlyResponse(x2, set2));
+      case "Error":
+        return errorToResponse(response, set2);
+      case "Function":
+        return mapEarlyResponse(response(), set2);
+      case "Number":
+      case "Boolean":
+        return new Response(response.toString(), set2);
+      case "FormData":
+        return new Response(response);
+      case "Cookie":
+        if (response instanceof Cookie)
+          return new Response(response.value, set2);
+        return new Response(response?.toString(), set2);
+      default:
+        if (response instanceof Response)
           return handleResponse(response, set2, request);
-        case "Promise":
+        if (response instanceof Promise)
           return response.then((x2) => mapEarlyResponse(x2, set2));
-        case "Error":
+        if (response instanceof Error)
           return errorToResponse(response, set2);
-        case "Function":
-          return mapEarlyResponse(response(), set2);
-        case "Number":
-        case "Boolean":
-          return new Response(response.toString(), set2);
-        case "FormData":
-          return new Response(response);
-        case "Cookie":
-          return response instanceof Cookie ? new Response(response.value, set2) : new Response(response?.toString(), set2);
-        default:
-          if (response instanceof Response)
-            return handleResponse(response, set2, request);
-          if (response instanceof Promise)
-            return response.then((x2) => mapEarlyResponse(x2, set2));
-          if (response instanceof Error)
-            return errorToResponse(response, set2);
-          if (response instanceof ElysiaCustomStatusResponse)
-            return set2.status = response.code, mapEarlyResponse(response.response, set2, request);
-          if (typeof response?.next == "function")
-            return handleStream(response, set2, request);
-          if (typeof response?.then == "function")
-            return response.then((x2) => mapEarlyResponse(x2, set2));
-          if (typeof response?.toResponse == "function")
-            return mapEarlyResponse(response.toResponse(), set2);
-          if ("charCodeAt" in response) {
-            let code = response.charCodeAt(0);
-            if (code === 123 || code === 91)
-              return set2.headers["Content-Type"] || (set2.headers["Content-Type"] = "application/json"), new Response(JSON.stringify(response), set2);
-          }
-          return new Response(response, set2);
-      }
-    else
-      switch (response?.constructor?.name) {
-        case "String":
-          return set2.headers["content-type"] = "text/plain", new Response(response);
-        case "Array":
-        case "Object":
-          return set2.headers["content-type"] = "application/json", new Response(JSON.stringify(response), set2);
-        case "ElysiaFile":
-          return handleFile(response.value);
-        case "File":
-          return handleFile(response, set2);
-        case "Blob":
-          return handleFile(response, set2);
-        case "ElysiaCustomStatusResponse":
+        if (response instanceof ElysiaCustomStatusResponse)
           return set2.status = response.code, mapEarlyResponse(response.response, set2, request);
-        case "ReadableStream":
-          return request?.signal?.addEventListener("abort", {
-            handleEvent() {
-              request?.signal && !request?.signal?.aborted && response.cancel();
-            }
-          }, {
-            once: true
-          }), new Response(response, {
-            headers: {
-              "Content-Type": "text/event-stream; charset=utf-8"
-            }
-          });
-        case undefined:
-          return response ? new Response(JSON.stringify(response), {
-            headers: {
-              "content-type": "application/json"
-            }
-          }) : new Response("");
-        case "Response":
-          return !response.headers.has("content-length") && response.headers.get("transfer-encoding") === "chunked" ? handleStream(streamResponse(response), responseToSetHeaders(response), request) : response;
-        case "Promise":
-          return response.then((x2) => {
-            let r = mapEarlyResponse(x2, set2);
-            if (r !== undefined)
-              return r;
-          });
-        case "Error":
-          return errorToResponse(response, set2);
-        case "Function":
-          return mapCompactResponse(response(), request);
-        case "Number":
-        case "Boolean":
-          return new Response(response.toString());
-        case "Cookie":
-          return response instanceof Cookie ? new Response(response.value, set2) : new Response(response?.toString(), set2);
-        case "FormData":
-          return new Response(response);
-        default:
-          if (response instanceof Response)
-            return response;
-          if (response instanceof Promise)
-            return response.then((x2) => mapEarlyResponse(x2, set2));
-          if (response instanceof Error)
-            return errorToResponse(response, set2);
-          if (response instanceof ElysiaCustomStatusResponse)
-            return set2.status = response.code, mapEarlyResponse(response.response, set2, request);
-          if (typeof response?.next == "function")
-            return handleStream(response, set2, request);
-          if (typeof response?.then == "function")
-            return response.then((x2) => mapEarlyResponse(x2, set2));
-          if (typeof response?.toResponse == "function")
-            return mapEarlyResponse(response.toResponse(), set2);
-          if ("charCodeAt" in response) {
-            let code = response.charCodeAt(0);
-            if (code === 123 || code === 91)
-              return set2.headers["Content-Type"] || (set2.headers["Content-Type"] = "application/json"), new Response(JSON.stringify(response), set2);
+        if (typeof response?.next === "function")
+          return handleStream(response, set2, request);
+        if (typeof response?.then === "function")
+          return response.then((x2) => mapEarlyResponse(x2, set2));
+        if (typeof response?.toResponse === "function")
+          return mapEarlyResponse(response.toResponse(), set2);
+        if ("charCodeAt" in response) {
+          let code = response.charCodeAt(0);
+          if (code === 123 || code === 91) {
+            if (!set2.headers["Content-Type"])
+              set2.headers["Content-Type"] = "application/json";
+            return new Response(JSON.stringify(response), set2);
           }
-          return new Response(response);
-      }
+        }
+        return new Response(response, set2);
+    }
+  else
+    switch (response?.constructor?.name) {
+      case "String":
+        return set2.headers["content-type"] = "text/plain", new Response(response);
+      case "Array":
+      case "Object":
+        return set2.headers["content-type"] = "application/json", new Response(JSON.stringify(response), set2);
+      case "ElysiaFile":
+        return handleFile(response.value);
+      case "File":
+        return handleFile(response, set2);
+      case "Blob":
+        return handleFile(response, set2);
+      case "ElysiaCustomStatusResponse":
+        return set2.status = response.code, mapEarlyResponse(response.response, set2, request);
+      case "ReadableStream":
+        return request?.signal?.addEventListener("abort", { handleEvent() {
+          if (request?.signal && !request?.signal?.aborted)
+            response.cancel();
+        } }, { once: true }), new Response(response, { headers: { "Content-Type": "text/event-stream; charset=utf-8" } });
+      case undefined:
+        if (!response)
+          return new Response("");
+        return new Response(JSON.stringify(response), { headers: { "content-type": "application/json" } });
+      case "Response":
+        if (!response.headers.has("content-length") && response.headers.get("transfer-encoding") === "chunked")
+          return handleStream(streamResponse(response), responseToSetHeaders(response), request);
+        return response;
+      case "Promise":
+        return response.then((x2) => {
+          let r = mapEarlyResponse(x2, set2);
+          if (r !== undefined)
+            return r;
+        });
+      case "Error":
+        return errorToResponse(response, set2);
+      case "Function":
+        return mapCompactResponse(response(), request);
+      case "Number":
+      case "Boolean":
+        return new Response(response.toString());
+      case "Cookie":
+        if (response instanceof Cookie)
+          return new Response(response.value, set2);
+        return new Response(response?.toString(), set2);
+      case "FormData":
+        return new Response(response);
+      default:
+        if (response instanceof Response)
+          return response;
+        if (response instanceof Promise)
+          return response.then((x2) => mapEarlyResponse(x2, set2));
+        if (response instanceof Error)
+          return errorToResponse(response, set2);
+        if (response instanceof ElysiaCustomStatusResponse)
+          return set2.status = response.code, mapEarlyResponse(response.response, set2, request);
+        if (typeof response?.next === "function")
+          return handleStream(response, set2, request);
+        if (typeof response?.then === "function")
+          return response.then((x2) => mapEarlyResponse(x2, set2));
+        if (typeof response?.toResponse === "function")
+          return mapEarlyResponse(response.toResponse(), set2);
+        if ("charCodeAt" in response) {
+          let code = response.charCodeAt(0);
+          if (code === 123 || code === 91) {
+            if (!set2.headers["Content-Type"])
+              set2.headers["Content-Type"] = "application/json";
+            return new Response(JSON.stringify(response), set2);
+          }
+        }
+        return new Response(response);
+    }
 };
 var mapCompactResponse = (response, request) => {
   switch (response?.constructor?.name) {
     case "String":
-      return new Response(response, {
-        headers: {
-          "Content-Type": "text/plain"
-        }
-      });
+      return new Response(response, { headers: { "Content-Type": "text/plain" } });
     case "Object":
     case "Array":
-      return new Response(JSON.stringify(response), {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
+      return new Response(JSON.stringify(response), { headers: { "Content-Type": "application/json" } });
     case "ElysiaFile":
       return handleFile(response.value);
     case "File":
@@ -13189,30 +12752,20 @@ var mapCompactResponse = (response, request) => {
     case "Blob":
       return handleFile(response);
     case "ElysiaCustomStatusResponse":
-      return mapResponse(response.response, {
-        status: response.code,
-        headers: {}
-      });
+      return mapResponse(response.response, { status: response.code, headers: {} });
     case "ReadableStream":
-      return request?.signal?.addEventListener("abort", {
-        handleEvent() {
-          request?.signal && !request?.signal?.aborted && response.cancel();
-        }
-      }, {
-        once: true
-      }), new Response(response, {
-        headers: {
-          "Content-Type": "text/event-stream; charset=utf-8"
-        }
-      });
+      return request?.signal?.addEventListener("abort", { handleEvent() {
+        if (request?.signal && !request?.signal?.aborted)
+          response.cancel();
+      } }, { once: true }), new Response(response, { headers: { "Content-Type": "text/event-stream; charset=utf-8" } });
     case undefined:
-      return response ? new Response(JSON.stringify(response), {
-        headers: {
-          "content-type": "application/json"
-        }
-      }) : new Response("");
+      if (!response)
+        return new Response("");
+      return new Response(JSON.stringify(response), { headers: { "content-type": "application/json" } });
     case "Response":
-      return response.headers.get("transfer-encoding") === "chunked" ? handleStream(streamResponse(response), responseToSetHeaders(response), request) : response;
+      if (response.headers.get("transfer-encoding") === "chunked")
+        return handleStream(streamResponse(response), responseToSetHeaders(response), request);
+      return response;
     case "Error":
       return errorToResponse(response);
     case "Promise":
@@ -13232,149 +12785,119 @@ var mapCompactResponse = (response, request) => {
       if (response instanceof Error)
         return errorToResponse(response);
       if (response instanceof ElysiaCustomStatusResponse)
-        return mapResponse(response.response, {
-          status: response.code,
-          headers: {}
-        });
-      if (typeof response?.next == "function")
+        return mapResponse(response.response, { status: response.code, headers: {} });
+      if (typeof response?.next === "function")
         return handleStream(response, undefined, request);
-      if (typeof response?.then == "function")
+      if (typeof response?.then === "function")
         return response.then((x2) => mapResponse(x2, set));
-      if (typeof response?.toResponse == "function")
+      if (typeof response?.toResponse === "function")
         return mapCompactResponse(response.toResponse());
       if ("charCodeAt" in response) {
         let code = response.charCodeAt(0);
         if (code === 123 || code === 91)
-          return new Response(JSON.stringify(response), {
-            headers: {
-              "Content-Type": "application/json"
-            }
-          });
+          return new Response(JSON.stringify(response), { headers: { "Content-Type": "application/json" } });
       }
       return new Response(response);
   }
 };
-var errorToResponse = (error2, set2) => new Response(JSON.stringify({
-  name: error2?.name,
-  message: error2?.message,
-  cause: error2?.cause
-}), {
-  status: set2?.status !== 200 ? set2?.status ?? 500 : 500,
-  headers: set2?.headers
-});
+var errorToResponse = (error2, set2) => new Response(JSON.stringify({ name: error2?.name, message: error2?.message, cause: error2?.cause }), { status: set2?.status !== 200 ? set2?.status ?? 500 : 500, headers: set2?.headers });
 var createStaticHandler = (handle, hooks, setHeaders = {}) => {
-  if (typeof handle == "function")
+  if (typeof handle === "function")
     return;
-  let response = mapResponse(handle, {
-    headers: setHeaders
-  });
+  let response = mapResponse(handle, { headers: setHeaders });
   if (!hooks.parse?.length && !hooks.transform?.length && !hooks.beforeHandle?.length && !hooks.afterHandle?.length)
     return response.clone.bind(response);
 };
-var handleResponse = createResponseHandler({
-  mapResponse,
-  mapCompactResponse
-});
-var handleStream = createStreamHandler({
-  mapResponse,
-  mapCompactResponse
-});
-var WebStandardAdapter = {
-  name: "web-standard",
-  isWebStandard: true,
-  handler: {
-    mapResponse,
-    mapEarlyResponse,
-    mapCompactResponse,
-    createStaticHandler
-  },
-  composeHandler: {
-    mapResponseContext: "c.request",
-    preferWebstandardHeaders: true,
-    headers: `c.headers={}
+var handleResponse = createResponseHandler({ mapResponse, mapCompactResponse });
+var handleStream = createStreamHandler({ mapResponse, mapCompactResponse });
+var WebStandardAdapter = { name: "web-standard", isWebStandard: true, handler: { mapResponse, mapEarlyResponse, mapCompactResponse, createStaticHandler }, composeHandler: { mapResponseContext: "c.request", preferWebstandardHeaders: true, headers: `c.headers={}
 for(const [k,v] of c.request.headers.entries())c.headers[k]=v
-`,
-    parser: {
-      json(isOptional2) {
-        return isOptional2 ? `try{c.body=await c.request.json()}catch{}
-` : `c.body=await c.request.json()
+`, parser: { json(isOptional) {
+  if (isOptional)
+    return `try{c.body=await c.request.json()}catch{}
 `;
-      },
-      text() {
-        return `c.body=await c.request.text()
+  return `c.body=await c.request.json()
 `;
-      },
-      urlencoded() {
-        return `c.body=parseQuery(await c.request.text())
+}, text() {
+  return `c.body=await c.request.text()
 `;
-      },
-      arrayBuffer() {
-        return `c.body=await c.request.arrayBuffer()
+}, urlencoded() {
+  return `c.body=parseQuery(await c.request.text())
 `;
-      },
-      formData(isOptional2) {
-        let fnLiteral = `
+}, arrayBuffer() {
+  return `c.body=await c.request.arrayBuffer()
+`;
+}, formData(isOptional) {
+  let fnLiteral = `
 c.body={}
 `;
-        return isOptional2 ? fnLiteral += "let form;try{form=await c.request.formData()}catch{}" : fnLiteral += `const form=await c.request.formData()
-`, fnLiteral + `for(const key of form.keys()){if(c.body[key]) continue
+  if (isOptional)
+    fnLiteral += "let form;try{form=await c.request.formData()}catch{}";
+  else
+    fnLiteral += `const form=await c.request.formData()
+`;
+  return fnLiteral + `for(const key of form.keys()){if(c.body[key]) continue
 const value=form.getAll(key)
 if(value.length===1)c.body[key]=value[0]
 else c.body[key]=value}`;
-      }
-    }
-  },
-  composeGeneralHandler: {
-    parameters: "r",
-    createContext(app) {
-      let decoratorsLiteral = "", fnLiteral = "", defaultHeaders = app.setHeaders;
-      for (let key of Object.keys(app.decorator))
-        decoratorsLiteral += `,'${key}':decorator['${key}']`;
-      let standardHostname = app.config.handler?.standardHostname ?? true, hasTrace = !!app.event.trace?.length;
-      return fnLiteral += `const u=r.url,s=u.indexOf('/',${standardHostname ? 11 : 7}),qi=u.indexOf('?',s+1)
+} } }, composeGeneralHandler: { parameters: "r", createContext(app) {
+  let decoratorsLiteral = "", fnLiteral = "", defaultHeaders = app.setHeaders;
+  for (let key of Object.keys(app.decorator))
+    decoratorsLiteral += `,'${key}':decorator['${key}']`;
+  let standardHostname = app.config.handler?.standardHostname ?? true, hasTrace = !!app.event.trace?.length;
+  if (fnLiteral += `const u=r.url,s=u.indexOf('/',${standardHostname ? 11 : 7}),qi=u.indexOf('?',s+1)
 let p
 if(qi===-1)p=u.substring(s)
 else p=u.substring(s, qi)
-`, hasTrace && (fnLiteral += `const id=randomId()
-`), fnLiteral += "const c={request:r,store,qi,path:p,url:u,redirect,error:status,status,set:{headers:", fnLiteral += Object.keys(defaultHeaders ?? {}).length ? "Object.assign({},app.setHeaders)" : "Object.create(null)", fnLiteral += ",status:200}", app.inference.server && (fnLiteral += ",get server(){return app.getServer()}"), hasTrace && (fnLiteral += ",[ELYSIA_REQUEST_ID]:id"), fnLiteral += decoratorsLiteral, fnLiteral += `}
+`, hasTrace)
+    fnLiteral += `const id=randomId()
+`;
+  if (fnLiteral += "const c={request:r,store,qi,path:p,url:u,redirect,error:status,status,set:{headers:", fnLiteral += Object.keys(defaultHeaders ?? {}).length ? "Object.assign({},app.setHeaders)" : "Object.create(null)", fnLiteral += ",status:200}", app.inference.server)
+    fnLiteral += ",get server(){return app.getServer()}";
+  if (hasTrace)
+    fnLiteral += ",[ELYSIA_REQUEST_ID]:id";
+  return fnLiteral += decoratorsLiteral, fnLiteral += `}
 `, fnLiteral;
-    },
-    error404(hasEventHook, hasErrorHook) {
-      let findDynamicRoute = "if(route===null)return ";
-      return hasErrorHook ? findDynamicRoute += `app.handleError(c,notFound,false,${this.parameters})` : findDynamicRoute += hasEventHook ? "new Response(error404Message,{status:c.set.status===200?404:c.set.status,headers:c.set.headers})" : "error404.clone()", {
-        declare: hasErrorHook ? "" : `const error404Message=notFound.message.toString()
+}, error404(hasEventHook, hasErrorHook) {
+  let findDynamicRoute = "if(route===null)return ";
+  if (hasErrorHook)
+    findDynamicRoute += `app.handleError(c,notFound,false,${this.parameters})`;
+  else
+    findDynamicRoute += hasEventHook ? "new Response(error404Message,{status:c.set.status===200?404:c.set.status,headers:c.set.headers})" : "error404.clone()";
+  return { declare: hasErrorHook ? "" : `const error404Message=notFound.message.toString()
 const error404=new Response(error404Message,{status:404})
-`,
-        code: findDynamicRoute
-      };
-    }
-  },
-  composeError: {
-    mapResponseContext: "",
-    validationError: "return new Response(error.message,{headers:Object.assign({'content-type':'application/json'},set.headers),status:set.status})",
-    unknownError: "return new Response(error.message,{headers:set.headers,status:error.status??set.status??500})"
-  },
-  listen() {
-    return () => {
-      throw new Error("WebStandard does not support listen, you might want to export default Elysia.fetch instead");
-    };
-  }
-};
+`, code: findDynamicRoute };
+} }, composeError: { mapResponseContext: "", validationError: "return new Response(error.message,{headers:Object.assign({'content-type':'application/json'},set.headers),status:set.status})", unknownError: "return new Response(error.message,{headers:set.headers,status:error.status??set.status??500})" }, listen() {
+  return () => {
+    throw new Error("WebStandard does not support listen, you might want to export default Elysia.fetch instead");
+  };
+} };
+var import_fast_decode_uri_component3 = __toESM2(require_fast_decode_uri_component(), 1);
+var import_fast_decode_uri_component2 = __toESM2(require_fast_decode_uri_component(), 1);
 function parseQueryFromURL(input, startIndex = 0) {
-  let result = /* @__PURE__ */ Object.create(null), KEY_PLUS_FLAG = 1, KEY_DECODE_FLAG = 2, VALUE_PLUS_FLAG = 4, VALUE_DECODE_FLAG = 8, flags = 0, startingIndex = startIndex - 1, equalityIndex = startingIndex, inputLength = input.length;
+  let result = Object.create(null), KEY_PLUS_FLAG = 1, KEY_DECODE_FLAG = 2, VALUE_PLUS_FLAG = 4, VALUE_DECODE_FLAG = 8, flags = 0, startingIndex = startIndex - 1, equalityIndex = startingIndex, inputLength = input.length;
   for (let i2 = startIndex;i2 < inputLength; i2++)
     switch (input.charCodeAt(i2)) {
       case 38:
         processKeyValuePair(i2), startingIndex = i2, equalityIndex = i2, flags = 0;
         break;
       case 61:
-        equalityIndex <= startingIndex ? equalityIndex = i2 : flags |= VALUE_DECODE_FLAG;
+        if (equalityIndex <= startingIndex)
+          equalityIndex = i2;
+        else
+          flags |= 8;
         break;
       case 43:
-        equalityIndex > startingIndex ? flags |= VALUE_PLUS_FLAG : flags |= KEY_PLUS_FLAG;
+        if (equalityIndex > startingIndex)
+          flags |= 4;
+        else
+          flags |= 1;
         break;
       case 37:
-        equalityIndex > startingIndex ? flags |= VALUE_DECODE_FLAG : flags |= KEY_DECODE_FLAG;
+        if (equalityIndex > startingIndex)
+          flags |= 8;
+        else
+          flags |= 2;
         break;
     }
   return processKeyValuePair(inputLength), result;
@@ -13383,148 +12906,384 @@ function parseQueryFromURL(input, startIndex = 0) {
     if (keyEndIndex <= startingIndex + 1)
       return;
     let keySlice = input.slice(startingIndex + 1, keyEndIndex);
-    if (flags & KEY_PLUS_FLAG && (keySlice = keySlice.replace(/\+/g, " ")), flags & KEY_DECODE_FLAG && (keySlice = import_fast_decode_uri_component3.default(keySlice) || keySlice), result[keySlice] !== undefined)
+    if (flags & 1)
+      keySlice = keySlice.replace(/\+/g, " ");
+    if (flags & 2)
+      keySlice = import_fast_decode_uri_component2.default(keySlice) || keySlice;
+    if (result[keySlice] !== undefined)
       return;
     let finalValue = "";
-    hasBothKeyValuePair && (finalValue = input.slice(equalityIndex + 1, endIndex), flags & VALUE_PLUS_FLAG && (finalValue = finalValue.replace(/\+/g, " ")), flags & VALUE_DECODE_FLAG && (finalValue = import_fast_decode_uri_component3.default(finalValue) || finalValue)), result[keySlice] = finalValue;
+    if (hasBothKeyValuePair) {
+      if (finalValue = input.slice(equalityIndex + 1, endIndex), flags & 4)
+        finalValue = finalValue.replace(/\+/g, " ");
+      if (flags & 8)
+        finalValue = import_fast_decode_uri_component2.default(finalValue) || finalValue;
+    }
+    result[keySlice] = finalValue;
   }
 }
 function parseQuery(input) {
-  let result = /* @__PURE__ */ Object.create(null), flags = 0, KEY_HAS_PLUS = 1, KEY_NEEDS_DECODE = 2, VALUE_HAS_PLUS = 4, VALUE_NEEDS_DECODE = 8, inputLength = input.length, startingIndex = -1, equalityIndex = -1;
+  let result = Object.create(null), flags = 0, KEY_HAS_PLUS = 1, KEY_NEEDS_DECODE = 2, VALUE_HAS_PLUS = 4, VALUE_NEEDS_DECODE = 8, inputLength = input.length, startingIndex = -1, equalityIndex = -1;
   for (let i2 = 0;i2 < inputLength; i2++)
     switch (input.charCodeAt(i2)) {
       case 38:
         processKeyValuePair(input, i2), startingIndex = i2, equalityIndex = i2, flags = 0;
         break;
       case 61:
-        equalityIndex <= startingIndex ? equalityIndex = i2 : flags |= VALUE_NEEDS_DECODE;
+        if (equalityIndex <= startingIndex)
+          equalityIndex = i2;
+        else
+          flags |= VALUE_NEEDS_DECODE;
         break;
       case 43:
-        equalityIndex > startingIndex ? flags |= VALUE_HAS_PLUS : flags |= KEY_HAS_PLUS;
+        if (equalityIndex > startingIndex)
+          flags |= VALUE_HAS_PLUS;
+        else
+          flags |= KEY_HAS_PLUS;
         break;
       case 37:
-        equalityIndex > startingIndex ? flags |= VALUE_NEEDS_DECODE : flags |= KEY_NEEDS_DECODE;
+        if (equalityIndex > startingIndex)
+          flags |= VALUE_NEEDS_DECODE;
+        else
+          flags |= KEY_NEEDS_DECODE;
         break;
     }
-  return startingIndex < inputLength && processKeyValuePair(input, inputLength), result;
+  if (startingIndex < inputLength)
+    processKeyValuePair(input, inputLength);
+  return result;
   function processKeyValuePair(input2, endIndex) {
     let hasBothKeyValuePair = equalityIndex > startingIndex, effectiveEqualityIndex = hasBothKeyValuePair ? equalityIndex : endIndex, keySlice = input2.slice(startingIndex + 1, effectiveEqualityIndex);
     if (!hasBothKeyValuePair && keySlice.length === 0)
       return;
     let finalKey = keySlice;
-    flags & KEY_HAS_PLUS && (finalKey = finalKey.replace(/\+/g, " ")), flags & KEY_NEEDS_DECODE && (finalKey = import_fast_decode_uri_component3.default(finalKey) || finalKey);
+    if (flags & KEY_HAS_PLUS)
+      finalKey = finalKey.replace(/\+/g, " ");
+    if (flags & KEY_NEEDS_DECODE)
+      finalKey = import_fast_decode_uri_component2.default(finalKey) || finalKey;
     let finalValue = "";
     if (hasBothKeyValuePair) {
       let valueSlice = input2.slice(equalityIndex + 1, endIndex);
-      flags & VALUE_HAS_PLUS && (valueSlice = valueSlice.replace(/\+/g, " ")), flags & VALUE_NEEDS_DECODE && (valueSlice = import_fast_decode_uri_component3.default(valueSlice) || valueSlice), finalValue = valueSlice;
+      if (flags & VALUE_HAS_PLUS)
+        valueSlice = valueSlice.replace(/\+/g, " ");
+      if (flags & VALUE_NEEDS_DECODE)
+        valueSlice = import_fast_decode_uri_component2.default(valueSlice) || valueSlice;
+      finalValue = valueSlice;
     }
     let currentValue = result[finalKey];
-    currentValue === undefined ? result[finalKey] = finalValue : Array.isArray(currentValue) ? currentValue.push(finalValue) : result[finalKey] = [currentValue, finalValue];
+    if (currentValue === undefined)
+      result[finalKey] = finalValue;
+    else if (Array.isArray(currentValue))
+      currentValue.push(finalValue);
+    else
+      result[finalKey] = [currentValue, finalValue];
   }
 }
 var ELYSIA_TRACE = Symbol("ElysiaTrace");
 var createProcess = () => {
   let { promise, resolve } = Promise.withResolvers(), { promise: end, resolve: resolveEnd } = Promise.withResolvers(), { promise: error2, resolve: resolveError } = Promise.withResolvers(), callbacks = [], callbacksEnd = [];
-  return [
-    (callback) => (callback && callbacks.push(callback), promise),
-    (process2) => {
-      let processes = [], resolvers = [], groupError = null;
-      for (let i2 = 0;i2 < (process2.total ?? 0); i2++) {
-        let { promise: promise2, resolve: resolve2 } = Promise.withResolvers(), { promise: end2, resolve: resolveEnd2 } = Promise.withResolvers(), { promise: error3, resolve: resolveError2 } = Promise.withResolvers(), callbacks2 = [], callbacksEnd2 = [];
-        processes.push((callback) => (callback && callbacks2.push(callback), promise2)), resolvers.push((process3) => {
-          let result2 = {
-            ...process3,
-            end: end2,
-            error: error3,
-            index: i2,
-            onStop(callback) {
-              return callback && callbacksEnd2.push(callback), end2;
-            }
-          };
-          resolve2(result2);
-          for (let i22 = 0;i22 < callbacks2.length; i22++)
-            callbacks2[i22](result2);
-          return (error4 = null) => {
-            let end3 = performance.now();
-            error4 && (groupError = error4);
-            let detail = {
-              end: end3,
-              error: error4,
-              get elapsed() {
-                return end3 - process3.begin;
-              }
-            };
-            for (let i22 = 0;i22 < callbacksEnd2.length; i22++)
-              callbacksEnd2[i22](detail);
-            resolveEnd2(end3), resolveError2(error4);
-          };
-        });
-      }
-      let result = {
-        ...process2,
-        end,
-        error: error2,
-        onEvent(callback) {
-          for (let i2 = 0;i2 < processes.length; i2++)
-            processes[i2](callback);
-        },
-        onStop(callback) {
-          return callback && callbacksEnd.push(callback), end;
-        }
-      };
-      resolve(result);
-      for (let i2 = 0;i2 < callbacks.length; i2++)
-        callbacks[i2](result);
-      return {
-        resolveChild: resolvers,
-        resolve(error3 = null) {
-          let end2 = performance.now();
-          !error3 && groupError && (error3 = groupError);
-          let detail = {
-            end: end2,
-            error: error3,
-            get elapsed() {
-              return end2 - process2.begin;
-            }
-          };
-          for (let i2 = 0;i2 < callbacksEnd.length; i2++)
-            callbacksEnd[i2](detail);
-          resolveEnd(end2), resolveError(error3);
-        }
-      };
+  return [(callback) => {
+    if (callback)
+      callbacks.push(callback);
+    return promise;
+  }, (process2) => {
+    let processes = [], resolvers = [], groupError = null;
+    for (let i2 = 0;i2 < (process2.total ?? 0); i2++) {
+      let { promise: promise2, resolve: resolve2 } = Promise.withResolvers(), { promise: end2, resolve: resolveEnd2 } = Promise.withResolvers(), { promise: error3, resolve: resolveError2 } = Promise.withResolvers(), callbacks2 = [], callbacksEnd2 = [];
+      processes.push((callback) => {
+        if (callback)
+          callbacks2.push(callback);
+        return promise2;
+      }), resolvers.push((process3) => {
+        let result2 = { ...process3, end: end2, error: error3, index: i2, onStop(callback) {
+          if (callback)
+            callbacksEnd2.push(callback);
+          return end2;
+        } };
+        resolve2(result2);
+        for (let i22 = 0;i22 < callbacks2.length; i22++)
+          callbacks2[i22](result2);
+        return (error4 = null) => {
+          let end3 = performance.now();
+          if (error4)
+            groupError = error4;
+          let detail = { end: end3, error: error4, get elapsed() {
+            return end3 - process3.begin;
+          } };
+          for (let i22 = 0;i22 < callbacksEnd2.length; i22++)
+            callbacksEnd2[i22](detail);
+          resolveEnd2(end3), resolveError2(error4);
+        };
+      });
     }
-  ];
+    let result = { ...process2, end, error: error2, onEvent(callback) {
+      for (let i2 = 0;i2 < processes.length; i2++)
+        processes[i2](callback);
+    }, onStop(callback) {
+      if (callback)
+        callbacksEnd.push(callback);
+      return end;
+    } };
+    resolve(result);
+    for (let i2 = 0;i2 < callbacks.length; i2++)
+      callbacks[i2](result);
+    return { resolveChild: resolvers, resolve(error3 = null) {
+      let end2 = performance.now();
+      if (!error3 && groupError)
+        error3 = groupError;
+      let detail = { end: end2, error: error3, get elapsed() {
+        return end2 - process2.begin;
+      } };
+      for (let i2 = 0;i2 < callbacksEnd.length; i2++)
+        callbacksEnd[i2](detail);
+      resolveEnd(end2), resolveError(error3);
+    } };
+  }];
 };
-var createTracer = (traceListener) => (context) => {
-  let [onRequest, resolveRequest] = createProcess(), [onParse, resolveParse] = createProcess(), [onTransform, resolveTransform] = createProcess(), [onBeforeHandle, resolveBeforeHandle] = createProcess(), [onHandle, resolveHandle] = createProcess(), [onAfterHandle, resolveAfterHandle] = createProcess(), [onError, resolveError] = createProcess(), [onMapResponse, resolveMapResponse] = createProcess(), [onAfterResponse, resolveAfterResponse] = createProcess();
-  return traceListener({
-    id: context[ELYSIA_REQUEST_ID],
-    context,
-    set: context.set,
-    onRequest,
-    onParse,
-    onTransform,
-    onBeforeHandle,
-    onHandle,
-    onAfterHandle,
-    onMapResponse,
-    onAfterResponse,
-    onError,
-    time: Date.now(),
-    store: context.store
-  }), {
-    request: resolveRequest,
-    parse: resolveParse,
-    transform: resolveTransform,
-    beforeHandle: resolveBeforeHandle,
-    handle: resolveHandle,
-    afterHandle: resolveAfterHandle,
-    error: resolveError,
-    mapResponse: resolveMapResponse,
-    afterResponse: resolveAfterResponse
+var createTracer = (traceListener) => {
+  return (context) => {
+    let [onRequest, resolveRequest] = createProcess(), [onParse, resolveParse] = createProcess(), [onTransform, resolveTransform] = createProcess(), [onBeforeHandle, resolveBeforeHandle] = createProcess(), [onHandle, resolveHandle] = createProcess(), [onAfterHandle, resolveAfterHandle] = createProcess(), [onError, resolveError] = createProcess(), [onMapResponse, resolveMapResponse] = createProcess(), [onAfterResponse, resolveAfterResponse] = createProcess();
+    return traceListener({ id: context[ELYSIA_REQUEST_ID], context, set: context.set, onRequest, onParse, onTransform, onBeforeHandle, onHandle, onAfterHandle, onMapResponse, onAfterResponse, onError, time: Date.now(), store: context.store }), { request: resolveRequest, parse: resolveParse, transform: resolveTransform, beforeHandle: resolveBeforeHandle, handle: resolveHandle, afterHandle: resolveAfterHandle, error: resolveError, mapResponse: resolveMapResponse, afterResponse: resolveAfterResponse };
   };
 };
-var isOptional = (schema) => schema ? schema?.[Kind] === "Import" && schema.References ? schema.References().some(isOptional) : (schema.schema && (schema = schema.schema), !!schema && (OptionalKind in schema)) : false;
+var Kind3 = Symbol.for("TypeBox.Kind");
+var Hint2 = Symbol.for("TypeBox.Hint");
+var isSpecialProperty = (name) => /(\ |-|\t|\n)/.test(name);
+var joinProperty = (v1, v2, isOptional = false) => {
+  if (typeof v2 === "number")
+    return `${v1}[${v2}]`;
+  if (isSpecialProperty(v2))
+    return `${v1}${isOptional ? "?." : ""}["${v2}"]`;
+  return `${v1}${isOptional ? "?" : ""}.${v2}`;
+};
+var encodeProperty = (v) => isSpecialProperty(v) ? `"${v}"` : v;
+var sanitize = (key, sanitize2 = 0, schema) => {
+  if (schema.type !== "string" || schema.const || schema.trusted)
+    return key;
+  let hof = "";
+  for (let i2 = sanitize2 - 1;i2 >= 0; i2--)
+    hof += `d.h${i2}(`;
+  return hof + key + ")".repeat(sanitize2);
+};
+var mergeObjectIntersection = (schema) => {
+  if (!schema.allOf || Kind3 in schema && (schema[Kind3] !== "Intersect" || schema.type !== "object"))
+    return schema;
+  let { allOf, ...newSchema } = schema;
+  if (newSchema.properties = {}, Kind3 in newSchema)
+    newSchema[Kind3] = "Object";
+  for (let type of allOf) {
+    if (type.type !== "object")
+      continue;
+    let { properties, required, type: _2, [Kind3]: __, ...rest } = type;
+    if (required)
+      newSchema.required = newSchema.required ? newSchema.required.concat(required) : required;
+    Object.assign(newSchema, rest);
+    for (let property in type.properties)
+      newSchema.properties[property] = mergeObjectIntersection(type.properties[property]);
+  }
+  return newSchema;
+};
+var handleRecord = (schema, property, instruction) => {
+  let child = schema.patternProperties["^(.*)$"] ?? schema.patternProperties[Object.keys(schema.patternProperties)[0]];
+  if (!child)
+    return property;
+  let i2 = instruction.array;
+  return instruction.array++, `(()=>{const ar${i2}s=Object.keys(${property}),ar${i2}v={};for(let i=0;i<ar${i2}s.length;i++){const ar${i2}p=${property}[ar${i2}s[i]];ar${i2}v[ar${i2}s[i]]=${mirror(child, `ar${i2}p`, instruction)}}return ar${i2}v})()`;
+};
+var handleTuple = (schema, property, instruction) => {
+  let i2 = instruction.array;
+  instruction.array++;
+  let isRoot = property === "v" && !instruction.unions.length, v = "";
+  if (!isRoot)
+    v = "(()=>{";
+  v += `const ar${i2}v=[`;
+  for (let i22 = 0;i22 < schema.length; i22++) {
+    if (i22 !== 0)
+      v += ",";
+    v += mirror(schema[i22], joinProperty(property, i22, instruction.parentIsOptional), instruction);
+  }
+  if (v += "];", !isRoot)
+    v += `return ar${i2}v})()`;
+  return v;
+};
+function deepClone(source, weak = new WeakMap) {
+  if (source === null || typeof source !== "object" || typeof source === "function")
+    return source;
+  if (weak.has(source))
+    return weak.get(source);
+  if (Array.isArray(source)) {
+    let copy = new Array(source.length);
+    weak.set(source, copy);
+    for (let i2 = 0;i2 < source.length; i2++)
+      copy[i2] = deepClone(source[i2], weak);
+    return copy;
+  }
+  if (typeof source === "object") {
+    let keys = Object.keys(source).concat(Object.getOwnPropertySymbols(source)), cloned = {};
+    for (let key of keys)
+      cloned[key] = deepClone(source[key], weak);
+    return cloned;
+  }
+  return source;
+}
+var handleUnion = (schemas, property, instruction) => {
+  if (instruction.TypeCompiler === undefined) {
+    if (!instruction.typeCompilerWanred)
+      console.warn(new Error("[exact-mirror] TypeBox's TypeCompiler is required to use Union")), instruction.typeCompilerWanred = true;
+    return property;
+  }
+  instruction.unionKeys[property] = 1;
+  let ui = instruction.unions.length, typeChecks = instruction.unions[ui] = [], v = `(()=>{
+`, unwrapRef = (type) => {
+    if (!(Kind3 in type) || !type.$ref)
+      return type;
+    if (type[Kind3] === "This")
+      return deepClone(instruction.definitions[type.$ref]);
+    else if (type[Kind3] === "Ref")
+      if (!instruction.modules)
+        console.warn(new Error("[exact-mirror] modules is required when using nested cyclic reference"));
+      else
+        return instruction.modules.Import(type.$ref);
+    return type;
+  };
+  for (let i2 = 0;i2 < schemas.length; i2++) {
+    let type = unwrapRef(schemas[i2]);
+    if (Array.isArray(type.anyOf))
+      for (let i22 = 0;i22 < type.anyOf.length; i22++)
+        type.anyOf[i22] = unwrapRef(type.anyOf[i22]);
+    else if (type.items)
+      if (Array.isArray(type.items))
+        for (let i22 = 0;i22 < type.items.length; i22++)
+          type.items[i22] = unwrapRef(type.items[i22]);
+      else
+        type.items = unwrapRef(type.items);
+    typeChecks.push(TypeCompiler.Compile(type)), v += `if(d.unions[${ui}][${i2}].Check(${property})){return ${mirror(type, property, { ...instruction, recursion: instruction.recursion + 1, parentIsOptional: true })}}
+`;
+  }
+  return v += `return ${instruction.removeUnknownUnionType ? "undefined" : property}})()`, v;
+};
+var mirror = (schema, property, instruction) => {
+  if (!schema)
+    return "";
+  let isRoot = property === "v" && !instruction.unions.length;
+  if (Kind3 in schema && schema[Kind3] === "Import" && schema.$ref in schema.$defs)
+    return mirror(schema.$defs[schema.$ref], property, { ...instruction, definitions: Object.assign(instruction.definitions, schema.$defs) });
+  if (isRoot && schema.type !== "object" && schema.type !== "array" && !schema.anyOf)
+    return `return ${sanitize("v", instruction.sanitize?.length, schema)}`;
+  if (instruction.recursion >= instruction.recursionLimit)
+    return property;
+  let v = "";
+  if (schema.$id && Hint2 in schema)
+    instruction.definitions[schema.$id] = schema;
+  switch (schema.type) {
+    case "object":
+      if (schema[Kind3] === "Record") {
+        v = handleRecord(schema, property, instruction);
+        break;
+      }
+      if (schema = mergeObjectIntersection(schema), v += "{", schema.additionalProperties)
+        v += `...${property}`;
+      let keys = Object.keys(schema.properties);
+      for (let i22 = 0;i22 < keys.length; i22++) {
+        let key = keys[i22], isOptional = schema.required && !schema.required.includes(key) || Array.isArray(schema.properties[key].anyOf), name = joinProperty(property, key, instruction.parentIsOptional);
+        if (isOptional) {
+          let index = instruction.array;
+          if (property.startsWith("ar")) {
+            let refName = name.slice(name.indexOf(".") + 1), array = instruction.optionalsInArray;
+            if (array[index])
+              array[index].push(refName);
+            else
+              array[index] = [refName];
+          } else
+            instruction.optionals.push(name);
+        }
+        let child = schema.properties[key];
+        if (schema.additionalProperties && child.type !== "object")
+          continue;
+        if (i22 !== 0)
+          v += ",";
+        v += `${encodeProperty(key)}:${isOptional ? `${name}===undefined?undefined:` : ""}${mirror(child, name, { ...instruction, recursion: instruction.recursion + 1, parentIsOptional: isOptional })}`;
+      }
+      v += "}";
+      break;
+    case "array":
+      if (schema.items.type !== "object" && schema.items.type !== "array")
+        if (Array.isArray(schema.items)) {
+          v = handleTuple(schema.items, property, instruction);
+          break;
+        } else if (isRoot)
+          return "return v";
+        else if (Kind3 in schema.items && schema.items.$ref && (schema.items[Kind3] === "Ref" || schema.items[Kind3] === "This"))
+          v = mirror(deepClone(instruction.definitions[schema.items.$ref]), property, { ...instruction, parentIsOptional: true, recursion: instruction.recursion + 1 });
+        else {
+          v = property;
+          break;
+        }
+      let i2 = instruction.array;
+      instruction.array++;
+      let reference = property;
+      if (isRoot)
+        v = `const ar${i2}v=new Array(${property}.length);`;
+      else
+        reference = `ar${i2}s`, v = `((${reference})=>{const ar${i2}v=new Array(${reference}.length);`;
+      v += `for(let i=0;i<${reference}.length;i++){const ar${i2}p=${reference}[i];ar${i2}v[i]=${mirror(schema.items, `ar${i2}p`, instruction)}`;
+      let optionals = instruction.optionalsInArray[i2 + 1];
+      if (optionals)
+        for (let oi = 0;oi < optionals.length; oi++) {
+          let target = `ar${i2}v[i].${optionals[oi]}`;
+          v += `;if(${target}===undefined)delete ${target}`;
+        }
+      if (v += "}", !isRoot)
+        v += `return ar${i2}v})(${property})`;
+      break;
+    default:
+      if (schema.$ref && schema.$ref in instruction.definitions)
+        return mirror(instruction.definitions[schema.$ref], property, instruction);
+      if (Array.isArray(schema.anyOf)) {
+        v = handleUnion(schema.anyOf, property, instruction);
+        break;
+      }
+      v = sanitize(property, instruction.sanitize?.length, schema);
+      break;
+  }
+  if (!isRoot)
+    return v;
+  if (schema.type === "array")
+    return `${v}return ar0v`;
+  v = `const x=${v}
+`;
+  for (let i2 = 0;i2 < instruction.optionals.length; i2++) {
+    let key = instruction.optionals[i2], prop = key.slice(1);
+    if (v += `if(${key}===undefined`, instruction.unionKeys[key])
+      v += `||x${prop}===undefined`;
+    v += `)delete x${prop.charCodeAt(0) !== 63 ? "?" : ""}${prop}
+`;
+  }
+  return `${v}return x`;
+};
+var createMirror = (schema, { TypeCompiler: TypeCompiler22, modules, definitions, sanitize: sanitize2, recursionLimit = 8, removeUnknownUnionType = false } = {}) => {
+  let unions = [];
+  if (typeof sanitize2 === "function")
+    sanitize2 = [sanitize2];
+  let f = mirror(schema, "v", { optionals: [], optionalsInArray: [], array: 0, parentIsOptional: false, unions, unionKeys: {}, TypeCompiler: TypeCompiler22, modules, definitions: definitions ?? modules?.$defs ?? {}, sanitize: sanitize2, recursion: 0, recursionLimit, removeUnknownUnionType });
+  if (!unions.length && !sanitize2?.length)
+    return Function("v", f);
+  let hof;
+  if (sanitize2?.length) {
+    hof = {};
+    for (let i2 = 0;i2 < sanitize2.length; i2++)
+      hof[`h${i2}`] = sanitize2[i2];
+  }
+  return Function("d", `return function mirror(v){${f}}`)({ unions, ...hof });
+};
+var isOptional = (schema) => {
+  if (!schema)
+    return false;
+  if (schema?.[Kind] === "Import" && schema.References)
+    return schema.References().some(isOptional);
+  if (schema.schema)
+    schema = schema.schema;
+  return !!schema && OptionalKind in schema;
+};
 var hasAdditionalProperties = (_schema) => {
   if (!_schema)
     return false;
@@ -13559,7 +13318,9 @@ var hasAdditionalProperties = (_schema) => {
     }
     return false;
   }
-  return schema.type === "array" && schema.items && !Array.isArray(schema.items) ? hasAdditionalProperties(schema.items) : false;
+  if (schema.type === "array" && schema.items && !Array.isArray(schema.items))
+    return hasAdditionalProperties(schema.items);
+  return false;
 };
 var hasType = (type, schema) => {
   if (!schema)
@@ -13643,11 +13404,15 @@ var hasRef = (schema) => {
     let properties = schema.properties;
     for (let key of Object.keys(properties)) {
       let property = properties[key];
-      if (hasRef(property) || property.type === "array" && property.items && hasRef(property.items))
+      if (hasRef(property))
+        return true;
+      if (property.type === "array" && property.items && hasRef(property.items))
         return true;
     }
   }
-  return schema.type === "array" && schema.items && hasRef(schema.items) ? true : schema[Kind] === "Ref" && ("$ref" in schema);
+  if (schema.type === "array" && schema.items && hasRef(schema.items))
+    return true;
+  return schema[Kind] === "Ref" && "$ref" in schema;
 };
 var hasTransform = (schema) => {
   if (!schema)
@@ -13675,11 +13440,15 @@ var hasTransform = (schema) => {
     let properties = schema.properties;
     for (let key of Object.keys(properties)) {
       let property = properties[key];
-      if (hasTransform(property) || property.type === "array" && property.items && hasTransform(property.items))
+      if (hasTransform(property))
+        return true;
+      if (property.type === "array" && property.items && hasTransform(property.items))
         return true;
     }
   }
-  return schema.type === "array" && schema.items && hasTransform(schema.items) ? true : (TransformKind in schema);
+  if (schema.type === "array" && schema.items && hasTransform(schema.items))
+    return true;
+  return TransformKind in schema;
 };
 var replaceSchemaType = (schema, options, _config = {}) => {
   let config = _config;
@@ -13720,56 +13489,33 @@ var _replaceSchemaType = (schema, options, config) => {
       return schema;
     let transform2, composeProperties = (schema2) => {
       let v = _composeProperties(schema2);
-      return v.$id && delete v.$id, v;
+      if (v.$id)
+        delete v.$id;
+      return v;
     }, _composeProperties = (v) => {
       if (properties2 && v.type === "object") {
         let newProperties = {};
         for (let [key, value2] of Object.entries(properties2))
-          newProperties[key] = _replaceSchemaType(value2, options, {
-            ...config,
-            root: false
-          });
-        return {
-          ...rest,
-          ...v,
-          properties: newProperties
-        };
+          newProperties[key] = _replaceSchemaType(value2, options, { ...config, root: false });
+        return { ...rest, ...v, properties: newProperties };
       }
       if (items && v.type === "array")
-        return {
-          ...rest,
-          ...v,
-          items: _replaceSchemaType(items, options, {
-            ...config,
-            root: false
-          })
-        };
-      let value = {
-        ...rest,
-        ...v
-      };
-      return delete value.required, properties2 && v.type === "string" && v.format === "ObjectString" && v.default === "{}" && (transform2 = t.ObjectString(properties2, rest), value.default = JSON.stringify(exports_value2.Create(t.Object(properties2))), value.properties = properties2), items && v.type === "string" && v.format === "ArrayString" && v.default === "[]" && (transform2 = t.ArrayString(items, rest), value.default = JSON.stringify(exports_value2.Create(t.Array(items))), value.items = items), value;
+        return { ...rest, ...v, items: _replaceSchemaType(items, options, { ...config, root: false }) };
+      let value = { ...rest, ...v };
+      if (delete value.required, properties2 && v.type === "string" && v.format === "ObjectString" && v.default === "{}")
+        transform2 = t.ObjectString(properties2, rest), value.default = JSON.stringify(exports_value2.Create(t.Object(properties2))), value.properties = properties2;
+      if (items && v.type === "string" && v.format === "ArrayString" && v.default === "[]")
+        transform2 = t.ArrayString(items, rest), value.default = JSON.stringify(exports_value2.Create(t.Array(items))), value.items = items;
+      return value;
     };
     if (isRoot) {
       if (properties2) {
         let newProperties = {};
         for (let [key, value] of Object.entries(properties2))
-          newProperties[key] = _replaceSchemaType(value, options, {
-            ...config,
-            root: false
-          });
-        return {
-          ...rest,
-          properties: newProperties
-        };
+          newProperties[key] = _replaceSchemaType(value, options, { ...config, root: false });
+        return { ...rest, properties: newProperties };
       } else if (items?.map)
-        return {
-          ...rest,
-          items: items.map((v) => _replaceSchemaType(v, options, {
-            ...config,
-            root: false
-          }))
-        };
+        return { ...rest, items: items.map((v) => _replaceSchemaType(v, options, { ...config, root: false })) };
       return rest;
     }
     if (to.anyOf)
@@ -13781,35 +13527,20 @@ var _replaceSchemaType = (schema, options, config) => {
     else if (to.allOf)
       for (let i2 = 0;i2 < to.allOf.length; i2++)
         to.allOf[i2] = composeProperties(to.allOf[i2]);
-    else
-      to.not && (to.not = composeProperties(to.not));
-    if (transform2 && (to[TransformKind] = transform2[TransformKind]), to.anyOf || to.oneOf || to.allOf || to.not)
+    else if (to.not)
+      to.not = composeProperties(to.not);
+    if (transform2)
+      to[TransformKind] = transform2[TransformKind];
+    if (to.anyOf || to.oneOf || to.allOf || to.not)
       return to;
     if (properties2) {
       let newProperties = {};
       for (let [key, value] of Object.entries(properties2))
-        newProperties[key] = _replaceSchemaType(value, options, {
-          ...config,
-          root: false
-        });
-      return {
-        ...rest,
-        ...to,
-        properties: newProperties
-      };
+        newProperties[key] = _replaceSchemaType(value, options, { ...config, root: false });
+      return { ...rest, ...to, properties: newProperties };
     } else if (items?.map)
-      return {
-        ...rest,
-        ...to,
-        items: items.map((v) => _replaceSchemaType(v, options, {
-          ...config,
-          root: false
-        }))
-      };
-    return {
-      ...rest,
-      ...to
-    };
+      return { ...rest, ...to, items: items.map((v) => _replaceSchemaType(v, options, { ...config, root: false })) };
+    return { ...rest, ...to };
   }
   let properties = schema?.properties;
   if (properties && root && options.rootOnly !== true)
@@ -13828,44 +13559,28 @@ var _replaceSchemaType = (schema, options, config) => {
           else if (to.allOf)
             for (let i2 = 0;i2 < to.allOf.length; i2++)
               to.allOf[i2] = { ...rest, ...to.allOf[i2] };
-          else
-            to.not && (to.not = { ...rest, ...to.not });
-          properties[key] = {
-            ...rest,
-            ..._replaceSchemaType(rest, options, {
-              ...config,
-              root: false
-            })
-          };
+          else if (to.not)
+            to.not = { ...rest, ...to.not };
+          properties[key] = { ...rest, ..._replaceSchemaType(rest, options, { ...config, root: false }) };
           break;
         case "Object":
         case "Union":
-          properties[key] = _replaceSchemaType(value, options, {
-            ...config,
-            root: false
-          });
+          properties[key] = _replaceSchemaType(value, options, { ...config, root: false });
           break;
         default:
           if (Array.isArray(value.items))
             for (let i2 = 0;i2 < value.items.length; i2++)
-              value.items[i2] = _replaceSchemaType(value.items[i2], options, {
-                ...config,
-                root: false
-              });
-          else
-            value.anyOf || value.oneOf || value.allOf || value.not ? properties[key] = _replaceSchemaType(value, options, {
-              ...config,
-              root: false
-            }) : value.type === "array" && (value.items = _replaceSchemaType(value.items, options, {
-              ...config,
-              root: false
-            }));
+              value.items[i2] = _replaceSchemaType(value.items[i2], options, { ...config, root: false });
+          else if (value.anyOf || value.oneOf || value.allOf || value.not)
+            properties[key] = _replaceSchemaType(value, options, { ...config, root: false });
+          else if (value.type === "array")
+            value.items = _replaceSchemaType(value.items, options, { ...config, root: false });
           break;
       }
   return schema;
 };
 var createCleaner = (schema) => (value) => {
-  if (typeof value == "object")
+  if (typeof value === "object")
     try {
       return exports_value2.Clean(schema, value);
     } catch {
@@ -13877,53 +13592,35 @@ var createCleaner = (schema) => (value) => {
     }
   return value;
 };
-var getSchemaValidator = (s, {
-  models = {},
-  dynamic = false,
-  modules,
-  normalize = false,
-  additionalProperties = false,
-  coerce = false,
-  additionalCoerce = [],
-  validators,
-  sanitize: sanitize2
-} = {}) => {
+var getSchemaValidator = (s, { models = {}, dynamic = false, modules, normalize = false, additionalProperties = false, coerce = false, additionalCoerce = [], validators, sanitize: sanitize2 } = {}) => {
   if (validators = validators?.filter((x2) => x2), !s) {
     if (!validators?.length)
       return;
     s = validators[0], validators = validators.slice(1);
   }
-  let doesHaveRef, replaceSchema = (schema2) => coerce ? replaceSchemaType(schema2, [
-    {
-      from: t.Number(),
-      to: (options) => t.Numeric(options),
-      untilObjectFound: true
-    },
-    {
-      from: t.Boolean(),
-      to: (options) => t.BooleanString(options),
-      untilObjectFound: true
-    },
-    ...Array.isArray(additionalCoerce) ? additionalCoerce : [additionalCoerce]
-  ]) : replaceSchemaType(schema2, additionalCoerce), mapSchema = (s2) => {
+  let doesHaveRef = undefined, replaceSchema = (schema2) => {
+    if (coerce)
+      return replaceSchemaType(schema2, [{ from: t.Number(), to: (options) => t.Numeric(options), untilObjectFound: true }, { from: t.Boolean(), to: (options) => t.BooleanString(options), untilObjectFound: true }, ...Array.isArray(additionalCoerce) ? additionalCoerce : [additionalCoerce]]);
+    return replaceSchemaType(schema2, additionalCoerce);
+  }, mapSchema = (s2) => {
     let schema2;
     if (!s2)
       return;
-    if (typeof s2 != "string")
+    if (typeof s2 !== "string")
       schema2 = s2;
     else {
       let isArray = s2.endsWith("[]"), key = isArray ? s2.substring(0, s2.length - 2) : s2;
-      schema2 = modules?.Import(key) ?? models[key], isArray && (schema2 = t.Array(schema2));
+      if (schema2 = modules?.Import(key) ?? models[key], isArray)
+        schema2 = t.Array(schema2);
     }
     if (!schema2)
       return;
     let _doesHaveRef;
     if (schema2[Kind] !== "Import" && (_doesHaveRef = hasRef(schema2))) {
       let id = randomId();
-      doesHaveRef === undefined && (doesHaveRef = _doesHaveRef), schema2 = t.Module({
-        ...modules?.$defs,
-        [id]: schema2
-      }).Import(id);
+      if (doesHaveRef === undefined)
+        doesHaveRef = _doesHaveRef;
+      schema2 = t.Module({ ...modules?.$defs, [id]: schema2 }).Import(id);
     }
     if (schema2[Kind] === "Import") {
       let newDefs = {};
@@ -13931,61 +13628,56 @@ var getSchemaValidator = (s, {
         newDefs[key2] = replaceSchema(value);
       let key = schema2.$ref;
       schema2 = t.Module(newDefs).Import(key);
-    } else
-      (coerce || additionalCoerce) && (schema2 = replaceSchema(schema2));
+    } else if (coerce || additionalCoerce)
+      schema2 = replaceSchema(schema2);
     return schema2;
   }, schema = mapSchema(s);
   if (validators?.length) {
-    let hasAdditional = false, { schema: mergedObjectSchema, notObjects } = mergeObjectSchemas([
-      schema,
-      ...validators.map(mapSchema)
-    ]);
-    notObjects && (schema = t.Intersect([
-      ...mergedObjectSchema ? [mergedObjectSchema] : [],
-      ...notObjects.map((x2) => {
+    let hasAdditional = false, { schema: mergedObjectSchema, notObjects } = mergeObjectSchemas([schema, ...validators.map(mapSchema)]);
+    if (notObjects) {
+      if (schema = t.Intersect([...mergedObjectSchema ? [mergedObjectSchema] : [], ...notObjects.map((x2) => {
         let schema2 = mapSchema(x2);
-        return schema2.type === "object" && "additionalProperties" in schema2 && (!hasAdditional && schema2.additionalProperties === false && (hasAdditional = true), delete schema2.additionalProperties), schema2;
-      })
-    ]), schema.type === "object" && hasAdditional && (schema.additionalProperties = false));
-  } else
-    schema.type === "object" && !("additionalProperties" in schema) && (schema.additionalProperties = additionalProperties);
+        if (schema2.type === "object" && "additionalProperties" in schema2) {
+          if (!hasAdditional && schema2.additionalProperties === false)
+            hasAdditional = true;
+          delete schema2.additionalProperties;
+        }
+        return schema2;
+      })]), schema.type === "object" && hasAdditional)
+        schema.additionalProperties = false;
+    }
+  } else if (schema.type === "object" && "additionalProperties" in schema === false)
+    schema.additionalProperties = additionalProperties;
   if (dynamic) {
-    let validator = {
-      schema,
-      references: "",
-      checkFunc: () => {},
-      code: "",
-      Check: (value) => exports_value2.Check(schema, value),
-      Errors: (value) => exports_value2.Errors(schema, value),
-      Code: () => "",
-      Clean: createCleaner(schema),
-      Decode: (value) => exports_value2.Decode(schema, value),
-      Encode: (value) => exports_value2.Encode(schema, value),
-      get hasAdditionalProperties() {
-        return "~hasAdditionalProperties" in this ? this["~hasAdditionalProperties"] : this["~hasAdditionalProperties"] = hasAdditionalProperties(schema);
-      },
-      get hasDefault() {
-        return "~hasDefault" in this ? this["~hasDefault"] : this["~hasDefault"] = hasProperty("default", schema);
-      },
-      get isOptional() {
-        return "~isOptional" in this ? this["~isOptional"] : this["~isOptional"] = isOptional(schema);
-      },
-      get hasTransform() {
-        return "~hasTransform" in this ? this["~hasTransform"] : this["~hasTransform"] = hasTransform(schema);
-      },
-      "~hasRef": doesHaveRef,
-      get hasRef() {
-        return "~hasRef" in this ? this["~hasRef"] : this["~hasRef"] = hasTransform(schema);
-      }
-    };
-    if (schema.config && (validator.config = schema.config, validator?.schema?.config && delete validator.schema.config), normalize && schema.additionalProperties === false)
+    let validator = { schema, references: "", checkFunc: () => {}, code: "", Check: (value) => exports_value2.Check(schema, value), Errors: (value) => exports_value2.Errors(schema, value), Code: () => "", Clean: createCleaner(schema), Decode: (value) => exports_value2.Decode(schema, value), Encode: (value) => exports_value2.Encode(schema, value), get hasAdditionalProperties() {
+      if ("~hasAdditionalProperties" in this)
+        return this["~hasAdditionalProperties"];
+      return this["~hasAdditionalProperties"] = hasAdditionalProperties(schema);
+    }, get hasDefault() {
+      if ("~hasDefault" in this)
+        return this["~hasDefault"];
+      return this["~hasDefault"] = hasProperty("default", schema);
+    }, get isOptional() {
+      if ("~isOptional" in this)
+        return this["~isOptional"];
+      return this["~isOptional"] = isOptional(schema);
+    }, get hasTransform() {
+      if ("~hasTransform" in this)
+        return this["~hasTransform"];
+      return this["~hasTransform"] = hasTransform(schema);
+    }, "~hasRef": doesHaveRef, get hasRef() {
+      if ("~hasRef" in this)
+        return this["~hasRef"];
+      return this["~hasRef"] = hasTransform(schema);
+    } };
+    if (schema.config) {
+      if (validator.config = schema.config, validator?.schema?.config)
+        delete validator.schema.config;
+    }
+    if (normalize && schema.additionalProperties === false)
       if (normalize === true || normalize === "exactMirror")
         try {
-          validator.Clean = createMirror(schema, {
-            TypeCompiler,
-            sanitize: sanitize2?.(),
-            modules
-          });
+          validator.Clean = createMirror(schema, { TypeCompiler, sanitize: sanitize2?.(), modules });
         } catch {
           console.warn("Failed to create exactMirror. Please report the following code to https://github.com/elysiajs/elysia/issues"), console.warn(schema), validator.Clean = createCleaner(schema);
         }
@@ -13994,32 +13686,27 @@ var getSchemaValidator = (s, {
     return validator.parse = (v) => {
       try {
         return validator.Decode(v);
-      } catch {
+      } catch (error2) {
         throw [...validator.Errors(v)].map(mapValueError);
       }
     }, validator.safeParse = (v) => {
       try {
         return { success: true, data: validator.Decode(v), error: null };
-      } catch {
+      } catch (error2) {
         let errors = [...compiled.Errors(v)].map(mapValueError);
-        return {
-          success: false,
-          data: null,
-          error: errors[0]?.summary,
-          errors
-        };
+        return { success: false, data: null, error: errors[0]?.summary, errors };
       }
     }, validator;
   }
   let compiled = TypeCompiler.Compile(schema, Object.values(models));
-  if (schema.config && (compiled.config = schema.config, compiled?.schema?.config && delete compiled.schema.config), normalize === true || normalize === "exactMirror")
+  if (schema.config) {
+    if (compiled.config = schema.config, compiled?.schema?.config)
+      delete compiled.schema.config;
+  }
+  if (normalize === true || normalize === "exactMirror")
     try {
-      compiled.Clean = createMirror(schema, {
-        TypeCompiler,
-        sanitize: sanitize2?.(),
-        modules
-      });
-    } catch {
+      compiled.Clean = createMirror(schema, { TypeCompiler, sanitize: sanitize2?.(), modules });
+    } catch (error2) {
       console.warn("Failed to create exactMirror. Please report the following code to https://github.com/elysiajs/elysia/issues"), console.warn(schema), compiled.Clean = createCleaner(schema);
     }
   else
@@ -14027,378 +13714,282 @@ var getSchemaValidator = (s, {
   return compiled.parse = (v) => {
     try {
       return compiled.Decode(v);
-    } catch {
+    } catch (error2) {
       throw [...compiled.Errors(v)].map(mapValueError);
     }
   }, compiled.safeParse = (v) => {
     try {
       return { success: true, data: compiled.Decode(v), error: null };
-    } catch {
+    } catch (error2) {
       let errors = [...compiled.Errors(v)].map(mapValueError);
-      return {
-        success: false,
-        data: null,
-        error: errors[0]?.summary,
-        errors
-      };
+      return { success: false, data: null, error: errors[0]?.summary, errors };
     }
-  }, Object.assign(compiled, {
-    get hasAdditionalProperties() {
-      return "~hasAdditionalProperties" in this ? this["~hasAdditionalProperties"] : this["~hasAdditionalProperties"] = hasAdditionalProperties(compiled);
-    },
-    get hasDefault() {
-      return "~hasDefault" in this ? this["~hasDefault"] : this["~hasDefault"] = hasProperty("default", compiled);
-    },
-    get isOptional() {
-      return "~isOptional" in this ? this["~isOptional"] : this["~isOptional"] = isOptional(compiled);
-    },
-    get hasTransform() {
-      return "~hasTransform" in this ? this["~hasTransform"] : this["~hasTransform"] = hasTransform(schema);
-    },
-    get hasRef() {
-      return "~hasRef" in this ? this["~hasRef"] : this["~hasRef"] = hasRef(schema);
-    },
-    "~hasRef": doesHaveRef
-  }), compiled;
+  }, Object.assign(compiled, { get hasAdditionalProperties() {
+    if ("~hasAdditionalProperties" in this)
+      return this["~hasAdditionalProperties"];
+    return this["~hasAdditionalProperties"] = hasAdditionalProperties(compiled);
+  }, get hasDefault() {
+    if ("~hasDefault" in this)
+      return this["~hasDefault"];
+    return this["~hasDefault"] = hasProperty("default", compiled);
+  }, get isOptional() {
+    if ("~isOptional" in this)
+      return this["~isOptional"];
+    return this["~isOptional"] = isOptional(compiled);
+  }, get hasTransform() {
+    if ("~hasTransform" in this)
+      return this["~hasTransform"];
+    return this["~hasTransform"] = hasTransform(schema);
+  }, get hasRef() {
+    if ("~hasRef" in this)
+      return this["~hasRef"];
+    return this["~hasRef"] = hasRef(schema);
+  }, "~hasRef": doesHaveRef }), compiled;
 };
 var isUnion = (schema) => schema[Kind] === "Union" || !schema.schema && !!schema.anyOf;
 var mergeObjectSchemas = (schemas) => {
   if (schemas.length === 0)
-    return {
-      schema: undefined,
-      notObjects: []
-    };
+    return { schema: undefined, notObjects: [] };
   if (schemas.length === 1)
-    return schemas[0].type === "object" ? {
-      schema: schemas[0],
-      notObjects: []
-    } : {
-      schema: undefined,
-      notObjects: schemas
-    };
+    return schemas[0].type === "object" ? { schema: schemas[0], notObjects: [] } : { schema: undefined, notObjects: schemas };
   let newSchema, notObjects = [], additionalPropertiesIsTrue = false, additionalPropertiesIsFalse = false;
   for (let schema of schemas) {
     if (schema.type !== "object") {
       notObjects.push(schema);
       continue;
     }
-    if ("additionalProperties" in schema && (schema.additionalProperties === true ? additionalPropertiesIsTrue = true : schema.additionalProperties === false && (additionalPropertiesIsFalse = true)), !newSchema) {
+    if ("additionalProperties" in schema) {
+      if (schema.additionalProperties === true)
+        additionalPropertiesIsTrue = true;
+      else if (schema.additionalProperties === false)
+        additionalPropertiesIsFalse = true;
+    }
+    if (!newSchema) {
       newSchema = schema;
       continue;
     }
-    newSchema = {
-      ...newSchema,
-      ...schema,
-      properties: {
-        ...newSchema.properties,
-        ...schema.properties
-      },
-      required: [...newSchema?.required ?? [], ...schema.required]
-    };
+    newSchema = { ...newSchema, ...schema, properties: { ...newSchema.properties, ...schema.properties }, required: [...newSchema?.required ?? [], ...schema.required] };
   }
-  return newSchema && (newSchema.required && (newSchema.required = [...new Set(newSchema.required)]), additionalPropertiesIsFalse ? newSchema.additionalProperties = false : additionalPropertiesIsTrue && (newSchema.additionalProperties = true)), {
-    schema: newSchema,
-    notObjects
-  };
+  if (newSchema) {
+    if (newSchema.required)
+      newSchema.required = [...new Set(newSchema.required)];
+    if (additionalPropertiesIsFalse)
+      newSchema.additionalProperties = false;
+    else if (additionalPropertiesIsTrue)
+      newSchema.additionalProperties = true;
+  }
+  return { schema: newSchema, notObjects };
 };
-var getResponseSchemaValidator = (s, {
-  models = {},
-  modules,
-  dynamic = false,
-  normalize = false,
-  additionalProperties = false,
-  validators = [],
-  sanitize: sanitize2
-}) => {
+var getResponseSchemaValidator = (s, { models = {}, modules, dynamic = false, normalize = false, additionalProperties = false, validators = [], sanitize: sanitize2 }) => {
   if (validators = validators.filter((x2) => x2), !s) {
     if (!validators?.length)
       return;
     s = validators[0], validators = validators.slice(1);
   }
   let maybeSchemaOrRecord;
-  if (typeof s != "string")
+  if (typeof s !== "string")
     maybeSchemaOrRecord = s;
   else {
     let isArray = s.endsWith("[]"), key = isArray ? s.substring(0, s.length - 2) : s;
-    maybeSchemaOrRecord = modules.Import(key) ?? models[key], isArray && (maybeSchemaOrRecord = t.Array(maybeSchemaOrRecord));
+    if (maybeSchemaOrRecord = modules.Import(key) ?? models[key], isArray)
+      maybeSchemaOrRecord = t.Array(maybeSchemaOrRecord);
   }
   if (!maybeSchemaOrRecord)
     return;
   if (Kind in maybeSchemaOrRecord)
-    return {
-      200: getSchemaValidator(maybeSchemaOrRecord, {
-        modules,
-        models,
-        additionalProperties,
-        dynamic,
-        normalize,
-        coerce: false,
-        additionalCoerce: [],
-        validators: validators.map((x2) => x2[200]),
-        sanitize: sanitize2
-      })
-    };
+    return { 200: getSchemaValidator(maybeSchemaOrRecord, { modules, models, additionalProperties, dynamic, normalize, coerce: false, additionalCoerce: [], validators: validators.map((x2) => x2[200]), sanitize: sanitize2 }) };
   let record = {};
   return Object.keys(maybeSchemaOrRecord).forEach((status2) => {
     if (isNaN(+status2))
       return;
     let maybeNameOrSchema = maybeSchemaOrRecord[+status2];
-    if (typeof maybeNameOrSchema == "string") {
+    if (typeof maybeNameOrSchema === "string") {
       if (maybeNameOrSchema in models) {
         let schema = models[maybeNameOrSchema];
-        record[+status2] = Kind in schema ? getSchemaValidator(schema, {
-          modules,
-          models,
-          additionalProperties,
-          dynamic,
-          normalize,
-          coerce: false,
-          additionalCoerce: [],
-          validators: validators.map((x2) => x2[+status2]),
-          sanitize: sanitize2
-        }) : schema;
+        record[+status2] = Kind in schema ? getSchemaValidator(schema, { modules, models, additionalProperties, dynamic, normalize, coerce: false, additionalCoerce: [], validators: validators.map((x2) => x2[+status2]), sanitize: sanitize2 }) : schema;
       }
       return;
     }
-    record[+status2] = Kind in maybeNameOrSchema ? getSchemaValidator(maybeNameOrSchema, {
-      modules,
-      models,
-      additionalProperties,
-      dynamic,
-      normalize,
-      coerce: false,
-      additionalCoerce: [],
-      validators: validators.map((x2) => x2[+status2]),
-      sanitize: sanitize2
-    }) : maybeNameOrSchema;
+    record[+status2] = Kind in maybeNameOrSchema ? getSchemaValidator(maybeNameOrSchema, { modules, models, additionalProperties, dynamic, normalize, coerce: false, additionalCoerce: [], validators: validators.map((x2) => x2[+status2]), sanitize: sanitize2 }) : maybeNameOrSchema;
   }), record;
 };
 var _stringToStructureCoercions;
-var stringToStructureCoercions = () => (_stringToStructureCoercions || (_stringToStructureCoercions = [
-  {
-    from: t.Object({}),
-    to: () => t.ObjectString({}),
-    excludeRoot: true
-  },
-  {
-    from: t.Array(t.Any()),
-    to: () => t.ArrayString(t.Any())
-  }
-]), _stringToStructureCoercions);
+var stringToStructureCoercions = () => {
+  if (!_stringToStructureCoercions)
+    _stringToStructureCoercions = [{ from: t.Object({}), to: () => t.ObjectString({}), excludeRoot: true }, { from: t.Array(t.Any()), to: () => t.ArrayString(t.Any()) }];
+  return _stringToStructureCoercions;
+};
 var _coercePrimitiveRoot;
-var coercePrimitiveRoot = () => (_coercePrimitiveRoot || (_coercePrimitiveRoot = [
-  {
-    from: t.Number(),
-    to: (options) => t.Numeric(options),
-    rootOnly: true
-  },
-  {
-    from: t.Boolean(),
-    to: (options) => t.BooleanString(options),
-    rootOnly: true
-  }
-]), _coercePrimitiveRoot);
-var getCookieValidator = ({
-  validator,
-  modules,
-  defaultConfig = {},
-  config,
-  dynamic,
-  models,
-  validators,
-  sanitize: sanitize2
-}) => {
-  let cookieValidator = getSchemaValidator(validator, {
-    modules,
-    dynamic,
-    models,
-    additionalProperties: true,
-    coerce: true,
-    additionalCoerce: stringToStructureCoercions(),
-    validators,
-    sanitize: sanitize2
-  });
-  return cookieValidator ? cookieValidator.config = mergeCookie(cookieValidator.config, config) : (cookieValidator = getSchemaValidator(t.Cookie(t.Any()), {
-    modules,
-    dynamic,
-    models,
-    additionalProperties: true,
-    validators,
-    sanitize: sanitize2
-  }), cookieValidator.config = defaultConfig), cookieValidator;
+var coercePrimitiveRoot = () => {
+  if (!_coercePrimitiveRoot)
+    _coercePrimitiveRoot = [{ from: t.Number(), to: (options) => t.Numeric(options), rootOnly: true }, { from: t.Boolean(), to: (options) => t.BooleanString(options), rootOnly: true }];
+  return _coercePrimitiveRoot;
+};
+var getCookieValidator = ({ validator, modules, defaultConfig = {}, config, dynamic, models, validators, sanitize: sanitize2 }) => {
+  let cookieValidator = getSchemaValidator(validator, { modules, dynamic, models, additionalProperties: true, coerce: true, additionalCoerce: stringToStructureCoercions(), validators, sanitize: sanitize2 });
+  if (cookieValidator)
+    cookieValidator.config = mergeCookie(cookieValidator.config, config);
+  else
+    cookieValidator = getSchemaValidator(t.Cookie(t.Any()), { modules, dynamic, models, additionalProperties: true, validators, sanitize: sanitize2 }), cookieValidator.config = defaultConfig;
+  return cookieValidator;
 };
 var unwrapImportSchema = (schema) => schema[Kind] === "Import" && schema.$defs[schema.$ref][Kind] === "Object" ? schema.$defs[schema.$ref] : schema;
 var allocateIf = (value, condition) => condition ? value : "";
-var defaultParsers = [
-  "json",
-  "text",
-  "urlencoded",
-  "arrayBuffer",
-  "formdata",
-  "application/json",
-  "text/plain",
-  "application/x-www-form-urlencoded",
-  "application/octet-stream",
-  "multipart/form-data"
-];
-var createReport = ({
-  context = "c",
-  trace = [],
-  addFn
-}) => {
+var defaultParsers = ["json", "text", "urlencoded", "arrayBuffer", "formdata", "application/json", "text/plain", "application/x-www-form-urlencoded", "application/octet-stream", "multipart/form-data"];
+var createReport = ({ context = "c", trace = [], addFn }) => {
   if (!trace.length)
-    return () => ({
-      resolveChild() {
+    return () => {
+      return { resolveChild() {
         return () => {};
-      },
-      resolve() {}
-    });
+      }, resolve() {} };
+    };
   for (let i2 = 0;i2 < trace.length; i2++)
     addFn(`let report${i2},reportChild${i2},reportErr${i2},reportErrChild${i2};let trace${i2}=${context}[ELYSIA_TRACE]?.[${i2}]??trace[${i2}](${context});
 `);
-  return (event, {
-    name,
-    total = 0
-  } = {}) => {
-    name || (name = "anonymous");
+  return (event, { name, total = 0 } = {}) => {
+    if (!name)
+      name = "anonymous";
     let reporter = event === "error" ? "reportErr" : "report";
     for (let i2 = 0;i2 < trace.length; i2++)
       addFn(`${reporter}${i2} = trace${i2}.${event}({id,event:'${event}',name:'${name}',begin:performance.now(),total:${total}})
 `);
-    return {
-      resolve() {
+    return { resolve() {
+      for (let i2 = 0;i2 < trace.length; i2++)
+        addFn(`${reporter}${i2}.resolve()
+`);
+    }, resolveChild(name2) {
+      for (let i2 = 0;i2 < trace.length; i2++)
+        addFn(`${reporter}Child${i2}=${reporter}${i2}.resolveChild?.shift()?.({id,event:'${event}',name:'${name2}',begin:performance.now()})
+`);
+      return (binding) => {
         for (let i2 = 0;i2 < trace.length; i2++)
-          addFn(`${reporter}${i2}.resolve()
+          if (binding)
+            addFn(`if(${binding} instanceof Error){${reporter}Child${i2}?.(${binding}) }else{${reporter}Child${i2}?.()}`);
+          else
+            addFn(`${reporter}Child${i2}?.()
 `);
-      },
-      resolveChild(name2) {
-        for (let i2 = 0;i2 < trace.length; i2++)
-          addFn(`${reporter}Child${i2}=${reporter}${i2}.resolveChild?.shift()?.({id,event:'${event}',name:'${name2}',begin:performance.now()})
-`);
-        return (binding) => {
-          for (let i2 = 0;i2 < trace.length; i2++)
-            addFn(binding ? `if(${binding} instanceof Error){${reporter}Child${i2}?.(${binding}) }else{${reporter}Child${i2}?.()}` : `${reporter}Child${i2}?.()
-`);
-        };
-      }
-    };
+      };
+    } };
   };
 };
-var composeCleaner = ({
-  schema,
-  name,
-  type,
-  typeAlias = type,
-  normalize,
-  ignoreTryCatch = false
-}) => !normalize || !schema.Clean || schema.hasAdditionalProperties ? "" : normalize === true || normalize === "exactMirror" ? ignoreTryCatch ? `${name}=validator.${typeAlias}.Clean(${name})
-` : `try{${name}=validator.${typeAlias}.Clean(${name})
-}catch{}` : normalize === "typebox" ? `${name}=validator.${typeAlias}.Clean(${name})
-` : "";
-var composeValidationFactory = ({
-  injectResponse = "",
-  normalize = false,
-  validator,
-  encodeSchema = false,
-  isStaticResponse = false,
-  hasSanitize = false
-}) => ({
-  validate: (type, value = `c.${type}`) => `c.set.status=422;throw new ValidationError('${type}',validator.${type},${value})`,
-  response: (name = "r") => {
-    if (isStaticResponse)
-      return "";
-    let code = injectResponse + `
+var composeCleaner = ({ schema, name, type, typeAlias = type, normalize, ignoreTryCatch = false }) => {
+  if (!normalize || !schema.Clean || schema.hasAdditionalProperties)
+    return "";
+  if (normalize === true || normalize === "exactMirror") {
+    if (ignoreTryCatch)
+      return `${name}=validator.${typeAlias}.Clean(${name})
 `;
-    code += `if(${name} instanceof ElysiaCustomStatusResponse){c.set.status=${name}.code
+    return `try{${name}=validator.${typeAlias}.Clean(${name})
+}catch{}`;
+  }
+  if (normalize === "typebox")
+    return `${name}=validator.${typeAlias}.Clean(${name})
+`;
+  return "";
+};
+var composeValidationFactory = ({ injectResponse = "", normalize = false, validator, encodeSchema = false, isStaticResponse = false, hasSanitize = false }) => ({ validate: (type, value = `c.${type}`) => `c.set.status=422;throw new ValidationError('${type}',validator.${type},${value})`, response: (name = "r") => {
+  if (isStaticResponse)
+    return "";
+  let code = injectResponse + `
+`;
+  code += `if(${name} instanceof ElysiaCustomStatusResponse){c.set.status=${name}.code
 ${name}=${name}.response}switch(c.set.status){`;
-    for (let [status2, value] of Object.entries(validator.response)) {
-      code += `
+  for (let [status2, value] of Object.entries(validator.response)) {
+    code += `
 case ${status2}:if(${name} instanceof Response)break
 `;
-      let noValidate = value.schema?.noValidate === true, appliedCleaner = noValidate || hasSanitize, clean2 = ({ ignoreTryCatch = false } = {}) => composeCleaner({
-        name,
-        schema: value,
-        type: "response",
-        typeAlias: `response[${status2}]`,
-        normalize,
-        ignoreTryCatch
-      });
-      appliedCleaner && (code += clean2());
-      let applyErrorCleaner = !appliedCleaner && normalize && !noValidate;
-      encodeSchema && value.hasTransform ? code += `try{${name}=validator.response[${status2}].Encode(${name})
+    let noValidate = value.schema?.noValidate === true, appliedCleaner = noValidate || hasSanitize, clean2 = ({ ignoreTryCatch = false } = {}) => composeCleaner({ name, schema: value, type: "response", typeAlias: `response[${status2}]`, normalize, ignoreTryCatch });
+    if (appliedCleaner)
+      code += clean2();
+    let applyErrorCleaner = !appliedCleaner && normalize && !noValidate;
+    if (encodeSchema && value.hasTransform)
+      code += `try{${name}=validator.response[${status2}].Encode(${name})
 c.set.status=${status2}}catch{` + (applyErrorCleaner ? `try{
 ` + clean2({ ignoreTryCatch: true }) + `${name}=validator.response[${status2}].Encode(${name})
-}catch{throw new ValidationError('response',validator.response[${status2}],${name})}` : `throw new ValidationError('response',validator.response[${status2}],${name})`) + "}" : (appliedCleaner || (code += clean2()), noValidate || (code += `if(validator.response[${status2}].Check(${name})===false)throw new ValidationError('response',validator.response[${status2}],${name})
+}catch{throw new ValidationError('response',validator.response[${status2}],${name})}` : `throw new ValidationError('response',validator.response[${status2}],${name})`) + "}";
+    else {
+      if (!appliedCleaner)
+        code += clean2();
+      if (!noValidate)
+        code += `if(validator.response[${status2}].Check(${name})===false)throw new ValidationError('response',validator.response[${status2}],${name})
 c.set.status=${status2}
-`)), code += `break
 `;
     }
-    return code + "}";
+    code += `break
+`;
   }
-});
-var isAsyncName = (v) => (v?.fn ?? v).constructor.name === "AsyncFunction";
+  return code + "}";
+} });
+var isAsyncName = (v) => {
+  return (v?.fn ?? v).constructor.name === "AsyncFunction";
+};
 var matchResponseClone = /=>\s?response\.clone\(/;
 var matchFnReturn = /(?:return|=>)\s?\S+\(|a(?:sync|wait)/;
 var isAsync = (v) => {
-  let isObject2 = typeof v == "object";
+  let isObject2 = typeof v === "object";
   if (isObject2 && v.isAsync !== undefined)
     return v.isAsync;
   let fn = isObject2 ? v.fn : v;
   if (fn.constructor.name === "AsyncFunction")
     return true;
   let literal = fn.toString();
-  if (matchResponseClone.test(literal))
-    return isObject2 && (v.isAsync = false), false;
+  if (matchResponseClone.test(literal)) {
+    if (isObject2)
+      v.isAsync = false;
+    return false;
+  }
   let result = matchFnReturn.test(literal);
-  return isObject2 && (v.isAsync = result), result;
+  if (isObject2)
+    v.isAsync = result;
+  return result;
 };
 var hasReturn = (v) => {
-  let isObject2 = typeof v == "object";
+  let isObject2 = typeof v === "object";
   if (isObject2 && v.hasReturn !== undefined)
     return v.hasReturn;
-  let fnLiteral = isObject2 ? v.fn.toString() : typeof v == "string" ? v.toString() : v, parenthesisEnd = fnLiteral.indexOf(")");
-  if (fnLiteral.charCodeAt(parenthesisEnd + 2) === 61 && fnLiteral.charCodeAt(parenthesisEnd + 5) !== 123)
-    return isObject2 && (v.hasReturn = true), true;
+  let fnLiteral = isObject2 ? v.fn.toString() : typeof v === "string" ? v.toString() : v, parenthesisEnd = fnLiteral.indexOf(")");
+  if (fnLiteral.charCodeAt(parenthesisEnd + 2) === 61 && fnLiteral.charCodeAt(parenthesisEnd + 5) !== 123) {
+    if (isObject2)
+      v.hasReturn = true;
+    return true;
+  }
   let result = fnLiteral.includes("return");
-  return isObject2 && (v.hasReturn = result), result;
+  if (isObject2)
+    v.hasReturn = result;
+  return result;
 };
 var isGenerator = (v) => {
   let fn = v?.fn ?? v;
   return fn.constructor.name === "AsyncGeneratorFunction" || fn.constructor.name === "GeneratorFunction";
 };
-var composeHandler = ({
-  app,
-  path,
-  method,
-  hooks,
-  validator,
-  handler,
-  allowMeta = false,
-  inference
-}) => {
-  let adapter = app["~adapter"].composeHandler, adapterHandler = app["~adapter"].handler, isHandleFn = typeof handler == "function";
-  if (!isHandleFn && (handler = adapterHandler.mapResponse(handler, {
-    headers: app.setHeaders ?? {}
-  }), hooks.parse?.length && hooks.transform?.length && hooks.beforeHandle?.length && hooks.afterHandle?.length))
-    return handler instanceof Response ? Function("a", `"use strict";
-return function(){return a.clone()}`)(handler) : Function("a", `"use strict";
+var composeHandler = ({ app, path, method, hooks, validator, handler, allowMeta = false, inference }) => {
+  let adapter = app["~adapter"].composeHandler, adapterHandler = app["~adapter"].handler, isHandleFn = typeof handler === "function";
+  if (!isHandleFn) {
+    if (handler = adapterHandler.mapResponse(handler, { headers: app.setHeaders ?? {} }), hooks.parse?.length && hooks.transform?.length && hooks.beforeHandle?.length && hooks.afterHandle?.length) {
+      if (handler instanceof Response)
+        return Function("a", `"use strict";
+return function(){return a.clone()}`)(handler);
+      return Function("a", `"use strict";
 return function(){return a}`)(handler);
-  let handle = isHandleFn ? "handler(c)" : "handler", hasAfterResponse = !!hooks.afterResponse?.length, hasTrace = !!hooks.trace?.length, fnLiteral = "";
-  if (inference = sucrose(hooks, inference), inference = sucrose({
-    handler
-  }, inference), adapter.declare) {
-    let literal = adapter.declare(inference);
-    literal && (fnLiteral += literal);
+    }
   }
-  inference.server && (fnLiteral += `Object.defineProperty(c,'server',{get:function(){return getServer()}})
-`), validator.createBody?.(), validator.createQuery?.(), validator.createHeaders?.(), validator.createParams?.(), validator.createCookie?.(), validator.createResponse?.();
+  let handle = isHandleFn ? "handler(c)" : "handler", hasAfterResponse = !!hooks.afterResponse?.length, hasTrace = !!hooks.trace?.length, fnLiteral = "";
+  if (inference = sucrose(hooks, inference), inference = sucrose({ handler }, inference), adapter.declare) {
+    let literal = adapter.declare(inference);
+    if (literal)
+      fnLiteral += literal;
+  }
+  if (inference.server)
+    fnLiteral += `Object.defineProperty(c,'server',{get:function(){return getServer()}})
+`;
+  validator.createBody?.(), validator.createQuery?.(), validator.createHeaders?.(), validator.createParams?.(), validator.createCookie?.(), validator.createResponse?.();
   let hasValidation = !!validator.body || !!validator.headers || !!validator.params || !!validator.query || !!validator.cookie || !!validator.response, hasQuery = inference.query || !!validator.query, requestNoBody = hooks.parse?.length === 1 && hooks.parse[0].fn === "none", hasBody = method !== "" && method !== "GET" && method !== "HEAD" && (inference.body || !!validator.body || !!hooks.parse?.length) && !requestNoBody, defaultHeaders = app.setHeaders, hasDefaultHeaders = defaultHeaders && !!Object.keys(defaultHeaders).length, hasHeaders = inference.headers || !!validator.headers || adapter.preferWebstandardHeaders !== true && inference.body, hasCookie = inference.cookie || !!validator.cookie, cookieMeta = validator.cookie?.config ? mergeCookie(validator?.cookie?.config, app.config.cookie) : app.config.cookie, _encodeCookie = "", encodeCookie = () => {
     if (_encodeCookie)
       return _encodeCookie;
     if (cookieMeta?.sign) {
       if (!cookieMeta.secrets)
         throw new Error(`t.Cookie required secret which is not set in (${method}) ${path}.`);
-      let secret = cookieMeta.secrets ? typeof cookieMeta.secrets == "string" ? cookieMeta.secrets : cookieMeta.secrets[0] : undefined;
+      let secret = !cookieMeta.secrets ? undefined : typeof cookieMeta.secrets === "string" ? cookieMeta.secrets : cookieMeta.secrets[0];
       if (_encodeCookie += `const _setCookie = c.set.cookie
 if(_setCookie){`, cookieMeta.sign === true)
         _encodeCookie += `for(const [key, cookie] of Object.entries(_setCookie)){c.set.cookie[key].value=await signCookie(cookie.value,'${secret}')}`;
@@ -14410,29 +14001,32 @@ if(_setCookie){`, cookieMeta.sign === true)
 `;
     }
     return _encodeCookie;
-  }, normalize = app.config.normalize, encodeSchema = app.config.encodeSchema, validation = composeValidationFactory({
-    normalize,
-    validator,
-    encodeSchema,
-    isStaticResponse: handler instanceof Response,
-    hasSanitize: !!app.config.sanitize
-  });
-  hasHeaders && (fnLiteral += adapter.headers), hasTrace && (fnLiteral += `const id=c[ELYSIA_REQUEST_ID]
-`);
-  let report = createReport({
-    trace: hooks.trace,
-    addFn: (word) => {
-      fnLiteral += word;
-    }
-  });
+  }, normalize = app.config.normalize, encodeSchema = app.config.encodeSchema, validation = composeValidationFactory({ normalize, validator, encodeSchema, isStaticResponse: handler instanceof Response, hasSanitize: !!app.config.sanitize });
+  if (hasHeaders)
+    fnLiteral += adapter.headers;
+  if (hasTrace)
+    fnLiteral += `const id=c[ELYSIA_REQUEST_ID]
+`;
+  let report = createReport({ trace: hooks.trace, addFn: (word) => {
+    fnLiteral += word;
+  } });
   if (fnLiteral += "try{", hasCookie) {
     let get = (name, defaultValue) => {
       let value = cookieMeta?.[name] ?? defaultValue;
-      return value ? typeof value == "string" ? `${name}:'${value}',` : value instanceof Date ? `${name}: new Date(${value.getTime()}),` : `${name}:${value},` : typeof defaultValue == "string" ? `${name}:"${defaultValue}",` : `${name}:${defaultValue},`;
-    }, options = cookieMeta ? `{secrets:${cookieMeta.secrets !== undefined ? typeof cookieMeta.secrets == "string" ? `'${cookieMeta.secrets}'` : "[" + cookieMeta.secrets.reduce((a, b) => a + `'${b}',`, "") + "]" : "undefined"},sign:${cookieMeta.sign === true ? true : cookieMeta.sign !== undefined ? "[" + cookieMeta.sign.reduce((a, b) => a + `'${b}',`, "") + "]" : "undefined"},` + get("domain") + get("expires") + get("httpOnly") + get("maxAge") + get("path", "/") + get("priority") + get("sameSite") + get("secure") + "}" : "undefined";
-    hasHeaders ? fnLiteral += `
+      if (!value)
+        return typeof defaultValue === "string" ? `${name}:"${defaultValue}",` : `${name}:${defaultValue},`;
+      if (typeof value === "string")
+        return `${name}:'${value}',`;
+      if (value instanceof Date)
+        return `${name}: new Date(${value.getTime()}),`;
+      return `${name}:${value},`;
+    }, options = cookieMeta ? `{secrets:${cookieMeta.secrets !== undefined ? typeof cookieMeta.secrets === "string" ? `'${cookieMeta.secrets}'` : "[" + cookieMeta.secrets.reduce((a, b) => a + `'${b}',`, "") + "]" : "undefined"},sign:${cookieMeta.sign === true ? true : cookieMeta.sign !== undefined ? "[" + cookieMeta.sign.reduce((a, b) => a + `'${b}',`, "") + "]" : "undefined"},` + get("domain") + get("expires") + get("httpOnly") + get("maxAge") + get("path", "/") + get("priority") + get("sameSite") + get("secure") + "}" : "undefined";
+    if (hasHeaders)
+      fnLiteral += `
 c.cookie=await parseCookie(c.set,c.headers.cookie,${options})
-` : fnLiteral += `
+`;
+    else
+      fnLiteral += `
 c.cookie=await parseCookie(c.set,c.request.headers.get('cookie'),${options})
 `;
   }
@@ -14443,15 +14037,10 @@ c.cookie=await parseCookie(c.set,c.request.headers.get('cookie'),${options})
       if (!validator.query.hasAdditionalProperties)
         for (let [key, _value] of Object.entries(properties)) {
           let value = _value, isArray = value.type === "array" || !!value.anyOf?.some((v) => v.type === "string" && v.format === "ArrayString");
-          value && OptionalKind in value && value.type === "array" && value.items && (value = value.items);
+          if (value && OptionalKind in value && value.type === "array" && value.items)
+            value = value.items;
           let { type, anyOf } = value;
-          destructured.push({
-            key,
-            isArray,
-            isNestedObjectArray: isArray && value.items?.type === "object" || !!value.items?.anyOf?.some((x2) => x2.type === "object" || x2.type === "array"),
-            isObject: type === "object" || anyOf?.some((v) => v.type === "string" && v.format === "ArrayString"),
-            anyOf: !!anyOf
-          });
+          destructured.push({ key, isArray, isNestedObjectArray: isArray && value.items?.type === "object" || !!value.items?.anyOf?.some((x2) => x2.type === "object" || x2.type === "array"), isObject: type === "object" || anyOf?.some((v) => v.type === "string" && v.format === "ArrayString"), anyOf: !!anyOf });
         }
     }
     if (!destructured.length)
@@ -14460,17 +14049,13 @@ c.cookie=await parseCookie(c.set,c.request.headers.get('cookie'),${options})
       fnLiteral += `if(c.qi!==-1){let url='&'+c.url.slice(c.qi+1)
 `;
       let index = 0;
-      for (let {
-        key,
-        isArray,
-        isObject: isObject2,
-        isNestedObjectArray,
-        anyOf
-      } of destructured) {
+      for (let { key, isArray, isObject: isObject2, isNestedObjectArray, anyOf } of destructured) {
         let init2 = (index === 0 ? "let " : "") + `memory=url.indexOf('&${key}=')
 let a${index}
 `;
-        isArray ? (fnLiteral += init2, isNestedObjectArray ? fnLiteral += `while(memory!==-1){const start=memory+${key.length + 2}
+        if (isArray)
+          if (fnLiteral += init2, isNestedObjectArray)
+            fnLiteral += `while(memory!==-1){const start=memory+${key.length + 2}
 memory=url.indexOf('&',start)
 if(a${index}===undefined)
 a${index}=''
@@ -14488,7 +14073,9 @@ memory=url.indexOf('&${key}=',memory)
 if(memory===-1)break}try{if(a${index}.charCodeAt(0)===91)a${index} = JSON.parse(a${index})
 else
 a${index}=JSON.parse('['+a${index}+']')}catch{}
-` : fnLiteral += `while(memory!==-1){const start=memory+${key.length + 2}
+`;
+          else
+            fnLiteral += `while(memory!==-1){const start=memory+${key.length + 2}
 memory=url.indexOf('&',start)
 if(a${index}===undefined)a${index}=[]
 if(memory===-1){const temp=decodeURIComponent(url.slice(start)).replace(/\\+/g,' ')
@@ -14497,12 +14084,17 @@ break}else{const temp=decodeURIComponent(url.slice(start, memory)).replace(/\\+/
 if(temp.includes(',')){a${index}=a${index}.concat(temp.split(','))}else{a${index}.push(temp)}
 }memory=url.indexOf('&${key}=',memory)
 if(memory===-1) break
-}`) : isObject2 ? fnLiteral += init2 + `if(memory!==-1){const start=memory+${key.length + 2}
+}`;
+        else if (isObject2)
+          fnLiteral += init2 + `if(memory!==-1){const start=memory+${key.length + 2}
 memory=url.indexOf('&',start)
-if(memory===-1)a${index}=decodeURIComponent(url.slice(start).replace(/\\+/g,' '))else a${index}=decodeURIComponent(url.slice(start,memory).replace(/\\+/g,' '))if(a${index}!==undefined)try{a${index}=JSON.parse(a${index})}catch{}}` : (fnLiteral += init2 + `if(memory!==-1){const start=memory+${key.length + 2}
+if(memory===-1)a${index}=decodeURIComponent(url.slice(start).replace(/\\+/g,' '))else a${index}=decodeURIComponent(url.slice(start,memory).replace(/\\+/g,' '))if(a${index}!==undefined)try{a${index}=JSON.parse(a${index})}catch{}}`;
+        else {
+          if (fnLiteral += init2 + `if(memory!==-1){const start=memory+${key.length + 2}
 memory=url.indexOf('&',start)
 if(memory===-1)a${index}=decodeURIComponent(url.slice(start).replace(/\\+/g,' '))
-else{a${index}=decodeURIComponent(url.slice(start,memory).replace(/\\+/g,' '))`, anyOf && (fnLiteral += `
+else{a${index}=decodeURIComponent(url.slice(start,memory).replace(/\\+/g,' '))`, anyOf)
+            fnLiteral += `
 let deepMemory=url.indexOf('&${key}=',memory)
 if(deepMemory!==-1){a${index}=[a${index}]
 let first=true
@@ -14517,33 +14109,36 @@ if(value===null){if(deepMemory===-1){break}else{continue}}
 const vStart=value.charCodeAt(0)
 const vEnd=value.charCodeAt(value.length - 1)
 if((vStart===91&&vEnd===93)||(vStart===123&&vEnd===125))
-try{a${index}.push(JSON.parse(value))}catch{a${index}.push(value)}if(deepMemory===-1)break}}`), fnLiteral += "}}"), index++, fnLiteral += `
+try{a${index}.push(JSON.parse(value))}catch{a${index}.push(value)}if(deepMemory===-1)break}}`;
+          fnLiteral += "}}";
+        }
+        index++, fnLiteral += `
 `;
       }
       fnLiteral += "c.query={" + destructured.map(({ key }, index2) => `'${key}':a${index2}`).join(",") + "}", fnLiteral += `} else c.query = {}
 `;
     }
   }
-  let isAsyncHandler = typeof handler == "function" && isAsync(handler), saveResponse = hasTrace || hooks.afterResponse?.length ? "c.response= " : "", maybeAsync = hasCookie || hasBody || isAsyncHandler || !!hooks.parse?.length || !!hooks.afterHandle?.some(isAsync) || !!hooks.beforeHandle?.some(isAsync) || !!hooks.transform?.some(isAsync) || !!hooks.mapResponse?.some(isAsync), maybeStream = (typeof handler == "function" ? isGenerator(handler) : false) || !!hooks.beforeHandle?.some(isGenerator) || !!hooks.afterHandle?.some(isGenerator) || !!hooks.transform?.some(isGenerator), responseKeys = Object.keys(validator.response ?? {}), hasMultipleResponses = responseKeys.length > 1, hasSingle200 = responseKeys.length === 0 || responseKeys.length === 1 && responseKeys[0] === "200", hasSet = inference.cookie || inference.set || hasHeaders || hasTrace || hasMultipleResponses || !hasSingle200 || isHandleFn && hasDefaultHeaders || maybeStream, mapResponse3 = (r = "r") => `return ${hasSet ? "mapResponse" : "mapCompactResponse"}(${saveResponse}${r}${hasSet ? ",c.set" : ""}${mapResponseContext})
+  let isAsyncHandler = typeof handler === "function" && isAsync(handler), saveResponse = hasTrace || hooks.afterResponse?.length ? "c.response= " : "", maybeAsync = hasCookie || hasBody || isAsyncHandler || !!hooks.parse?.length || !!hooks.afterHandle?.some(isAsync) || !!hooks.beforeHandle?.some(isAsync) || !!hooks.transform?.some(isAsync) || !!hooks.mapResponse?.some(isAsync), maybeStream = (typeof handler === "function" ? isGenerator(handler) : false) || !!hooks.beforeHandle?.some(isGenerator) || !!hooks.afterHandle?.some(isGenerator) || !!hooks.transform?.some(isGenerator), responseKeys = Object.keys(validator.response ?? {}), hasMultipleResponses = responseKeys.length > 1, hasSingle200 = responseKeys.length === 0 || responseKeys.length === 1 && responseKeys[0] === "200", hasSet = inference.cookie || inference.set || hasHeaders || hasTrace || hasMultipleResponses || !hasSingle200 || isHandleFn && hasDefaultHeaders || maybeStream, mapResponse2 = (r = "r") => `return ${hasSet ? "mapResponse" : "mapCompactResponse"}(${saveResponse}${r}${hasSet ? ",c.set" : ""}${mapResponseContext})
 `, mapResponseContext = maybeStream || adapter.mapResponseContext ? `,${adapter.mapResponseContext}` : "";
-  (hasTrace || inference.route) && (fnLiteral += `c.route=\`${path}\`
-`);
-  let parseReporter = report("parse", {
-    total: hooks.parse?.length
-  });
+  if (hasTrace || inference.route)
+    fnLiteral += `c.route=\`${path}\`
+`;
+  let parseReporter = report("parse", { total: hooks.parse?.length });
   if (hasBody) {
     let hasBodyInference = !!hooks.parse?.length || inference.body || validator.body;
-    adapter.parser.declare && (fnLiteral += adapter.parser.declare), fnLiteral += `
+    if (adapter.parser.declare)
+      fnLiteral += adapter.parser.declare;
+    fnLiteral += `
 try{`;
-    let parser = typeof hooks.parse == "string" ? hooks.parse : Array.isArray(hooks.parse) && hooks.parse.length === 1 ? typeof hooks.parse[0] == "string" ? hooks.parse[0] : typeof hooks.parse[0].fn == "string" ? hooks.parse[0].fn : undefined : undefined;
+    let parser = typeof hooks.parse === "string" ? hooks.parse : Array.isArray(hooks.parse) && hooks.parse.length === 1 ? typeof hooks.parse[0] === "string" ? hooks.parse[0] : typeof hooks.parse[0].fn === "string" ? hooks.parse[0].fn : undefined : undefined;
     if (!parser && validator.body && !hooks.parse?.length) {
       let schema = validator.body.schema;
-      schema && schema.anyOf && schema[Kind] === "Union" && schema.anyOf?.length === 2 && schema.anyOf?.find((x2) => x2[Kind] === "ElysiaForm") && (parser = "formdata");
+      if (schema && schema.anyOf && schema[Kind] === "Union" && schema.anyOf?.length === 2 && schema.anyOf?.find((x2) => x2[Kind] === "ElysiaForm"))
+        parser = "formdata";
     }
     if (parser && defaultParsers.includes(parser)) {
-      let reporter = report("parse", {
-        total: hooks.parse?.length
-      }), isOptionalBody = !!validator.body?.isOptional;
+      let reporter = report("parse", { total: hooks.parse?.length }), isOptionalBody = !!validator.body?.isOptional;
       switch (parser) {
         case "json":
         case "application/json":
@@ -14566,7 +14161,8 @@ try{`;
           fnLiteral += adapter.parser.formData(isOptionalBody);
           break;
         default:
-          parser[0] in app["~parser"] && (fnLiteral += hasHeaders ? "let contentType = c.headers['content-type']" : "let contentType = c.request.headers.get('content-type')", fnLiteral += `
+          if (parser[0] in app["~parser"])
+            fnLiteral += hasHeaders ? "let contentType = c.headers['content-type']" : "let contentType = c.request.headers.get('content-type')", fnLiteral += `
 if(contentType){const index=contentType.indexOf(';')
 if(index!==-1)contentType=contentType.substring(0,index)}
 else{contentType=''}c.contentType=contentType
@@ -14575,7 +14171,7 @@ if(result instanceof Promise)result=await result
 if(result instanceof ElysiaCustomStatusResponse)throw result
 if(result!==undefined)c.body=result
 delete c.contentType
-`);
+`;
           break;
       }
       reporter.resolve();
@@ -14605,14 +14201,14 @@ case 114:` + adapter.parser.formData(isOptionalBody) + `break
 default:if(contentType.charCodeAt(0)===116){` + adapter.parser.text(isOptionalBody) + `}break
 }`;
       }
-      let reporter = report("parse", {
-        total: hooks.parse?.length
-      });
+      let reporter = report("parse", { total: hooks.parse?.length });
       if (hooks.parse)
         for (let i2 = 0;i2 < hooks.parse.length; i2++) {
           let name = `bo${i2}`;
-          if (i2 !== 0 && (fnLiteral += `
-if(!used){`), typeof hooks.parse[i2].fn == "string") {
+          if (i2 !== 0)
+            fnLiteral += `
+if(!used){`;
+          if (typeof hooks.parse[i2].fn === "string") {
             let endUnit = reporter.resolveChild(hooks.parse[i2].fn), isOptionalBody = !!validator.body?.isOptional;
             switch (hooks.parse[i2].fn) {
               case "json":
@@ -14649,15 +14245,19 @@ ${name}=${name}(c,contentType)
 if(${name} instanceof Promise)${name}=await ${name}
 if(${name}!==undefined){c.body=${name};used=true}`, endUnit();
           }
-          if (i2 !== 0 && (fnLiteral += "}"), hasDefaultParser)
+          if (i2 !== 0)
+            fnLiteral += "}";
+          if (hasDefaultParser)
             break;
         }
       if (reporter.resolve(), !hasDefaultParser) {
         let isOptionalBody = !!validator.body?.isOptional;
-        hooks.parse?.length && (fnLiteral += `
+        if (hooks.parse?.length)
+          fnLiteral += `
 if(!used){
 if(!contentType) throw new ParseError()
-`), fnLiteral += "switch(contentType){", fnLiteral += `case 'application/json':
+`;
+        fnLiteral += "switch(contentType){", fnLiteral += `case 'application/json':
 ` + adapter.parser.json(isOptionalBody) + `break
 case 'text/plain':` + adapter.parser.text(isOptionalBody) + `break
 case 'application/x-www-form-urlencoded':` + adapter.parser.urlencoded(isOptionalBody) + `break
@@ -14671,24 +14271,27 @@ if(bo${key} instanceof ElysiaCustomStatusResponse)throw result
 if(bo${key}!==undefined)c.body=bo${key}
 break
 `;
-        hooks.parse?.length && (fnLiteral += "}"), fnLiteral += "}";
+        if (hooks.parse?.length)
+          fnLiteral += "}";
+        fnLiteral += "}";
       }
-      hooks.parse?.length && (fnLiteral += `
-delete c.contentType`);
+      if (hooks.parse?.length)
+        fnLiteral += `
+delete c.contentType`;
     }
     fnLiteral += "}catch(error){throw new ParseError(error)}";
   }
   if (parseReporter.resolve(), hooks?.transform) {
-    let reporter = report("transform", {
-      total: hooks.transform.length
-    });
-    hooks.transform.length && (fnLiteral += `let transformed
-`);
+    let reporter = report("transform", { total: hooks.transform.length });
+    if (hooks.transform.length)
+      fnLiteral += `let transformed
+`;
     for (let i2 = 0;i2 < hooks.transform.length; i2++) {
       let transform2 = hooks.transform[i2], endUnit = reporter.resolveChild(transform2.fn.name);
-      fnLiteral += isAsync(transform2) ? `transformed=await e.transform[${i2}](c)
+      if (fnLiteral += isAsync(transform2) ? `transformed=await e.transform[${i2}](c)
 ` : `transformed=e.transform[${i2}](c)
-`, transform2.subType === "mapDerive" ? fnLiteral += `if(transformed instanceof ElysiaCustomStatusResponse)throw transformed
+`, transform2.subType === "mapDerive")
+        fnLiteral += `if(transformed instanceof ElysiaCustomStatusResponse)throw transformed
 else{transformed.request=c.request
 transformed.store=c.store
 transformed.qi=c.qi
@@ -14697,9 +14300,12 @@ transformed.url=c.url
 transformed.redirect=c.redirect
 transformed.set=c.set
 transformed.error=c.error
-c=transformed}` : fnLiteral += `if(transformed instanceof ElysiaCustomStatusResponse)throw transformed
+c=transformed}`;
+      else
+        fnLiteral += `if(transformed instanceof ElysiaCustomStatusResponse)throw transformed
 else Object.assign(c,transformed)
-`, endUnit();
+`;
+      endUnit();
     }
     reporter.resolve();
   }
@@ -14708,142 +14314,176 @@ else Object.assign(c,transformed)
     if (validator.headers) {
       if (validator.headers.hasDefault)
         for (let [key, value] of Object.entries(exports_value2.Default(validator.headers.schema, {}))) {
-          let parsed = typeof value == "object" ? JSON.stringify(value) : typeof value == "string" ? `'${value}'` : value;
-          parsed !== undefined && (fnLiteral += `c.headers['${key}']??=${parsed}
-`);
+          let parsed = typeof value === "object" ? JSON.stringify(value) : typeof value === "string" ? `'${value}'` : value;
+          if (parsed !== undefined)
+            fnLiteral += `c.headers['${key}']??=${parsed}
+`;
         }
-      fnLiteral += composeCleaner({
-        name: "c.headers",
-        schema: validator.headers,
-        type: "headers",
-        normalize
-      }), validator.headers.isOptional && (fnLiteral += "if(isNotEmpty(c.headers)){"), validator.body?.schema?.noValidate !== true && (fnLiteral += "if(validator.headers.Check(c.headers) === false){" + validation.validate("headers") + "}"), validator.headers.hasTransform && (fnLiteral += `c.headers=validator.headers.Decode(c.headers)
-`), validator.headers.isOptional && (fnLiteral += "}");
+      if (fnLiteral += composeCleaner({ name: "c.headers", schema: validator.headers, type: "headers", normalize }), validator.headers.isOptional)
+        fnLiteral += "if(isNotEmpty(c.headers)){";
+      if (validator.body?.schema?.noValidate !== true)
+        fnLiteral += "if(validator.headers.Check(c.headers) === false){" + validation.validate("headers") + "}";
+      if (validator.headers.hasTransform)
+        fnLiteral += `c.headers=validator.headers.Decode(c.headers)
+`;
+      if (validator.headers.isOptional)
+        fnLiteral += "}";
     }
     if (validator.params) {
       if (validator.params.hasDefault)
         for (let [key, value] of Object.entries(exports_value2.Default(validator.params.schema, {}))) {
-          let parsed = typeof value == "object" ? JSON.stringify(value) : typeof value == "string" ? `'${value}'` : value;
-          parsed !== undefined && (fnLiteral += `c.params['${key}']??=${parsed}
-`);
+          let parsed = typeof value === "object" ? JSON.stringify(value) : typeof value === "string" ? `'${value}'` : value;
+          if (parsed !== undefined)
+            fnLiteral += `c.params['${key}']??=${parsed}
+`;
         }
-      validator.params?.schema?.noValidate !== true && (fnLiteral += "if(validator.params.Check(c.params)===false){" + validation.validate("params") + "}"), validator.params.hasTransform && (fnLiteral += `c.params=validator.params.Decode(c.params)
-`);
+      if (validator.params?.schema?.noValidate !== true)
+        fnLiteral += "if(validator.params.Check(c.params)===false){" + validation.validate("params") + "}";
+      if (validator.params.hasTransform)
+        fnLiteral += `c.params=validator.params.Decode(c.params)
+`;
     }
     if (validator.query) {
       if (validator.query.hasDefault)
         for (let [key, value] of Object.entries(exports_value2.Default(validator.query.schema, {}))) {
-          let parsed = typeof value == "object" ? JSON.stringify(value) : typeof value == "string" ? `'${value}'` : value;
-          parsed !== undefined && (fnLiteral += `if(c.query['${key}']===undefined)c.query['${key}']=${parsed}
-`), fnLiteral += composeCleaner({
-            name: "c.query",
-            schema: validator.query,
-            type: "query",
-            normalize
-          });
+          let parsed = typeof value === "object" ? JSON.stringify(value) : typeof value === "string" ? `'${value}'` : value;
+          if (parsed !== undefined)
+            fnLiteral += `if(c.query['${key}']===undefined)c.query['${key}']=${parsed}
+`;
+          fnLiteral += composeCleaner({ name: "c.query", schema: validator.query, type: "query", normalize });
         }
-      validator.query.isOptional && (fnLiteral += "if(isNotEmpty(c.query)){"), validator.query?.schema?.noValidate !== true && (fnLiteral += "if(validator.query.Check(c.query)===false){" + validation.validate("query") + "}"), validator.query.hasTransform && (fnLiteral += `c.query=validator.query.Decode(Object.assign({},c.query))
-`), validator.query.isOptional && (fnLiteral += "}");
+      if (validator.query.isOptional)
+        fnLiteral += "if(isNotEmpty(c.query)){";
+      if (validator.query?.schema?.noValidate !== true)
+        fnLiteral += "if(validator.query.Check(c.query)===false){" + validation.validate("query") + "}";
+      if (validator.query.hasTransform)
+        fnLiteral += `c.query=validator.query.Decode(Object.assign({},c.query))
+`;
+      if (validator.query.isOptional)
+        fnLiteral += "}";
     }
     if (hasBody && validator.body) {
-      (validator.body.hasTransform || validator.body.isOptional) && (fnLiteral += `const isNotEmptyObject=c.body&&(typeof c.body==="object"&&isNotEmpty(c.body))
-`);
+      if (validator.body.hasTransform || validator.body.isOptional)
+        fnLiteral += `const isNotEmptyObject=c.body&&(typeof c.body==="object"&&isNotEmpty(c.body))
+`;
       let hasUnion = isUnion(validator.body.schema), hasNonUnionFileWithDefault = false;
       if (validator.body.hasDefault) {
         let value = exports_value2.Default(validator.body.schema, validator.body.schema.type === "object" || validator.body.schema[Kind] === "Import" && validator.body.schema.$defs[validator.body.schema.$ref][Kind] === "Object" ? {} : undefined), schema = unwrapImportSchema(validator.body.schema);
-        if (!hasUnion && value && typeof value == "object" && (hasType("File", schema) || hasType("Files", schema))) {
+        if (!hasUnion && value && typeof value === "object" && (hasType("File", schema) || hasType("Files", schema))) {
           hasNonUnionFileWithDefault = true;
-          for (let [k, v] of Object.entries(value))
-            (v === "File" || v === "Files") && delete value[k];
-          isNotEmpty(value) || (value = undefined);
+          for (let [k2, v] of Object.entries(value))
+            if (v === "File" || v === "Files")
+              delete value[k2];
+          if (!isNotEmpty(value))
+            value = undefined;
         }
-        let parsed = typeof value == "object" ? JSON.stringify(value) : typeof value == "string" ? `'${value}'` : value;
-        value != null && (Array.isArray(value) ? fnLiteral += `if(!c.body)c.body=${parsed}
-` : typeof value == "object" ? fnLiteral += `c.body=Object.assign(${parsed},c.body)
-` : fnLiteral += `c.body=${parsed}
-`), fnLiteral += composeCleaner({
-          name: "c.body",
-          schema: validator.body,
-          type: "body",
-          normalize
-        }), validator.body?.schema?.noValidate !== true && (validator.body.isOptional ? fnLiteral += "if(isNotEmptyObject&&validator.body.Check(c.body)===false){" + validation.validate("body") + "}" : fnLiteral += "if(validator.body.Check(c.body)===false){" + validation.validate("body") + "}");
-      } else
-        fnLiteral += composeCleaner({
-          name: "c.body",
-          schema: validator.body,
-          type: "body",
-          normalize
-        }), validator.body?.schema?.noValidate !== true && (validator.body.isOptional ? fnLiteral += "if(isNotEmptyObject&&validator.body.Check(c.body)===false){" + validation.validate("body") + "}" : fnLiteral += "if(validator.body.Check(c.body)===false){" + validation.validate("body") + "}");
-      if (validator.body.hasTransform && (fnLiteral += `if(isNotEmptyObject)c.body=validator.body.Decode(c.body)
-`), hasUnion && validator.body.schema.anyOf?.length) {
+        let parsed = typeof value === "object" ? JSON.stringify(value) : typeof value === "string" ? `'${value}'` : value;
+        if (value !== undefined && value !== null)
+          if (Array.isArray(value))
+            fnLiteral += `if(!c.body)c.body=${parsed}
+`;
+          else if (typeof value === "object")
+            fnLiteral += `c.body=Object.assign(${parsed},c.body)
+`;
+          else
+            fnLiteral += `c.body=${parsed}
+`;
+        if (fnLiteral += composeCleaner({ name: "c.body", schema: validator.body, type: "body", normalize }), validator.body?.schema?.noValidate !== true)
+          if (validator.body.isOptional)
+            fnLiteral += "if(isNotEmptyObject&&validator.body.Check(c.body)===false){" + validation.validate("body") + "}";
+          else
+            fnLiteral += "if(validator.body.Check(c.body)===false){" + validation.validate("body") + "}";
+      } else if (fnLiteral += composeCleaner({ name: "c.body", schema: validator.body, type: "body", normalize }), validator.body?.schema?.noValidate !== true)
+        if (validator.body.isOptional)
+          fnLiteral += "if(isNotEmptyObject&&validator.body.Check(c.body)===false){" + validation.validate("body") + "}";
+        else
+          fnLiteral += "if(validator.body.Check(c.body)===false){" + validation.validate("body") + "}";
+      if (validator.body.hasTransform)
+        fnLiteral += `if(isNotEmptyObject)c.body=validator.body.Decode(c.body)
+`;
+      if (hasUnion && validator.body.schema.anyOf?.length) {
         let iterator = Object.values(validator.body.schema.anyOf);
         for (let i2 = 0;i2 < iterator.length; i2++) {
           let type = iterator[i2];
           if (hasType("File", type) || hasType("Files", type)) {
-            let candidate = getSchemaValidator(type, {
-              modules: app.definitions.typebox,
-              dynamic: !app.config.aot,
-              models: app.definitions.type,
-              normalize: app.config.normalize,
-              additionalCoerce: coercePrimitiveRoot(),
-              sanitize: () => app.config.sanitize
-            });
+            let candidate = getSchemaValidator(type, { modules: app.definitions.typebox, dynamic: !app.config.aot, models: app.definitions.type, normalize: app.config.normalize, additionalCoerce: coercePrimitiveRoot(), sanitize: () => app.config.sanitize });
             if (candidate) {
               let isFirst = fileUnions.length === 0, iterator2 = Object.entries(type.properties), validator2 = isFirst ? `
 ` : " else ";
               validator2 += `if(fileUnions[${fileUnions.length}].Check(c.body)){`;
               let validateFile2 = "", validatorLength = 0;
               for (let i22 = 0;i22 < iterator2.length; i22++) {
-                let [k, v] = iterator2[i22];
-                !v.extension || v[Kind] !== "File" && v[Kind] !== "Files" || (validatorLength && (validateFile2 += ","), validateFile2 += `validateFileExtension(c.body.${k},${JSON.stringify(v.extension)},'body.${k}')`, validatorLength++);
+                let [k2, v] = iterator2[i22];
+                if (!v.extension || v[Kind] !== "File" && v[Kind] !== "Files")
+                  continue;
+                if (validatorLength)
+                  validateFile2 += ",";
+                validateFile2 += `validateFileExtension(c.body.${k2},${JSON.stringify(v.extension)},'body.${k2}')`, validatorLength++;
               }
-              validateFile2 && (validatorLength === 1 ? validator2 += `await ${validateFile2}
-` : validatorLength > 1 && (validator2 += `await Promise.all([${validateFile2}])
-`), validator2 += "}", fnLiteral += validator2, fileUnions.push(candidate));
+              if (validateFile2) {
+                if (validatorLength === 1)
+                  validator2 += `await ${validateFile2}
+`;
+                else if (validatorLength > 1)
+                  validator2 += `await Promise.all([${validateFile2}])
+`;
+                validator2 += "}", fnLiteral += validator2, fileUnions.push(candidate);
+              }
             }
           }
         }
       } else if (hasNonUnionFileWithDefault || !hasUnion && (hasType("File", unwrapImportSchema(validator.body.schema)) || hasType("Files", unwrapImportSchema(validator.body.schema)))) {
         let validateFile2 = "", i2 = 0;
-        for (let [k, v] of Object.entries(unwrapImportSchema(validator.body.schema).properties))
-          !v.extension || v[Kind] !== "File" && v[Kind] !== "Files" || (i2 && (validateFile2 += ","), validateFile2 += `validateFileExtension(c.body.${k},${JSON.stringify(v.extension)},'body.${k}')`, i2++);
-        i2 && (fnLiteral += `
-`), i2 === 1 ? fnLiteral += `await ${validateFile2}
-` : i2 > 1 && (fnLiteral += `await Promise.all([${validateFile2}])
-`);
+        for (let [k2, v] of Object.entries(unwrapImportSchema(validator.body.schema).properties)) {
+          if (!v.extension || v[Kind] !== "File" && v[Kind] !== "Files")
+            continue;
+          if (i2)
+            validateFile2 += ",";
+          validateFile2 += `validateFileExtension(c.body.${k2},${JSON.stringify(v.extension)},'body.${k2}')`, i2++;
+        }
+        if (i2)
+          fnLiteral += `
+`;
+        if (i2 === 1)
+          fnLiteral += `await ${validateFile2}
+`;
+        else if (i2 > 1)
+          fnLiteral += `await Promise.all([${validateFile2}])
+`;
       }
     }
     if (validator.cookie) {
-      let cookieValidator = getCookieValidator({
-        modules: app.definitions.typebox,
-        validator: validator.cookie,
-        defaultConfig: app.config.cookie,
-        dynamic: !!app.config.aot,
-        config: validator.cookie?.config ?? {},
-        models: app.definitions.type
-      });
+      let cookieValidator = getCookieValidator({ modules: app.definitions.typebox, validator: validator.cookie, defaultConfig: app.config.cookie, dynamic: !!app.config.aot, config: validator.cookie?.config ?? {}, models: app.definitions.type });
       if (fnLiteral += `const cookieValue={}
 for(const [key,value] of Object.entries(c.cookie))cookieValue[key]=value.value
 `, cookieValidator.hasDefault)
         for (let [key, value] of Object.entries(exports_value2.Default(cookieValidator.schema, {})))
-          fnLiteral += `cookieValue['${key}'] = ${typeof value == "object" ? JSON.stringify(value) : value}
+          fnLiteral += `cookieValue['${key}'] = ${typeof value === "object" ? JSON.stringify(value) : value}
 `;
-      cookieValidator.isOptional && (fnLiteral += "if(isNotEmpty(c.cookie)){"), validator.body?.schema?.noValidate !== true && (fnLiteral += "if(validator.cookie.Check(cookieValue)===false){" + validation.validate("cookie", "cookieValue") + "}"), cookieValidator.hasTransform && (fnLiteral += `for(const [key,value] of Object.entries(validator.cookie.Decode(cookieValue)))c.cookie[key].value=value
-`), cookieValidator.isOptional && (fnLiteral += "}");
+      if (cookieValidator.isOptional)
+        fnLiteral += "if(isNotEmpty(c.cookie)){";
+      if (validator.body?.schema?.noValidate !== true)
+        fnLiteral += "if(validator.cookie.Check(cookieValue)===false){" + validation.validate("cookie", "cookieValue") + "}";
+      if (cookieValidator.hasTransform)
+        fnLiteral += `for(const [key,value] of Object.entries(validator.cookie.Decode(cookieValue)))c.cookie[key].value=value
+`;
+      if (cookieValidator.isOptional)
+        fnLiteral += "}";
     }
   }
   if (hooks?.beforeHandle) {
-    let reporter = report("beforeHandle", {
-      total: hooks.beforeHandle.length
-    }), hasResolve = false;
+    let reporter = report("beforeHandle", { total: hooks.beforeHandle.length }), hasResolve = false;
     for (let i2 = 0;i2 < hooks.beforeHandle.length; i2++) {
       let beforeHandle = hooks.beforeHandle[i2], endUnit = reporter.resolveChild(beforeHandle.fn.name), returning = hasReturn(beforeHandle);
-      if (beforeHandle.subType === "resolve" || beforeHandle.subType === "mapResolve")
-        hasResolve || (hasResolve = true, fnLiteral += `
+      if (beforeHandle.subType === "resolve" || beforeHandle.subType === "mapResolve") {
+        if (!hasResolve)
+          hasResolve = true, fnLiteral += `
 let resolved
-`), fnLiteral += isAsync(beforeHandle) ? `resolved=await e.beforeHandle[${i2}](c);
+`;
+        if (fnLiteral += isAsync(beforeHandle) ? `resolved=await e.beforeHandle[${i2}](c);
 ` : `resolved=e.beforeHandle[${i2}](c);
-`, beforeHandle.subType === "mapResolve" ? fnLiteral += `if(resolved instanceof ElysiaCustomStatusResponse)throw resolved
+`, beforeHandle.subType === "mapResolve")
+          fnLiteral += `if(resolved instanceof ElysiaCustomStatusResponse)throw resolved
 else{resolved.request=c.request
 resolved.store=c.store
 resolved.qi=c.qi
@@ -14852,10 +14492,12 @@ resolved.url=c.url
 resolved.redirect=c.redirect
 resolved.set=c.set
 resolved.error=c.error
-c=resolved}` : fnLiteral += `if(resolved instanceof ElysiaCustomStatusResponse)throw resolved
+c=resolved}`;
+        else
+          fnLiteral += `if(resolved instanceof ElysiaCustomStatusResponse)throw resolved
 else Object.assign(c, resolved)
 `;
-      else if (!returning)
+      } else if (!returning)
         fnLiteral += isAsync(beforeHandle) ? `await e.beforeHandle[${i2}](c)
 ` : `e.beforeHandle[${i2}](c)
 `, endUnit();
@@ -14863,34 +14505,33 @@ else Object.assign(c, resolved)
         if (fnLiteral += isAsync(beforeHandle) ? `be=await e.beforeHandle[${i2}](c)
 ` : `be=e.beforeHandle[${i2}](c)
 `, endUnit("be"), fnLiteral += "if(be!==undefined){", reporter.resolve(), hooks.afterHandle?.length) {
-          report("handle", {
-            name: isHandleFn ? handler.name : undefined
-          }).resolve();
-          let reporter2 = report("afterHandle", {
-            total: hooks.afterHandle.length
-          });
+          report("handle", { name: isHandleFn ? handler.name : undefined }).resolve();
+          let reporter2 = report("afterHandle", { total: hooks.afterHandle.length });
           for (let i22 = 0;i22 < hooks.afterHandle.length; i22++) {
             let hook = hooks.afterHandle[i22], returning2 = hasReturn(hook), endUnit2 = reporter2.resolveChild(hook.fn.name);
-            fnLiteral += `c.response = be
-`, returning2 ? (fnLiteral += isAsync(hook.fn) ? `af=await e.afterHandle[${i22}](c)
+            if (fnLiteral += `c.response = be
+`, !returning2)
+              fnLiteral += isAsync(hook.fn) ? `await e.afterHandle[${i22}](c, be)
+` : `e.afterHandle[${i22}](c, be)
+`;
+            else
+              fnLiteral += isAsync(hook.fn) ? `af=await e.afterHandle[${i22}](c)
 ` : `af=e.afterHandle[${i22}](c)
 `, fnLiteral += `if(af!==undefined) c.response=be=af
-`) : fnLiteral += isAsync(hook.fn) ? `await e.afterHandle[${i22}](c, be)
-` : `e.afterHandle[${i22}](c, be)
-`, endUnit2("af");
+`;
+            endUnit2("af");
           }
           reporter2.resolve();
         }
-        validator.response && (fnLiteral += validation.response("be"));
-        let mapResponseReporter = report("mapResponse", {
-          total: hooks.mapResponse?.length
-        });
+        if (validator.response)
+          fnLiteral += validation.response("be");
+        let mapResponseReporter = report("mapResponse", { total: hooks.mapResponse?.length });
         if (hooks.mapResponse?.length) {
           fnLiteral += `c.response=be
 `;
           for (let i22 = 0;i22 < hooks.mapResponse.length; i22++) {
-            let mapResponse4 = hooks.mapResponse[i22], endUnit2 = mapResponseReporter.resolveChild(mapResponse4.fn.name);
-            fnLiteral += `if(mr===undefined){mr=${isAsyncName(mapResponse4) ? "await " : ""}e.mapResponse[${i22}](c)
+            let mapResponse3 = hooks.mapResponse[i22], endUnit2 = mapResponseReporter.resolveChild(mapResponse3.fn.name);
+            fnLiteral += `if(mr===undefined){mr=${isAsyncName(mapResponse3) ? "await " : ""}e.mapResponse[${i22}](c)
 if(mr!==undefined)be=c.response=mr}`, endUnit2();
           }
         }
@@ -14901,117 +14542,132 @@ if(mr!==undefined)be=c.response=mr}`, endUnit2();
     reporter.resolve();
   }
   if (hooks.afterHandle?.length) {
-    let handleReporter = report("handle", {
-      name: isHandleFn ? handler.name : undefined
-    });
-    hooks.afterHandle.length ? fnLiteral += isAsyncHandler ? `let r=c.response=await ${handle}
+    let handleReporter = report("handle", { name: isHandleFn ? handler.name : undefined });
+    if (hooks.afterHandle.length)
+      fnLiteral += isAsyncHandler ? `let r=c.response=await ${handle}
 ` : `let r=c.response=${handle}
-` : fnLiteral += isAsyncHandler ? `let r=await ${handle}
+`;
+    else
+      fnLiteral += isAsyncHandler ? `let r=await ${handle}
 ` : `let r=${handle}
-`, handleReporter.resolve();
-    let reporter = report("afterHandle", {
-      total: hooks.afterHandle.length
-    });
+`;
+    handleReporter.resolve();
+    let reporter = report("afterHandle", { total: hooks.afterHandle.length });
     for (let i2 = 0;i2 < hooks.afterHandle.length; i2++) {
       let hook = hooks.afterHandle[i2], returning = hasReturn(hook), endUnit = reporter.resolveChild(hook.fn.name);
-      returning ? (fnLiteral += isAsync(hook.fn) ? `af=await e.afterHandle[${i2}](c)
-` : `af=e.afterHandle[${i2}](c)
-`, endUnit("af"), validator.response ? (fnLiteral += "if(af!==undefined){", reporter.resolve(), fnLiteral += validation.response("af"), fnLiteral += "c.response=af}") : (fnLiteral += "if(af!==undefined){", reporter.resolve(), fnLiteral += "c.response=af}")) : (fnLiteral += isAsync(hook.fn) ? `await e.afterHandle[${i2}](c)
+      if (!returning)
+        fnLiteral += isAsync(hook.fn) ? `await e.afterHandle[${i2}](c)
 ` : `e.afterHandle[${i2}](c)
-`, endUnit());
+`, endUnit();
+      else if (fnLiteral += isAsync(hook.fn) ? `af=await e.afterHandle[${i2}](c)
+` : `af=e.afterHandle[${i2}](c)
+`, endUnit("af"), validator.response)
+        fnLiteral += "if(af!==undefined){", reporter.resolve(), fnLiteral += validation.response("af"), fnLiteral += "c.response=af}";
+      else
+        fnLiteral += "if(af!==undefined){", reporter.resolve(), fnLiteral += "c.response=af}";
     }
-    reporter.resolve(), fnLiteral += `r=c.response
-`, validator.response && (fnLiteral += validation.response()), fnLiteral += encodeCookie();
-    let mapResponseReporter = report("mapResponse", {
-      total: hooks.mapResponse?.length
-    });
+    if (reporter.resolve(), fnLiteral += `r=c.response
+`, validator.response)
+      fnLiteral += validation.response();
+    fnLiteral += encodeCookie();
+    let mapResponseReporter = report("mapResponse", { total: hooks.mapResponse?.length });
     if (hooks.mapResponse?.length)
       for (let i2 = 0;i2 < hooks.mapResponse.length; i2++) {
-        let mapResponse4 = hooks.mapResponse[i2], endUnit = mapResponseReporter.resolveChild(mapResponse4.fn.name);
-        fnLiteral += `mr=${isAsyncName(mapResponse4) ? "await " : ""}e.mapResponse[${i2}](c)
+        let mapResponse3 = hooks.mapResponse[i2], endUnit = mapResponseReporter.resolveChild(mapResponse3.fn.name);
+        fnLiteral += `mr=${isAsyncName(mapResponse3) ? "await " : ""}e.mapResponse[${i2}](c)
 if(mr!==undefined)r=c.response=mr
 `, endUnit();
       }
-    mapResponseReporter.resolve(), fnLiteral += mapResponse3();
+    mapResponseReporter.resolve(), fnLiteral += mapResponse2();
   } else {
-    let handleReporter = report("handle", {
-      name: isHandleFn ? handler.name : undefined
-    });
+    let handleReporter = report("handle", { name: isHandleFn ? handler.name : undefined });
     if (validator.response || hooks.mapResponse?.length) {
-      fnLiteral += isAsyncHandler ? `let r=await ${handle}
+      if (fnLiteral += isAsyncHandler ? `let r=await ${handle}
 ` : `let r=${handle}
-`, handleReporter.resolve(), validator.response && (fnLiteral += validation.response()), report("afterHandle").resolve();
-      let mapResponseReporter = report("mapResponse", {
-        total: hooks.mapResponse?.length
-      });
+`, handleReporter.resolve(), validator.response)
+        fnLiteral += validation.response();
+      report("afterHandle").resolve();
+      let mapResponseReporter = report("mapResponse", { total: hooks.mapResponse?.length });
       if (hooks.mapResponse?.length) {
         fnLiteral += `
 c.response=r
 `;
         for (let i2 = 0;i2 < hooks.mapResponse.length; i2++) {
-          let mapResponse4 = hooks.mapResponse[i2], endUnit = mapResponseReporter.resolveChild(mapResponse4.fn.name);
+          let mapResponse3 = hooks.mapResponse[i2], endUnit = mapResponseReporter.resolveChild(mapResponse3.fn.name);
           fnLiteral += `
-if(mr===undefined){mr=${isAsyncName(mapResponse4) ? "await " : ""}e.mapResponse[${i2}](c)
+if(mr===undefined){mr=${isAsyncName(mapResponse3) ? "await " : ""}e.mapResponse[${i2}](c)
 if(mr!==undefined)r=c.response=mr}
 `, endUnit();
         }
       }
-      mapResponseReporter.resolve(), fnLiteral += encodeCookie(), handler instanceof Response ? (fnLiteral += inference.set ? `if(isNotEmpty(c.set.headers)||c.set.status!==200||c.set.redirect||c.set.cookie)return mapResponse(${saveResponse}${handle}.clone(),c.set${mapResponseContext})else return ${handle}.clone()` : `return ${handle}.clone()`, fnLiteral += `
-`) : fnLiteral += mapResponse3();
+      if (mapResponseReporter.resolve(), fnLiteral += encodeCookie(), handler instanceof Response)
+        fnLiteral += inference.set ? `if(isNotEmpty(c.set.headers)||c.set.status!==200||c.set.redirect||c.set.cookie)return mapResponse(${saveResponse}${handle}.clone(),c.set${mapResponseContext})else return ${handle}.clone()` : `return ${handle}.clone()`, fnLiteral += `
+`;
+      else
+        fnLiteral += mapResponse2();
     } else if (hasCookie || hasTrace) {
       fnLiteral += isAsyncHandler ? `let r=await ${handle}
 ` : `let r=${handle}
 `, handleReporter.resolve(), report("afterHandle").resolve();
-      let mapResponseReporter = report("mapResponse", {
-        total: hooks.mapResponse?.length
-      });
+      let mapResponseReporter = report("mapResponse", { total: hooks.mapResponse?.length });
       if (hooks.mapResponse?.length) {
         fnLiteral += `c.response= r
 `;
         for (let i2 = 0;i2 < hooks.mapResponse.length; i2++) {
-          let mapResponse4 = hooks.mapResponse[i2], endUnit = mapResponseReporter.resolveChild(mapResponse4.fn.name);
-          fnLiteral += `if(mr===undefined){mr=${isAsyncName(mapResponse4) ? "await " : ""}e.mapResponse[${i2}](c)
+          let mapResponse3 = hooks.mapResponse[i2], endUnit = mapResponseReporter.resolveChild(mapResponse3.fn.name);
+          fnLiteral += `if(mr===undefined){mr=${isAsyncName(mapResponse3) ? "await " : ""}e.mapResponse[${i2}](c)
 if(mr!==undefined)r=c.response=mr}`, endUnit();
         }
       }
-      mapResponseReporter.resolve(), fnLiteral += encodeCookie() + mapResponse3();
+      mapResponseReporter.resolve(), fnLiteral += encodeCookie() + mapResponse2();
     } else {
       handleReporter.resolve();
       let handled = isAsyncHandler ? `await ${handle}` : handle;
-      report("afterHandle").resolve(), handler instanceof Response ? fnLiteral += inference.set ? `if(isNotEmpty(c.set.headers)||c.set.status!==200||c.set.redirect||c.set.cookie)return mapResponse(${saveResponse}${handle}.clone(),c.set${mapResponseContext})
+      if (report("afterHandle").resolve(), handler instanceof Response)
+        fnLiteral += inference.set ? `if(isNotEmpty(c.set.headers)||c.set.status!==200||c.set.redirect||c.set.cookie)return mapResponse(${saveResponse}${handle}.clone(),c.set${mapResponseContext})
 else return ${handle}.clone()
 ` : `return ${handle}.clone()
-` : fnLiteral += mapResponse3(handled);
+`;
+      else
+        fnLiteral += mapResponse2(handled);
     }
   }
   if (fnLiteral += `
-}catch(error){`, !maybeAsync && hooks.error?.length && (fnLiteral += "return(async()=>{"), fnLiteral += `const set=c.set
+}catch(error){`, !maybeAsync && hooks.error?.length)
+    fnLiteral += "return(async()=>{";
+  if (fnLiteral += `const set=c.set
 if(!set.status||set.status<300)set.status=error?.status||500
-`, hasCookie && (fnLiteral += encodeCookie()), hasTrace && hooks.trace)
+`, hasCookie)
+    fnLiteral += encodeCookie();
+  if (hasTrace && hooks.trace)
     for (let i2 = 0;i2 < hooks.trace.length; i2++)
       fnLiteral += `report${i2}?.resolve(error);reportChild${i2}?.(error)
 `;
-  let errorReporter = report("error", {
-    total: hooks.error?.length
-  });
+  let errorReporter = report("error", { total: hooks.error?.length });
   if (hooks.error?.length) {
-    fnLiteral += `c.error=error
-`, hasValidation ? fnLiteral += `if(error instanceof TypeBoxError){c.code="VALIDATION"
-c.set.status=422}else{c.code=error.code??error[ERROR_CODE]??"UNKNOWN"}` : fnLiteral += `c.code=error.code??error[ERROR_CODE]??"UNKNOWN"
-`, fnLiteral += `let er
+    if (fnLiteral += `c.error=error
+`, hasValidation)
+      fnLiteral += `if(error instanceof TypeBoxError){c.code="VALIDATION"
+c.set.status=422}else{c.code=error.code??error[ERROR_CODE]??"UNKNOWN"}`;
+    else
+      fnLiteral += `c.code=error.code??error[ERROR_CODE]??"UNKNOWN"
+`;
+    fnLiteral += `let er
 `;
     for (let i2 = 0;i2 < hooks.error.length; i2++) {
       let endUnit = errorReporter.resolveChild(hooks.error[i2].fn.name);
-      isAsync(hooks.error[i2]) ? fnLiteral += `er=await e.error[${i2}](c)
-` : fnLiteral += `er=e.error[${i2}](c)
+      if (isAsync(hooks.error[i2]))
+        fnLiteral += `er=await e.error[${i2}](c)
+`;
+      else
+        fnLiteral += `er=e.error[${i2}](c)
 if(er instanceof Promise)er=await er
-`, endUnit();
-      let mapResponseReporter = report("mapResponse", {
-        total: hooks.mapResponse?.length
-      });
+`;
+      endUnit();
+      let mapResponseReporter = report("mapResponse", { total: hooks.mapResponse?.length });
       if (hooks.mapResponse?.length)
         for (let i22 = 0;i22 < hooks.mapResponse.length; i22++) {
-          let mapResponse4 = hooks.mapResponse[i22], endUnit2 = mapResponseReporter.resolveChild(mapResponse4.fn.name);
+          let mapResponse3 = hooks.mapResponse[i22], endUnit2 = mapResponseReporter.resolveChild(mapResponse3.fn.name);
           fnLiteral += `c.response=er
 er=e.mapResponse[${i22}](c)
 if(er instanceof Promise)er=await er
@@ -15027,11 +14683,12 @@ if(er instanceof Promise)er=await er
       fnLiteral += "return er}";
     }
   }
-  if (errorReporter.resolve(), fnLiteral += "return handleError(c,error,true)", !maybeAsync && hooks.error?.length && (fnLiteral += "})()"), fnLiteral += "}", hasAfterResponse || hasTrace) {
-    fnLiteral += "finally{ ", maybeAsync || (fnLiteral += ";(async()=>{");
-    let reporter = report("afterResponse", {
-      total: hooks.afterResponse?.length
-    });
+  if (errorReporter.resolve(), fnLiteral += "return handleError(c,error,true)", !maybeAsync && hooks.error?.length)
+    fnLiteral += "})()";
+  if (fnLiteral += "}", hasAfterResponse || hasTrace) {
+    if (fnLiteral += "finally{ ", !maybeAsync)
+      fnLiteral += ";(async()=>{";
+    let reporter = report("afterResponse", { total: hooks.afterResponse?.length });
     if (hasAfterResponse && hooks.afterResponse)
       for (let i2 = 0;i2 < hooks.afterResponse.length; i2++) {
         let endUnit = reporter.resolveChild(hooks.afterResponse[i2].fn.name);
@@ -15039,92 +14696,50 @@ if(er instanceof Promise)er=await er
 await e.afterResponse[${i2}](c)
 `, endUnit();
       }
-    reporter.resolve(), maybeAsync || (fnLiteral += "})()"), fnLiteral += "}";
+    if (reporter.resolve(), !maybeAsync)
+      fnLiteral += "})()";
+    fnLiteral += "}";
   }
   let adapterVariables = adapter.inject ? Object.keys(adapter.inject).join(",") + "," : "", init = "const {handler,handleError,hooks:e, " + allocateIf("validator,", hasValidation) + "mapResponse,mapCompactResponse,mapEarlyResponse,isNotEmpty,utils:{" + allocateIf("parseQuery,", hasBody) + allocateIf("parseQueryFromURL,", hasQuery) + "},error:{" + allocateIf("ValidationError,", hasValidation) + allocateIf("ParseError", hasBody) + "},validateFileExtension,schema,definitions,ERROR_CODE," + allocateIf("parseCookie,", hasCookie) + allocateIf("signCookie,", hasCookie) + allocateIf("decodeURIComponent,", hasQuery) + "ElysiaCustomStatusResponse," + allocateIf("ELYSIA_TRACE,", hasTrace) + allocateIf("ELYSIA_REQUEST_ID,", hasTrace) + allocateIf("parser,", hooks.parse?.length) + allocateIf("getServer,", inference.server) + allocateIf("fileUnions,", fileUnions.length) + adapterVariables + allocateIf("TypeBoxError", hasValidation) + `}=hooks
 const trace=e.trace
 return ${maybeAsync ? "async " : ""}function handle(c){`;
-  hooks.beforeHandle?.length && (init += `let be
-`), hooks.afterHandle?.length && (init += `let af
-`), hooks.mapResponse?.length && (init += `let mr
-`), allowMeta && (init += `c.schema=schema
+  if (hooks.beforeHandle?.length)
+    init += `let be
+`;
+  if (hooks.afterHandle?.length)
+    init += `let af
+`;
+  if (hooks.mapResponse?.length)
+    init += `let mr
+`;
+  if (allowMeta)
+    init += `c.schema=schema
 c.defs=definitions
-`), fnLiteral = init + fnLiteral + "}", init = "";
+`;
+  fnLiteral = init + fnLiteral + "}", init = "";
   try {
     return Function("hooks", `"use strict";
-` + fnLiteral)({
-      handler,
-      hooks: lifeCycleToFn({ ...hooks }),
-      validator: hasValidation ? validator : undefined,
-      handleError: app.handleError,
-      mapResponse: adapterHandler.mapResponse,
-      mapCompactResponse: adapterHandler.mapCompactResponse,
-      mapEarlyResponse: adapterHandler.mapEarlyResponse,
-      isNotEmpty,
-      utils: {
-        parseQuery: hasBody ? parseQuery : undefined,
-        parseQueryFromURL: hasQuery ? parseQueryFromURL : undefined
-      },
-      error: {
-        ValidationError: hasValidation ? ValidationError : undefined,
-        ParseError: hasBody ? ParseError2 : undefined
-      },
-      validateFileExtension,
-      schema: app.router.history,
-      definitions: app.definitions.type,
-      ERROR_CODE,
-      parseCookie: hasCookie ? parseCookie : undefined,
-      signCookie: hasCookie ? signCookie : undefined,
-      decodeURIComponent: hasQuery ? import_fast_decode_uri_component2.default : undefined,
-      ElysiaCustomStatusResponse,
-      ELYSIA_TRACE: hasTrace ? ELYSIA_TRACE : undefined,
-      ELYSIA_REQUEST_ID: hasTrace ? ELYSIA_REQUEST_ID : undefined,
-      getServer: () => app.getServer(),
-      fileUnions: fileUnions.length ? fileUnions : undefined,
-      TypeBoxError: hasValidation ? TypeBoxError : undefined,
-      parser: app["~parser"],
-      ...adapter.inject
-    });
+` + fnLiteral)({ handler, hooks: lifeCycleToFn({ ...hooks }), validator: hasValidation ? validator : undefined, handleError: app.handleError, mapResponse: adapterHandler.mapResponse, mapCompactResponse: adapterHandler.mapCompactResponse, mapEarlyResponse: adapterHandler.mapEarlyResponse, isNotEmpty, utils: { parseQuery: hasBody ? parseQuery : undefined, parseQueryFromURL: hasQuery ? parseQueryFromURL : undefined }, error: { ValidationError: hasValidation ? ValidationError : undefined, ParseError: hasBody ? ParseError2 : undefined }, validateFileExtension, schema: app.router.history, definitions: app.definitions.type, ERROR_CODE, parseCookie: hasCookie ? parseCookie : undefined, signCookie: hasCookie ? signCookie : undefined, decodeURIComponent: hasQuery ? import_fast_decode_uri_component3.default : undefined, ElysiaCustomStatusResponse, ELYSIA_TRACE: hasTrace ? ELYSIA_TRACE : undefined, ELYSIA_REQUEST_ID: hasTrace ? ELYSIA_REQUEST_ID : undefined, getServer: () => app.getServer(), fileUnions: fileUnions.length ? fileUnions : undefined, TypeBoxError: hasValidation ? TypeBoxError : undefined, parser: app["~parser"], ...adapter.inject });
   } catch (error2) {
     let debugHooks = lifeCycleToFn(hooks);
-    console.log("[Composer] failed to generate optimized handler"), console.log("---"), console.log({
-      handler: typeof handler == "function" ? handler.toString() : handler,
-      instruction: fnLiteral,
-      hooks: {
-        ...debugHooks,
-        transform: debugHooks?.transform?.map?.((x2) => x2.toString()),
-        resolve: debugHooks?.resolve?.map?.((x2) => x2.toString()),
-        beforeHandle: debugHooks?.beforeHandle?.map?.((x2) => x2.toString()),
-        afterHandle: debugHooks?.afterHandle?.map?.((x2) => x2.toString()),
-        mapResponse: debugHooks?.mapResponse?.map?.((x2) => x2.toString()),
-        parse: debugHooks?.parse?.map?.((x2) => x2.toString()),
-        error: debugHooks?.error?.map?.((x2) => x2.toString()),
-        afterResponse: debugHooks?.afterResponse?.map?.((x2) => x2.toString()),
-        stop: debugHooks?.stop?.map?.((x2) => x2.toString())
-      },
-      validator,
-      definitions: app.definitions.type,
-      error: error2
-    }), console.log("---"), process.exit(1);
+    console.log("[Composer] failed to generate optimized handler"), console.log("---"), console.log({ handler: typeof handler === "function" ? handler.toString() : handler, instruction: fnLiteral, hooks: { ...debugHooks, transform: debugHooks?.transform?.map?.((x2) => x2.toString()), resolve: debugHooks?.resolve?.map?.((x2) => x2.toString()), beforeHandle: debugHooks?.beforeHandle?.map?.((x2) => x2.toString()), afterHandle: debugHooks?.afterHandle?.map?.((x2) => x2.toString()), mapResponse: debugHooks?.mapResponse?.map?.((x2) => x2.toString()), parse: debugHooks?.parse?.map?.((x2) => x2.toString()), error: debugHooks?.error?.map?.((x2) => x2.toString()), afterResponse: debugHooks?.afterResponse?.map?.((x2) => x2.toString()), stop: debugHooks?.stop?.map?.((x2) => x2.toString()) }, validator, definitions: app.definitions.type, error: error2 }), console.log("---"), process.exit(1);
   }
 };
 var createOnRequestHandler = (app, addFn) => {
-  let fnLiteral = "", reporter = createReport({
-    trace: app.event.trace,
-    addFn: addFn ?? ((word) => {
-      fnLiteral += word;
-    })
-  })("request", {
-    total: app.event.request?.length
-  });
+  let fnLiteral = "", reporter = createReport({ trace: app.event.trace, addFn: addFn ?? ((word) => {
+    fnLiteral += word;
+  }) })("request", { total: app.event.request?.length });
   if (app.event.request?.length) {
     fnLiteral += "try{";
     for (let i2 = 0;i2 < app.event.request.length; i2++) {
       let hook = app.event.request[i2], withReturn = hasReturn(hook), maybeAsync = isAsync(hook), endUnit = reporter.resolveChild(app.event.request[i2].fn.name);
-      withReturn ? (fnLiteral += `re=mapEarlyResponse(${maybeAsync ? "await " : ""}onRequest[${i2}](c),c.set)
+      if (withReturn)
+        fnLiteral += `re=mapEarlyResponse(${maybeAsync ? "await " : ""}onRequest[${i2}](c),c.set)
 `, endUnit("re"), fnLiteral += `if(re!==undefined)return re
-`) : (fnLiteral += `${maybeAsync ? "await " : ""}onRequest[${i2}](c)
-`, endUnit());
+`;
+      else
+        fnLiteral += `${maybeAsync ? "await " : ""}onRequest[${i2}](c)
+`, endUnit();
     }
     fnLiteral += "}catch(error){return app.handleError(c,error,false)}";
   }
@@ -15152,20 +14767,35 @@ return route.store.compile()(c)
 `;
   let switchMap = "";
   for (let [path, methods] of Object.entries(router.static)) {
-    switchMap += `case'${path}':`, app.config.strictPath !== true && (switchMap += `case'${getLoosePath(path)}':`);
+    if (switchMap += `case'${path}':`, app.config.strictPath !== true)
+      switchMap += `case'${getLoosePath(path)}':`;
     let encoded = encodePath(path);
-    path !== encoded && (switchMap += `case'${encoded}':`), switchMap += "switch(r.method){", (("GET" in methods) || ("WS" in methods)) && (switchMap += "case 'GET':", ("WS" in methods) && (switchMap += `if(r.headers.get('upgrade')==='websocket')return ht[${methods.WS}].composed(c)
-`), ("GET" in methods) && (switchMap += `return ht[${methods.GET}].composed(c)
-`));
-    for (let [method, index] of Object.entries(methods))
-      method === "ALL" || method === "GET" || method === "WS" || (switchMap += `case '${method}':return ht[${index}].composed(c)
-`);
-    "ALL" in methods ? switchMap += `default:return ht[${methods.ALL}].composed(c)
-` : switchMap += `default:break map
-`, switchMap += "}";
+    if (path !== encoded)
+      switchMap += `case'${encoded}':`;
+    if (switchMap += "switch(r.method){", "GET" in methods || "WS" in methods) {
+      if (switchMap += "case 'GET':", "WS" in methods)
+        switchMap += `if(r.headers.get('upgrade')==='websocket')return ht[${methods.WS}].composed(c)
+`;
+      if ("GET" in methods)
+        switchMap += `return ht[${methods.GET}].composed(c)
+`;
+    }
+    for (let [method, index] of Object.entries(methods)) {
+      if (method === "ALL" || method === "GET" || method === "WS")
+        continue;
+      switchMap += `case '${method}':return ht[${index}].composed(c)
+`;
+    }
+    if ("ALL" in methods)
+      switchMap += `default:return ht[${methods.ALL}].composed(c)
+`;
+    else
+      switchMap += `default:break map
+`;
+    switchMap += "}";
   }
   let maybeAsync = !!app.event.request?.some(isAsync), adapterVariables = adapter.inject ? Object.keys(adapter.inject).join(",") + "," : "";
-  fnLiteral += `
+  if (fnLiteral += `
 const {app,mapEarlyResponse,NotFoundError,randomId,handleError,status,redirect,` + allocateIf("ELYSIA_TRACE,", hasTrace) + allocateIf("ELYSIA_REQUEST_ID,", hasTrace) + adapterVariables + `}=data
 const store=app.singleton.store
 const decorator=app.singleton.decorator
@@ -15175,48 +14805,47 @@ const router=app.router.http
 const trace=app.event.trace?.map(x=>typeof x==='function'?x:x.fn)??[]
 const notFound=new NotFoundError()
 const hoc=app.extender.higherOrderFunctions.map(x=>x.fn)
-`, app.event.request?.length && (fnLiteral += `const onRequest=app.event.request.map(x=>x.fn)
-`), fnLiteral += error404.declare, app.event.trace?.length && (fnLiteral += "const " + app.event.trace.map((_, i2) => `tr${i2}=app.event.trace[${i2}].fn`).join(",") + `
-`), fnLiteral += `${maybeAsync ? "async " : ""}function map(${adapter.parameters}){`, app.event.request?.length && (fnLiteral += `let re
-`), fnLiteral += adapter.createContext(app), app.event.trace?.length && (fnLiteral += "c[ELYSIA_TRACE]=[" + app.event.trace.map((_, i2) => `tr${i2}(c)`).join(",") + `]
-`), fnLiteral += createOnRequestHandler(app), switchMap && (fnLiteral += `
+`, app.event.request?.length)
+    fnLiteral += `const onRequest=app.event.request.map(x=>x.fn)
+`;
+  if (fnLiteral += error404.declare, app.event.trace?.length)
+    fnLiteral += "const " + app.event.trace.map((_2, i2) => `tr${i2}=app.event.trace[${i2}].fn`).join(",") + `
+`;
+  if (fnLiteral += `${maybeAsync ? "async " : ""}function map(${adapter.parameters}){`, app.event.request?.length)
+    fnLiteral += `let re
+`;
+  if (fnLiteral += adapter.createContext(app), app.event.trace?.length)
+    fnLiteral += "c[ELYSIA_TRACE]=[" + app.event.trace.map((_2, i2) => `tr${i2}(c)`).join(",") + `]
+`;
+  if (fnLiteral += createOnRequestHandler(app), switchMap)
+    fnLiteral += `
 map: switch(p){
-` + switchMap + "}"), fnLiteral += findDynamicRoute + `}
+` + switchMap + "}";
+  fnLiteral += findDynamicRoute + `}
 ` + createHoc(app), app.handleError = composeErrorHandler(app);
   let fn = Function("data", `"use strict";
-` + fnLiteral)({
-    app,
-    mapEarlyResponse: app["~adapter"].handler.mapEarlyResponse,
-    NotFoundError,
-    randomId,
-    handleError: app.handleError,
-    status,
-    redirect,
-    ELYSIA_TRACE: hasTrace ? ELYSIA_TRACE : undefined,
-    ELYSIA_REQUEST_ID: hasTrace ? ELYSIA_REQUEST_ID : undefined,
-    ...adapter.inject
-  });
-  return isBun && Bun.gc(false), fn;
+` + fnLiteral)({ app, mapEarlyResponse: app["~adapter"].handler.mapEarlyResponse, NotFoundError, randomId, handleError: app.handleError, status, redirect, ELYSIA_TRACE: hasTrace ? ELYSIA_TRACE : undefined, ELYSIA_REQUEST_ID: hasTrace ? ELYSIA_REQUEST_ID : undefined, ...adapter.inject });
+  if (isBun)
+    Bun.gc(false);
+  return fn;
 };
 var composeErrorHandler = (app) => {
   let hooks = app.event, fnLiteral = "", adapter = app["~adapter"].composeError, adapterVariables = adapter.inject ? Object.keys(adapter.inject).join(",") + "," : "", hasTrace = !!app.event.trace?.length;
-  fnLiteral += "const {mapResponse,ERROR_CODE,ElysiaCustomStatusResponse," + allocateIf("onError,", app.event.error) + allocateIf("afterResponse,", app.event.afterResponse) + allocateIf("trace,", app.event.trace) + allocateIf("onMapResponse,", app.event.mapResponse) + allocateIf("ELYSIA_TRACE,", hasTrace) + allocateIf("ELYSIA_REQUEST_ID,", hasTrace) + adapterVariables + `}=inject
-`, fnLiteral += `return ${app.event.error?.find(isAsync) || app.event.mapResponse?.find(isAsync) ? "async " : ""}function(context,error,skipGlobal){`, fnLiteral += "", hasTrace && (fnLiteral += `const id=context[ELYSIA_REQUEST_ID]
-`);
-  let report = createReport({
-    context: "context",
-    trace: hooks.trace,
-    addFn: (word) => {
-      fnLiteral += word;
-    }
-  });
-  fnLiteral += `const set=context.set
+  if (fnLiteral += "const {mapResponse,ERROR_CODE,ElysiaCustomStatusResponse," + allocateIf("onError,", app.event.error) + allocateIf("afterResponse,", app.event.afterResponse) + allocateIf("trace,", app.event.trace) + allocateIf("onMapResponse,", app.event.mapResponse) + allocateIf("ELYSIA_TRACE,", hasTrace) + allocateIf("ELYSIA_REQUEST_ID,", hasTrace) + adapterVariables + `}=inject
+`, fnLiteral += `return ${app.event.error?.find(isAsync) || app.event.mapResponse?.find(isAsync) ? "async " : ""}function(context,error,skipGlobal){`, fnLiteral += "", hasTrace)
+    fnLiteral += `const id=context[ELYSIA_REQUEST_ID]
+`;
+  let report = createReport({ context: "context", trace: hooks.trace, addFn: (word) => {
+    fnLiteral += word;
+  } });
+  if (fnLiteral += `const set=context.set
 let _r
 if(!context.code)context.code=error.code??error[ERROR_CODE]
 if(!(context.error instanceof Error))context.error=error
 if(error instanceof ElysiaCustomStatusResponse){set.status=error.status=error.code
-error.message=error.response}`, adapter.declare && (fnLiteral += adapter.declare);
-  let saveResponse = hasTrace || hooks.afterResponse?.length || hooks.afterResponse?.length ? "context.response = " : "";
+error.message=error.response}`, adapter.declare)
+    fnLiteral += adapter.declare;
+  let saveResponse = hasTrace || !!hooks.afterResponse?.length || !!hooks.afterResponse?.length ? "context.response = " : "";
   if (app.event.error)
     for (let i2 = 0;i2 < app.event.error.length; i2++) {
       let handler = app.event.error[i2], response = `${isAsync(handler) ? "await " : ""}onError[${i2}](context)
@@ -15227,14 +14856,11 @@ if(_r!==undefined){if(_r instanceof Response)return mapResponse(_r,set${adapter.
 if(_r instanceof ElysiaCustomStatusResponse){error.status=error.code
 error.message = error.response}if(set.status===200||!set.status)set.status=error.status
 `;
-        let mapResponseReporter2 = report("mapResponse", {
-          total: hooks.mapResponse?.length,
-          name: "context"
-        });
+        let mapResponseReporter2 = report("mapResponse", { total: hooks.mapResponse?.length, name: "context" });
         if (hooks.mapResponse?.length)
           for (let i22 = 0;i22 < hooks.mapResponse.length; i22++) {
-            let mapResponse3 = hooks.mapResponse[i22], endUnit = mapResponseReporter2.resolveChild(mapResponse3.fn.name);
-            fnLiteral += `context.response=_r_r=${isAsyncName(mapResponse3) ? "await " : ""}onMapResponse[${i22}](context)
+            let mapResponse2 = hooks.mapResponse[i22], endUnit = mapResponseReporter2.resolveChild(mapResponse2.fn.name);
+            fnLiteral += `context.response=_r_r=${isAsyncName(mapResponse2) ? "await " : ""}onMapResponse[${i22}](context)
 `, endUnit();
           }
         mapResponseReporter2.resolve(), fnLiteral += `return mapResponse(${saveResponse}_r,set${adapter.mapResponseContext})}`;
@@ -15251,37 +14877,23 @@ set.status=error.status??422
 if(typeof error.toResponse==='function')return context.response=error.toResponse()
 ` + adapter.unknownError + `
 }`;
-  let mapResponseReporter = report("mapResponse", {
-    total: hooks.mapResponse?.length,
-    name: "context"
-  });
+  let mapResponseReporter = report("mapResponse", { total: hooks.mapResponse?.length, name: "context" });
   if (fnLiteral += `
 if(!context.response)context.response=error.message??error
 `, hooks.mapResponse?.length) {
     fnLiteral += `let mr
 `;
     for (let i2 = 0;i2 < hooks.mapResponse.length; i2++) {
-      let mapResponse3 = hooks.mapResponse[i2], endUnit = mapResponseReporter.resolveChild(mapResponse3.fn.name);
-      fnLiteral += `if(mr===undefined){mr=${isAsyncName(mapResponse3) ? "await " : ""}onMapResponse[${i2}](context)
+      let mapResponse2 = hooks.mapResponse[i2], endUnit = mapResponseReporter.resolveChild(mapResponse2.fn.name);
+      fnLiteral += `if(mr===undefined){mr=${isAsyncName(mapResponse2) ? "await " : ""}onMapResponse[${i2}](context)
 if(mr!==undefined)error=context.response=mr}`, endUnit();
     }
   }
   mapResponseReporter.resolve(), fnLiteral += `
 return mapResponse(${saveResponse}error,set${adapter.mapResponseContext})}`;
-  let mapFn = (x2) => typeof x2 == "function" ? x2 : x2.fn;
+  let mapFn = (x2) => typeof x2 === "function" ? x2 : x2.fn;
   return Function("inject", `"use strict";
-` + fnLiteral)({
-    mapResponse: app["~adapter"].handler.mapResponse,
-    ERROR_CODE,
-    ElysiaCustomStatusResponse,
-    onError: app.event.error?.map(mapFn),
-    afterResponse: app.event.afterResponse?.map(mapFn),
-    trace: app.event.trace?.map(mapFn),
-    onMapResponse: app.event.mapResponse?.map(mapFn),
-    ELYSIA_TRACE: hasTrace ? ELYSIA_TRACE : undefined,
-    ELYSIA_REQUEST_ID: hasTrace ? ELYSIA_REQUEST_ID : undefined,
-    ...adapter.inject
-  });
+` + fnLiteral)({ mapResponse: app["~adapter"].handler.mapResponse, ERROR_CODE, ElysiaCustomStatusResponse, onError: app.event.error?.map(mapFn), afterResponse: app.event.afterResponse?.map(mapFn), trace: app.event.trace?.map(mapFn), onMapResponse: app.event.mapResponse?.map(mapFn), ELYSIA_TRACE: hasTrace ? ELYSIA_TRACE : undefined, ELYSIA_REQUEST_ID: hasTrace ? ELYSIA_REQUEST_ID : undefined, ...adapter.inject });
 };
 var mapResponse2 = (response, set2, request) => {
   if (isNotEmpty(set2.headers) || set2.status !== 200 || set2.cookie)
@@ -15300,15 +14912,16 @@ var mapResponse2 = (response, set2, request) => {
       case "ElysiaCustomStatusResponse":
         return set2.status = response.code, mapResponse2(response.response, set2, request);
       case "ReadableStream":
-        return set2.headers["content-type"]?.startsWith("text/event-stream") || (set2.headers["content-type"] = "text/event-stream; charset=utf-8"), request?.signal?.addEventListener("abort", {
-          handleEvent() {
-            request?.signal && !request?.signal?.aborted && response.cancel();
-          }
-        }, {
-          once: true
-        }), new Response(response, set2);
+        if (!set2.headers["content-type"]?.startsWith("text/event-stream"))
+          set2.headers["content-type"] = "text/event-stream; charset=utf-8";
+        return request?.signal?.addEventListener("abort", { handleEvent() {
+          if (request?.signal && !request?.signal?.aborted)
+            response.cancel();
+        } }, { once: true }), new Response(response, set2);
       case undefined:
-        return response ? new Response(JSON.stringify(response), set2) : new Response("", set2);
+        if (!response)
+          return new Response("", set2);
+        return new Response(JSON.stringify(response), set2);
       case "Response":
         return handleResponse2(response, set2, request);
       case "Error":
@@ -15321,7 +14934,9 @@ var mapResponse2 = (response, set2, request) => {
       case "Boolean":
         return new Response(response.toString(), set2);
       case "Cookie":
-        return response instanceof Cookie ? new Response(response.value, set2) : new Response(response?.toString(), set2);
+        if (response instanceof Cookie)
+          return new Response(response.value, set2);
+        return new Response(response?.toString(), set2);
       case "FormData":
         return new Response(response, set2);
       default:
@@ -15333,159 +14948,171 @@ var mapResponse2 = (response, set2, request) => {
           return errorToResponse2(response, set2);
         if (response instanceof ElysiaCustomStatusResponse)
           return set2.status = response.code, mapResponse2(response.response, set2, request);
-        if (typeof response?.next == "function")
+        if (typeof response?.next === "function")
           return handleStream2(response, set2, request);
-        if (typeof response?.then == "function")
+        if (typeof response?.then === "function")
           return response.then((x2) => mapResponse2(x2, set2));
-        if (typeof response?.toResponse == "function")
+        if (typeof response?.toResponse === "function")
           return mapResponse2(response.toResponse(), set2);
         if ("charCodeAt" in response) {
           let code = response.charCodeAt(0);
-          if (code === 123 || code === 91)
-            return set2.headers["Content-Type"] || (set2.headers["Content-Type"] = "application/json"), new Response(JSON.stringify(response), set2);
+          if (code === 123 || code === 91) {
+            if (!set2.headers["Content-Type"])
+              set2.headers["Content-Type"] = "application/json";
+            return new Response(JSON.stringify(response), set2);
+          }
         }
         return new Response(response, set2);
     }
-  return response instanceof Response && !response.headers.has("content-length") && response.headers.get("transfer-encoding") === "chunked" ? handleStream2(streamResponse(response), responseToSetHeaders(response, set2), request) : typeof response?.next == "function" || response instanceof ReadableStream ? handleStream2(response, set2, request) : mapCompactResponse2(response, request);
+  if (response instanceof Response && !response.headers.has("content-length") && response.headers.get("transfer-encoding") === "chunked")
+    return handleStream2(streamResponse(response), responseToSetHeaders(response, set2), request);
+  if (typeof response?.next === "function" || response instanceof ReadableStream)
+    return handleStream2(response, set2, request);
+  return mapCompactResponse2(response, request);
 };
 var mapEarlyResponse2 = (response, set2, request) => {
-  if (response != null)
-    if (isNotEmpty(set2.headers) || set2.status !== 200 || set2.cookie)
-      switch (handleSet(set2), response?.constructor?.name) {
-        case "String":
-          return new Response(response, set2);
-        case "Array":
-        case "Object":
-          return set2.headers["content-type"] = "application/json", new Response(JSON.stringify(response), set2);
-        case "ElysiaFile":
-          return handleFile(response.value);
-        case "File":
-          return handleFile(response, set2);
-        case "Blob":
-          return handleFile(response, set2);
-        case "ElysiaCustomStatusResponse":
-          return set2.status = response.code, mapEarlyResponse2(response.response, set2, request);
-        case "ReadableStream":
-          return set2.headers["content-type"]?.startsWith("text/event-stream") || (set2.headers["content-type"] = "text/event-stream; charset=utf-8"), request?.signal?.addEventListener("abort", {
-            handleEvent() {
-              request?.signal && !request?.signal?.aborted && response.cancel();
-            }
-          }, {
-            once: true
-          }), new Response(response, set2);
-        case undefined:
-          return response ? new Response(JSON.stringify(response), set2) : undefined;
-        case "Response":
+  if (response === undefined || response === null)
+    return;
+  if (isNotEmpty(set2.headers) || set2.status !== 200 || set2.cookie)
+    switch (handleSet(set2), response?.constructor?.name) {
+      case "String":
+        return new Response(response, set2);
+      case "Array":
+      case "Object":
+        return set2.headers["content-type"] = "application/json", new Response(JSON.stringify(response), set2);
+      case "ElysiaFile":
+        return handleFile(response.value);
+      case "File":
+        return handleFile(response, set2);
+      case "Blob":
+        return handleFile(response, set2);
+      case "ElysiaCustomStatusResponse":
+        return set2.status = response.code, mapEarlyResponse2(response.response, set2, request);
+      case "ReadableStream":
+        if (!set2.headers["content-type"]?.startsWith("text/event-stream"))
+          set2.headers["content-type"] = "text/event-stream; charset=utf-8";
+        return request?.signal?.addEventListener("abort", { handleEvent() {
+          if (request?.signal && !request?.signal?.aborted)
+            response.cancel();
+        } }, { once: true }), new Response(response, set2);
+      case undefined:
+        if (!response)
+          return;
+        return new Response(JSON.stringify(response), set2);
+      case "Response":
+        return handleResponse2(response, set2, request);
+      case "Promise":
+        return response.then((x2) => mapEarlyResponse2(x2, set2));
+      case "Error":
+        return errorToResponse2(response, set2);
+      case "Function":
+        return mapEarlyResponse2(response(), set2);
+      case "Number":
+      case "Boolean":
+        return new Response(response.toString(), set2);
+      case "FormData":
+        return new Response(response);
+      case "Cookie":
+        if (response instanceof Cookie)
+          return new Response(response.value, set2);
+        return new Response(response?.toString(), set2);
+      default:
+        if (response instanceof Response)
           return handleResponse2(response, set2, request);
-        case "Promise":
+        if (response instanceof Promise)
           return response.then((x2) => mapEarlyResponse2(x2, set2));
-        case "Error":
+        if (response instanceof Error)
           return errorToResponse2(response, set2);
-        case "Function":
-          return mapEarlyResponse2(response(), set2);
-        case "Number":
-        case "Boolean":
-          return new Response(response.toString(), set2);
-        case "FormData":
-          return new Response(response);
-        case "Cookie":
-          return response instanceof Cookie ? new Response(response.value, set2) : new Response(response?.toString(), set2);
-        default:
-          if (response instanceof Response)
-            return handleResponse2(response, set2, request);
-          if (response instanceof Promise)
-            return response.then((x2) => mapEarlyResponse2(x2, set2));
-          if (response instanceof Error)
-            return errorToResponse2(response, set2);
-          if (response instanceof ElysiaCustomStatusResponse)
-            return set2.status = response.code, mapEarlyResponse2(response.response, set2, request);
-          if (typeof response?.next == "function")
-            return handleStream2(response, set2, request);
-          if (typeof response?.then == "function")
-            return response.then((x2) => mapEarlyResponse2(x2, set2));
-          if (typeof response?.toResponse == "function")
-            return mapEarlyResponse2(response.toResponse(), set2);
-          if ("charCodeAt" in response) {
-            let code = response.charCodeAt(0);
-            if (code === 123 || code === 91)
-              return set2.headers["Content-Type"] || (set2.headers["Content-Type"] = "application/json"), new Response(JSON.stringify(response), set2);
-          }
-          return new Response(response, set2);
-      }
-    else
-      switch (response?.constructor?.name) {
-        case "String":
-          return new Response(response);
-        case "Array":
-        case "Object":
-          return set2.headers["content-type"] = "application/json", new Response(JSON.stringify(response), set2);
-        case "ElysiaFile":
-          return handleFile(response.value);
-        case "File":
-          return handleFile(response, set2);
-        case "Blob":
-          return handleFile(response, set2);
-        case "ElysiaCustomStatusResponse":
+        if (response instanceof ElysiaCustomStatusResponse)
           return set2.status = response.code, mapEarlyResponse2(response.response, set2, request);
-        case "ReadableStream":
-          return request?.signal?.addEventListener("abort", {
-            handleEvent() {
-              request?.signal && !request?.signal?.aborted && response.cancel();
-            }
-          }, {
-            once: true
-          }), new Response(response, {
-            headers: {
-              "Content-Type": "text/event-stream; charset=utf-8"
-            }
-          });
-        case undefined:
-          return response ? new Response(JSON.stringify(response), {
-            headers: {
-              "content-type": "application/json"
-            }
-          }) : new Response("");
-        case "Response":
-          return !response.headers.has("content-length") && response.headers.get("transfer-encoding") === "chunked" ? handleStream2(streamResponse(response), responseToSetHeaders(response), request) : response;
-        case "Promise":
-          return response.then((x2) => {
-            let r = mapEarlyResponse2(x2, set2);
-            if (r !== undefined)
-              return r;
-          });
-        case "Error":
-          return errorToResponse2(response, set2);
-        case "Function":
-          return mapCompactResponse2(response(), request);
-        case "Number":
-        case "Boolean":
-          return new Response(response.toString());
-        case "Cookie":
-          return response instanceof Cookie ? new Response(response.value, set2) : new Response(response?.toString(), set2);
-        case "FormData":
-          return new Response(response);
-        default:
-          if (response instanceof Response)
-            return response;
-          if (response instanceof Promise)
-            return response.then((x2) => mapEarlyResponse2(x2, set2));
-          if (response instanceof Error)
-            return errorToResponse2(response, set2);
-          if (response instanceof ElysiaCustomStatusResponse)
-            return set2.status = response.code, mapEarlyResponse2(response.response, set2, request);
-          if (typeof response?.next == "function")
-            return handleStream2(response, set2, request);
-          if (typeof response?.then == "function")
-            return response.then((x2) => mapEarlyResponse2(x2, set2));
-          if (typeof response?.toResponse == "function")
-            return mapEarlyResponse2(response.toResponse(), set2);
-          if ("charCodeAt" in response) {
-            let code = response.charCodeAt(0);
-            if (code === 123 || code === 91)
-              return set2.headers["Content-Type"] || (set2.headers["Content-Type"] = "application/json"), new Response(JSON.stringify(response), set2);
+        if (typeof response?.next === "function")
+          return handleStream2(response, set2, request);
+        if (typeof response?.then === "function")
+          return response.then((x2) => mapEarlyResponse2(x2, set2));
+        if (typeof response?.toResponse === "function")
+          return mapEarlyResponse2(response.toResponse(), set2);
+        if ("charCodeAt" in response) {
+          let code = response.charCodeAt(0);
+          if (code === 123 || code === 91) {
+            if (!set2.headers["Content-Type"])
+              set2.headers["Content-Type"] = "application/json";
+            return new Response(JSON.stringify(response), set2);
           }
-          return new Response(response);
-      }
+        }
+        return new Response(response, set2);
+    }
+  else
+    switch (response?.constructor?.name) {
+      case "String":
+        return new Response(response);
+      case "Array":
+      case "Object":
+        return set2.headers["content-type"] = "application/json", new Response(JSON.stringify(response), set2);
+      case "ElysiaFile":
+        return handleFile(response.value);
+      case "File":
+        return handleFile(response, set2);
+      case "Blob":
+        return handleFile(response, set2);
+      case "ElysiaCustomStatusResponse":
+        return set2.status = response.code, mapEarlyResponse2(response.response, set2, request);
+      case "ReadableStream":
+        return request?.signal?.addEventListener("abort", { handleEvent() {
+          if (request?.signal && !request?.signal?.aborted)
+            response.cancel();
+        } }, { once: true }), new Response(response, { headers: { "Content-Type": "text/event-stream; charset=utf-8" } });
+      case undefined:
+        if (!response)
+          return new Response("");
+        return new Response(JSON.stringify(response), { headers: { "content-type": "application/json" } });
+      case "Response":
+        if (!response.headers.has("content-length") && response.headers.get("transfer-encoding") === "chunked")
+          return handleStream2(streamResponse(response), responseToSetHeaders(response), request);
+        return response;
+      case "Promise":
+        return response.then((x2) => {
+          let r = mapEarlyResponse2(x2, set2);
+          if (r !== undefined)
+            return r;
+        });
+      case "Error":
+        return errorToResponse2(response, set2);
+      case "Function":
+        return mapCompactResponse2(response(), request);
+      case "Number":
+      case "Boolean":
+        return new Response(response.toString());
+      case "Cookie":
+        if (response instanceof Cookie)
+          return new Response(response.value, set2);
+        return new Response(response?.toString(), set2);
+      case "FormData":
+        return new Response(response);
+      default:
+        if (response instanceof Response)
+          return response;
+        if (response instanceof Promise)
+          return response.then((x2) => mapEarlyResponse2(x2, set2));
+        if (response instanceof Error)
+          return errorToResponse2(response, set2);
+        if (response instanceof ElysiaCustomStatusResponse)
+          return set2.status = response.code, mapEarlyResponse2(response.response, set2, request);
+        if (typeof response?.next === "function")
+          return handleStream2(response, set2, request);
+        if (typeof response?.then === "function")
+          return response.then((x2) => mapEarlyResponse2(x2, set2));
+        if (typeof response?.toResponse === "function")
+          return mapEarlyResponse2(response.toResponse(), set2);
+        if ("charCodeAt" in response) {
+          let code = response.charCodeAt(0);
+          if (code === 123 || code === 91) {
+            if (!set2.headers["Content-Type"])
+              set2.headers["Content-Type"] = "application/json";
+            return new Response(JSON.stringify(response), set2);
+          }
+        }
+        return new Response(response);
+    }
 };
 var mapCompactResponse2 = (response, request) => {
   switch (response?.constructor?.name) {
@@ -15493,11 +15120,7 @@ var mapCompactResponse2 = (response, request) => {
       return new Response(response);
     case "Object":
     case "Array":
-      return new Response(JSON.stringify(response), {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
+      return new Response(JSON.stringify(response), { headers: { "Content-Type": "application/json" } });
     case "ElysiaFile":
       return handleFile(response.value);
     case "File":
@@ -15505,30 +15128,20 @@ var mapCompactResponse2 = (response, request) => {
     case "Blob":
       return handleFile(response);
     case "ElysiaCustomStatusResponse":
-      return mapResponse2(response.response, {
-        status: response.code,
-        headers: {}
-      });
+      return mapResponse2(response.response, { status: response.code, headers: {} });
     case "ReadableStream":
-      return request?.signal?.addEventListener("abort", {
-        handleEvent() {
-          request?.signal && !request?.signal?.aborted && response.cancel();
-        }
-      }, {
-        once: true
-      }), new Response(response, {
-        headers: {
-          "Content-Type": "text/event-stream; charset=utf-8"
-        }
-      });
+      return request?.signal?.addEventListener("abort", { handleEvent() {
+        if (request?.signal && !request?.signal?.aborted)
+          response.cancel();
+      } }, { once: true }), new Response(response, { headers: { "Content-Type": "text/event-stream; charset=utf-8" } });
     case undefined:
-      return response ? new Response(JSON.stringify(response), {
-        headers: {
-          "content-type": "application/json"
-        }
-      }) : new Response("");
+      if (!response)
+        return new Response("");
+      return new Response(JSON.stringify(response), { headers: { "content-type": "application/json" } });
     case "Response":
-      return response.headers.get("transfer-encoding") === "chunked" ? handleStream2(streamResponse(response), responseToSetHeaders(response), request) : response;
+      if (response.headers.get("transfer-encoding") === "chunked")
+        return handleStream2(streamResponse(response), responseToSetHeaders(response), request);
+      return response;
     case "Error":
       return errorToResponse2(response);
     case "Promise":
@@ -15548,65 +15161,48 @@ var mapCompactResponse2 = (response, request) => {
       if (response instanceof Error)
         return errorToResponse2(response);
       if (response instanceof ElysiaCustomStatusResponse)
-        return mapResponse2(response.response, {
-          status: response.code,
-          headers: {}
-        });
-      if (typeof response?.next == "function")
+        return mapResponse2(response.response, { status: response.code, headers: {} });
+      if (typeof response?.next === "function")
         return handleStream2(response, undefined, request);
-      if (typeof response?.then == "function")
+      if (typeof response?.then === "function")
         return response.then((x2) => mapResponse2(x2, set));
-      if (typeof response?.toResponse == "function")
+      if (typeof response?.toResponse === "function")
         return mapCompactResponse2(response.toResponse());
       if ("charCodeAt" in response) {
         let code = response.charCodeAt(0);
         if (code === 123 || code === 91)
-          return new Response(JSON.stringify(response), {
-            headers: {
-              "Content-Type": "application/json"
-            }
-          });
+          return new Response(JSON.stringify(response), { headers: { "Content-Type": "application/json" } });
       }
       return new Response(response);
   }
 };
-var errorToResponse2 = (error2, set2) => new Response(JSON.stringify({
-  name: error2?.name,
-  message: error2?.message,
-  cause: error2?.cause
-}), {
-  status: set2?.status !== 200 ? set2?.status ?? 500 : 500,
-  headers: set2?.headers
-});
+var errorToResponse2 = (error2, set2) => new Response(JSON.stringify({ name: error2?.name, message: error2?.message, cause: error2?.cause }), { status: set2?.status !== 200 ? set2?.status ?? 500 : 500, headers: set2?.headers });
 var createStaticHandler2 = (handle, hooks, setHeaders = {}) => {
-  if (typeof handle == "function")
+  if (typeof handle === "function")
     return;
-  let response = mapResponse2(handle, {
-    headers: setHeaders
-  });
+  let response = mapResponse2(handle, { headers: setHeaders });
   if (!hooks.parse?.length && !hooks.transform?.length && !hooks.beforeHandle?.length && !hooks.afterHandle?.length)
     return response.clone.bind(response);
 };
-var handleResponse2 = createResponseHandler({
-  mapResponse: mapResponse2,
-  mapCompactResponse: mapCompactResponse2
-});
-var handleStream2 = createStreamHandler({
-  mapResponse: mapResponse2,
-  mapCompactResponse: mapCompactResponse2
-});
+var handleResponse2 = createResponseHandler({ mapResponse: mapResponse2, mapCompactResponse: mapCompactResponse2 });
+var handleStream2 = createStreamHandler({ mapResponse: mapResponse2, mapCompactResponse: mapCompactResponse2 });
 var allocateIf2 = (value, condition) => condition ? value : "";
 var createContext = (app, route, inference, isInline = false) => {
   let fnLiteral = "", defaultHeaders = app.setHeaders, hasTrace = !!app.event.trace?.length;
-  hasTrace && (fnLiteral += `const id=randomId()
-`);
+  if (hasTrace)
+    fnLiteral += `const id=randomId()
+`;
   let isDynamic = /[:*]/.test(route.path), getQi = `const u=request.url,s=u.indexOf('/',${app.config.handler?.standardHostname ?? true ? 11 : 7}),qi=u.indexOf('?', s + 1)
 `;
-  inference.query && (fnLiteral += getQi);
-  let getPath = inference.path ? isDynamic ? "get path(){" + (inference.query ? "" : getQi) + `if(qi===-1)return u.substring(s)
+  if (inference.query)
+    fnLiteral += getQi;
+  let getPath = !inference.path ? "" : !isDynamic ? `path:'${route.path}',` : "get path(){" + (inference.query ? "" : getQi) + `if(qi===-1)return u.substring(s)
 return u.substring(s,qi)
-},` : `path:'${route.path}',` : "";
-  fnLiteral += allocateIf2("const c=", !isInline) + "{request,store," + allocateIf2("qi,", inference.query) + allocateIf2("params:request.params,", isDynamic) + getPath + allocateIf2("url:request.url,", hasTrace || inference.url || inference.query) + "redirect,error:status,status,set:{headers:" + (isNotEmpty(defaultHeaders) ? "Object.assign({},app.setHeaders)" : "Object.create(null)") + ",status:200}", inference.server && (fnLiteral += ",get server(){return app.getServer()}"), hasTrace && (fnLiteral += ",[ELYSIA_REQUEST_ID]:id");
+},`;
+  if (fnLiteral += allocateIf2("const c=", !isInline) + "{request,store," + allocateIf2("qi,", inference.query) + allocateIf2("params:request.params,", isDynamic) + getPath + allocateIf2("url:request.url,", hasTrace || inference.url || inference.query) + "redirect,error:status,status,set:{headers:" + (isNotEmpty(defaultHeaders) ? "Object.assign({},app.setHeaders)" : "Object.create(null)") + ",status:200}", inference.server)
+    fnLiteral += ",get server(){return app.getServer()}";
+  if (hasTrace)
+    fnLiteral += ",[ELYSIA_REQUEST_ID]:id";
   {
     let decoratorsLiteral = "";
     for (let key of Object.keys(app.singleton.decorator))
@@ -15618,98 +15214,139 @@ return u.substring(s,qi)
 };
 var createBunRouteHandler = (app, route) => {
   let hasTrace = !!app.event.trace?.length, hasHoc = !!app.extender.higherOrderFunctions.length, inference = sucrose(route.hooks, app.inference);
-  inference = sucrose({
-    handler: route.handler
-  }, inference);
+  inference = sucrose({ handler: route.handler }, inference);
   let fnLiteral = "const handler=data.handler,app=data.app,store=data.store,decorator=data.decorator,redirect=data.redirect,route=data.route,mapEarlyResponse=data.mapEarlyResponse," + allocateIf2("randomId=data.randomId,", hasTrace) + allocateIf2("ELYSIA_REQUEST_ID=data.ELYSIA_REQUEST_ID,", hasTrace) + allocateIf2("ELYSIA_TRACE=data.ELYSIA_TRACE,", hasTrace) + allocateIf2("trace=data.trace,", hasTrace) + allocateIf2("hoc=data.hoc,", hasHoc) + `status=data.status
 `;
-  return app.event.request?.length && (fnLiteral += `const onRequest=app.event.request.map(x=>x.fn)
-`), fnLiteral += `${app.event.request?.find(isAsync) ? "async" : ""} function map(request){`, hasTrace || inference.query || app.event.request?.length ? (fnLiteral += createContext(app, route, inference), fnLiteral += createOnRequestHandler(app), fnLiteral += "return handler(c)}") : fnLiteral += `return handler(${createContext(app, route, inference, true)})}`, fnLiteral += createHoc(app), Function("data", fnLiteral)({
-    app,
-    handler: route.compile?.() ?? route.composed,
-    redirect,
-    status,
-    hoc: app.extender.higherOrderFunctions.map((x2) => x2.fn),
-    store: app.store,
-    decorator: app.decorator,
-    route: route.path,
-    randomId: hasTrace ? randomId : undefined,
-    ELYSIA_TRACE: hasTrace ? ELYSIA_TRACE : undefined,
-    ELYSIA_REQUEST_ID: hasTrace ? ELYSIA_REQUEST_ID : undefined,
-    trace: hasTrace ? app.event.trace?.map((x2) => x2?.fn ?? x2) : undefined,
-    mapEarlyResponse: mapEarlyResponse2
-  });
+  if (app.event.request?.length)
+    fnLiteral += `const onRequest=app.event.request.map(x=>x.fn)
+`;
+  if (fnLiteral += `${app.event.request?.find(isAsync) ? "async" : ""} function map(request){`, hasTrace || inference.query || app.event.request?.length)
+    fnLiteral += createContext(app, route, inference), fnLiteral += createOnRequestHandler(app), fnLiteral += "return handler(c)}";
+  else
+    fnLiteral += `return handler(${createContext(app, route, inference, true)})}`;
+  return fnLiteral += createHoc(app), Function("data", fnLiteral)({ app, handler: route.compile?.() ?? route.composed, redirect, status, hoc: app.extender.higherOrderFunctions.map((x2) => x2.fn), store: app.store, decorator: app.decorator, route: route.path, randomId: hasTrace ? randomId : undefined, ELYSIA_TRACE: hasTrace ? ELYSIA_TRACE : undefined, ELYSIA_REQUEST_ID: hasTrace ? ELYSIA_REQUEST_ID : undefined, trace: hasTrace ? app.event.trace?.map((x2) => x2?.fn ?? x2) : undefined, mapEarlyResponse: mapEarlyResponse2 });
 };
 var createNativeStaticHandler = (handle, hooks, setHeaders = {}) => {
-  if (typeof handle == "function" || handle instanceof Blob)
+  if (typeof handle === "function" || handle instanceof Blob)
     return;
-  if (typeof handle == "object" && handle?.toString() === "[object HTMLBundle]")
+  if (typeof handle === "object" && handle?.toString() === "[object HTMLBundle]")
     return () => handle;
-  let response = mapResponse2(handle, {
-    headers: setHeaders
-  });
-  if (!hooks.parse?.length && !hooks.transform?.length && !hooks.beforeHandle?.length && !hooks.afterHandle?.length)
-    return response instanceof Promise ? response.then((response2) => {
-      if (response2)
-        return response2.headers.has("content-type") || response2.headers.append("content-type", "text/plain"), response2.clone();
-    }) : (response.headers.has("content-type") || response.headers.append("content-type", "text/plain"), response.clone.bind(response));
-};
-var websocket = {
-  open(ws) {
-    ws.data.open?.(ws);
-  },
-  message(ws, message) {
-    ws.data.message?.(ws, message);
-  },
-  drain(ws) {
-    ws.data.drain?.(ws);
-  },
-  close(ws, code, reason) {
-    ws.data.close?.(ws, code, reason);
+  let response = mapResponse2(handle, { headers: setHeaders });
+  if (!hooks.parse?.length && !hooks.transform?.length && !hooks.beforeHandle?.length && !hooks.afterHandle?.length) {
+    if (response instanceof Promise)
+      return response.then((response2) => {
+        if (!response2)
+          return;
+        if (!response2.headers.has("content-type"))
+          response2.headers.append("content-type", "text/plain");
+        return response2.clone();
+      });
+    if (!response.headers.has("content-type"))
+      response.headers.append("content-type", "text/plain");
+    return response.clone.bind(response);
   }
 };
-var ElysiaWS = class {
+var websocket = { open(ws) {
+  ws.data.open?.(ws);
+}, message(ws, message) {
+  ws.data.message?.(ws, message);
+}, drain(ws) {
+  ws.data.drain?.(ws);
+}, close(ws, code, reason) {
+  ws.data.close?.(ws, code, reason);
+} };
+
+class ElysiaWS {
+  raw;
+  data;
+  body;
+  validator;
+  ["~types"];
+  get id() {
+    return this.data.id;
+  }
   constructor(raw, data, body = undefined) {
     this.raw = raw;
     this.data = data;
     this.body = body;
     this.validator = raw.data?.validator, this.sendText = raw.sendText.bind(raw), this.sendBinary = raw.sendBinary.bind(raw), this.close = raw.close.bind(raw), this.terminate = raw.terminate.bind(raw), this.publishText = raw.publishText.bind(raw), this.publishBinary = raw.publishBinary.bind(raw), this.subscribe = raw.subscribe.bind(raw), this.unsubscribe = raw.unsubscribe.bind(raw), this.isSubscribed = raw.isSubscribed.bind(raw), this.cork = raw.cork.bind(raw), this.remoteAddress = raw.remoteAddress, this.binaryType = raw.binaryType, this.data = raw.data, this.send = this.send.bind(this), this.ping = this.ping.bind(this), this.pong = this.pong.bind(this), this.publish = this.publish.bind(this);
   }
-  get id() {
-    return this.data.id;
-  }
   send(data, compress) {
-    return Buffer.isBuffer(data) ? this.raw.send(data, compress) : this.validator?.Check(data) === false ? this.raw.send(new ValidationError("message", this.validator, data).message) : (typeof data == "object" && (data = JSON.stringify(data)), this.raw.send(data, compress));
+    if (Buffer.isBuffer(data))
+      return this.raw.send(data, compress);
+    if (this.validator?.Check(data) === false)
+      return this.raw.send(new ValidationError("message", this.validator, data).message);
+    if (typeof data === "object")
+      data = JSON.stringify(data);
+    return this.raw.send(data, compress);
   }
   ping(data) {
-    return Buffer.isBuffer(data) ? this.raw.ping(data) : this.validator?.Check(data) === false ? this.raw.send(new ValidationError("message", this.validator, data).message) : (typeof data == "object" && (data = JSON.stringify(data)), this.raw.ping(data));
+    if (Buffer.isBuffer(data))
+      return this.raw.ping(data);
+    if (this.validator?.Check(data) === false)
+      return this.raw.send(new ValidationError("message", this.validator, data).message);
+    if (typeof data === "object")
+      data = JSON.stringify(data);
+    return this.raw.ping(data);
   }
   pong(data) {
-    return Buffer.isBuffer(data) ? this.raw.pong(data) : this.validator?.Check(data) === false ? this.raw.send(new ValidationError("message", this.validator, data).message) : (typeof data == "object" && (data = JSON.stringify(data)), this.raw.pong(data));
+    if (Buffer.isBuffer(data))
+      return this.raw.pong(data);
+    if (this.validator?.Check(data) === false)
+      return this.raw.send(new ValidationError("message", this.validator, data).message);
+    if (typeof data === "object")
+      data = JSON.stringify(data);
+    return this.raw.pong(data);
   }
   publish(topic, data, compress) {
-    return Buffer.isBuffer(data) ? this.raw.publish(topic, data, compress) : this.validator?.Check(data) === false ? this.raw.send(new ValidationError("message", this.validator, data).message) : (typeof data == "object" && (data = JSON.stringify(data)), this.raw.publish(topic, data, compress));
+    if (Buffer.isBuffer(data))
+      return this.raw.publish(topic, data, compress);
+    if (this.validator?.Check(data) === false)
+      return this.raw.send(new ValidationError("message", this.validator, data).message);
+    if (typeof data === "object")
+      data = JSON.stringify(data);
+    return this.raw.publish(topic, data, compress);
   }
+  sendText;
+  sendBinary;
+  close;
+  terminate;
+  publishText;
+  publishBinary;
+  subscribe;
+  unsubscribe;
+  isSubscribed;
+  cork;
+  remoteAddress;
+  binaryType;
   get readyState() {
     return this.raw.readyState;
   }
-};
-var createWSMessageParser = (parse22) => {
-  let parsers = typeof parse22 == "function" ? [parse22] : parse22;
-  return async function(ws, message) {
-    if (typeof message == "string") {
+}
+var createWSMessageParser = (parse2) => {
+  let parsers = typeof parse2 === "function" ? [parse2] : parse2;
+  return async function parseMessage(ws, message) {
+    if (typeof message === "string") {
       let start = message?.charCodeAt(0);
       if (start === 34 || start === 47 || start === 91 || start === 123)
         try {
           message = JSON.parse(message);
         } catch {}
-      else
-        isNumericString(message) ? message = +message : message === "true" ? message = true : message === "false" ? message = false : message === "null" && (message = null);
+      else if (isNumericString(message))
+        message = +message;
+      else if (message === "true")
+        message = true;
+      else if (message === "false")
+        message = false;
+      else if (message === "null")
+        message = null;
     }
     if (parsers)
       for (let i2 = 0;i2 < parsers.length; i2++) {
         let temp = parsers[i2](ws, message);
-        if (temp instanceof Promise && (temp = await temp), temp !== undefined)
+        if (temp instanceof Promise)
+          temp = await temp;
+        if (temp !== undefined)
           return temp;
       }
     return message;
@@ -15726,11 +15363,11 @@ var createHandleWSResponse = (validateResponse) => {
     let send = (datum) => {
       if (validateResponse?.Check(datum) === false)
         return ws.send(new ValidationError("message", validateResponse, datum).message);
-      if (typeof datum == "object")
+      if (typeof datum === "object")
         return ws.send(JSON.stringify(datum));
       ws.send(datum);
     };
-    if (typeof data?.next != "function")
+    if (typeof data?.next !== "function")
       return void send(data);
     let init = data.next();
     if (init instanceof Promise)
@@ -15755,253 +15392,211 @@ var getPossibleParams = (path) => {
     return [path];
   let routes = [], head = path.slice(0, match.index), param = match[0].slice(0, -1), tail = path.slice(match.index + match[0].length);
   routes.push(head.slice(0, -1)), routes.push(head + param);
-  for (let fragment of getPossibleParams(tail))
-    fragment && (fragment.startsWith("/:") || routes.push(head.slice(0, -1) + fragment), routes.push(head + param + fragment));
+  for (let fragment of getPossibleParams(tail)) {
+    if (!fragment)
+      continue;
+    if (!fragment.startsWith("/:"))
+      routes.push(head.slice(0, -1) + fragment);
+    routes.push(head + param + fragment);
+  }
   return routes;
 };
-var supportedMethods = {
-  GET: true,
-  HEAD: true,
-  OPTIONS: true,
-  DELETE: true,
-  PATCH: true,
-  POST: true,
-  PUT: true
-};
+var supportedMethods = { GET: true, HEAD: true, OPTIONS: true, DELETE: true, PATCH: true, POST: true, PUT: true };
 var mapRoutes = (app) => {
   if (!app.config.aot || !app.config.systemRouter)
     return;
   let routes = {}, add = (route, handler) => {
-    routes[route.path] ? routes[route.path][route.method] || (routes[route.path][route.method] = handler) : routes[route.path] = {
-      [route.method]: handler
-    };
+    if (routes[route.path]) {
+      if (!routes[route.path][route.method])
+        routes[route.path][route.method] = handler;
+    } else
+      routes[route.path] = { [route.method]: handler };
   }, tree = app.routeTree;
   for (let route of app.router.history) {
-    if (typeof route.handler != "function")
+    if (typeof route.handler !== "function")
       continue;
     let method = route.method;
     if (method === "GET" && `WS_${route.path}` in tree || method === "WS" || route.path.charCodeAt(route.path.length - 1) === 42 || !(method in supportedMethods))
       continue;
     if (method === "ALL") {
-      `WS_${route.path}` in tree || (routes[route.path] = route.hooks?.config?.mount ? route.hooks.trace || app.event.trace || app.extender.higherOrderFunctions ? createBunRouteHandler(app, route) : route.hooks.mount || route.handler : route.handler);
+      if (!(`WS_${route.path}` in tree))
+        routes[route.path] = route.hooks?.config?.mount ? route.hooks.trace || app.event.trace || app.extender.higherOrderFunctions ? createBunRouteHandler(app, route) : route.hooks.mount || route.handler : route.handler;
       continue;
     }
-    let compiled, handler = app.config.precompile ? createBunRouteHandler(app, route) : (request) => compiled ? compiled(request) : (compiled = createBunRouteHandler(app, route))(request);
+    let compiled, handler = app.config.precompile ? createBunRouteHandler(app, route) : (request) => {
+      if (compiled)
+        return compiled(request);
+      return (compiled = createBunRouteHandler(app, route))(request);
+    };
     for (let path of getPossibleParams(route.path))
-      add({
-        method,
-        path
-      }, handler);
+      add({ method, path }, handler);
   }
   return routes;
 };
 var mergeRoutes = (r1, r2) => {
   if (!r2)
     return r1;
-  for (let key of Object.keys(r2))
-    if (r1[key] !== r2[key]) {
-      if (!r1[key]) {
+  for (let key of Object.keys(r2)) {
+    if (r1[key] === r2[key])
+      continue;
+    if (!r1[key]) {
+      r1[key] = r2[key];
+      continue;
+    }
+    if (r1[key] && r2[key]) {
+      if (typeof r1[key] === "function" || r1[key] instanceof Response) {
         r1[key] = r2[key];
         continue;
       }
-      if (r1[key] && r2[key]) {
-        if (typeof r1[key] == "function" || r1[key] instanceof Response) {
-          r1[key] = r2[key];
-          continue;
-        }
-        r1[key] = {
-          ...r1[key],
-          ...r2[key]
-        };
-      }
+      r1[key] = { ...r1[key], ...r2[key] };
     }
+  }
   return r1;
 };
-var BunAdapter = {
-  ...WebStandardAdapter,
-  name: "bun",
-  handler: {
-    mapResponse: mapResponse2,
-    mapEarlyResponse: mapEarlyResponse2,
-    mapCompactResponse: mapCompactResponse2,
-    createStaticHandler: createStaticHandler2,
-    createNativeStaticHandler
-  },
-  composeHandler: {
-    ...WebStandardAdapter.composeHandler,
-    headers: hasHeaderShorthand ? `c.headers=c.request.headers.toJSON()
+var BunAdapter = { ...WebStandardAdapter, name: "bun", handler: { mapResponse: mapResponse2, mapEarlyResponse: mapEarlyResponse2, mapCompactResponse: mapCompactResponse2, createStaticHandler: createStaticHandler2, createNativeStaticHandler }, composeHandler: { ...WebStandardAdapter.composeHandler, headers: hasHeaderShorthand ? `c.headers=c.request.headers.toJSON()
 ` : `c.headers={}
 for(const [k,v] of c.request.headers.entries())c.headers[k]=v
-`
-  },
-  listen(app) {
-    return (options, callback) => {
-      if (typeof Bun > "u")
-        throw new Error(".listen() is designed to run on Bun only. If you are running Elysia in other environment please use a dedicated plugin or export the handler via Elysia.fetch");
-      if (app.compile(), typeof options == "string") {
-        if (!isNumericString(options))
-          throw new Error("Port must be a numeric value");
-        options = parseInt(options);
-      }
-      let createStaticRoute = (iterator, { withAsync = false } = {}) => {
-        let staticRoutes = {}, ops = [];
-        for (let [path, route] of Object.entries(iterator))
-          if (supportPerMethodInlineHandler) {
-            if (!route)
+` }, listen(app) {
+  return (options, callback) => {
+    if (typeof Bun === "undefined")
+      throw new Error(".listen() is designed to run on Bun only. If you are running Elysia in other environment please use a dedicated plugin or export the handler via Elysia.fetch");
+    if (app.compile(), typeof options === "string") {
+      if (!isNumericString(options))
+        throw new Error("Port must be a numeric value");
+      options = parseInt(options);
+    }
+    let createStaticRoute = (iterator, { withAsync = false } = {}) => {
+      let staticRoutes = {}, ops = [];
+      for (let [path, route] of Object.entries(iterator))
+        if (supportPerMethodInlineHandler) {
+          if (!route)
+            continue;
+          for (let [method, value] of Object.entries(route)) {
+            if (!value || !(method in supportedMethods))
               continue;
-            for (let [method, value] of Object.entries(route))
-              if (!(!value || !(method in supportedMethods))) {
-                if (value instanceof Promise) {
-                  withAsync && (staticRoutes[path] || (staticRoutes[path] = {}), ops.push(value.then((awaited) => {
-                    awaited instanceof Response && (staticRoutes[path][method] = awaited);
-                  })));
-                  continue;
-                }
-                value instanceof Response && (staticRoutes[path] || (staticRoutes[path] = {}), staticRoutes[path][method] = value);
+            if (value instanceof Promise) {
+              if (withAsync) {
+                if (!staticRoutes[path])
+                  staticRoutes[path] = {};
+                ops.push(value.then((awaited) => {
+                  if (awaited instanceof Response)
+                    staticRoutes[path][method] = awaited;
+                }));
               }
-          } else {
-            if (!route)
-              continue;
-            if (route instanceof Promise) {
-              withAsync && (staticRoutes[path] || (staticRoutes[path] = {}), ops.push(route.then((awaited) => {
-                awaited instanceof Response && (staticRoutes[path] = awaited);
-              })));
               continue;
             }
-            if (!(route instanceof Response))
+            if (!(value instanceof Response))
               continue;
-            staticRoutes[path] = route;
+            if (!staticRoutes[path])
+              staticRoutes[path] = {};
+            staticRoutes[path][method] = value;
           }
-        return withAsync ? Promise.all(ops).then(() => staticRoutes) : staticRoutes;
-      }, serve = typeof options == "object" ? {
-        development: !isProduction,
-        reusePort: true,
-        ...app.config.serve || {},
-        ...options || {},
-        routes: mergeRoutes(mergeRoutes(createStaticRoute(app.router.response), mapRoutes(app)), app.config.serve?.routes),
-        websocket: {
-          ...app.config.websocket || {},
-          ...websocket || {}
-        },
-        fetch: app.fetch
-      } : {
-        development: !isProduction,
-        reusePort: true,
-        ...app.config.serve || {},
-        routes: mergeRoutes(mergeRoutes(createStaticRoute(app.router.response), mapRoutes(app)), app.config.serve?.routes),
-        websocket: {
-          ...app.config.websocket || {},
-          ...websocket || {}
-        },
-        port: options,
-        fetch: app.fetch
-      };
-      if (app.server = Bun.serve(serve), app.event.start)
-        for (let i2 = 0;i2 < app.event.start.length; i2++)
-          app.event.start[i2].fn(app);
-      callback && callback(app.server), process.on("beforeExit", () => {
-        if (app.server && (app.server.stop?.(), app.server = null, app.event.stop))
+        } else {
+          if (!route)
+            continue;
+          if (route instanceof Promise) {
+            if (withAsync) {
+              if (!staticRoutes[path])
+                staticRoutes[path] = {};
+              ops.push(route.then((awaited) => {
+                if (awaited instanceof Response)
+                  staticRoutes[path] = awaited;
+              }));
+            }
+            continue;
+          }
+          if (!(route instanceof Response))
+            continue;
+          staticRoutes[path] = route;
+        }
+      if (withAsync)
+        return Promise.all(ops).then(() => staticRoutes);
+      return staticRoutes;
+    }, serve = typeof options === "object" ? { development: !isProduction, reusePort: true, ...app.config.serve || {}, ...options || {}, routes: mergeRoutes(mergeRoutes(createStaticRoute(app.router.response), mapRoutes(app)), app.config.serve?.routes), websocket: { ...app.config.websocket || {}, ...websocket || {} }, fetch: app.fetch } : { development: !isProduction, reusePort: true, ...app.config.serve || {}, routes: mergeRoutes(mergeRoutes(createStaticRoute(app.router.response), mapRoutes(app)), app.config.serve?.routes), websocket: { ...app.config.websocket || {}, ...websocket || {} }, port: options, fetch: app.fetch };
+    if (app.server = Bun.serve(serve), app.event.start)
+      for (let i2 = 0;i2 < app.event.start.length; i2++)
+        app.event.start[i2].fn(app);
+    if (callback)
+      callback(app.server);
+    process.on("beforeExit", () => {
+      if (app.server) {
+        if (app.server.stop?.(), app.server = null, app.event.stop)
           for (let i2 = 0;i2 < app.event.stop.length; i2++)
             app.event.stop[i2].fn(app);
-      }), app.promisedModules.then(async () => {
-        app.server?.reload({
-          ...serve,
-          fetch: app.fetch,
-          routes: mergeRoutes(mergeRoutes(await createStaticRoute(app.router.response, {
-            withAsync: true
-          }), mapRoutes(app)), app.config.serve?.routes)
-        }), Bun?.gc(false);
-      });
-    };
-  },
-  ws(app, path, options) {
-    let { parse: parse22, body, response, ...rest } = options, validateMessage = getSchemaValidator(body, {
-      modules: app.definitions.typebox,
-      models: app.definitions.type,
-      normalize: app.config.normalize
-    }), validateResponse = getSchemaValidator(response, {
-      modules: app.definitions.typebox,
-      models: app.definitions.type,
-      normalize: app.config.normalize
-    });
-    app.route("WS", path, async (context) => {
-      let server = app.getServer(), { set: set2, path: path2, qi, headers, query, params } = context;
-      if (context.validator = validateResponse, options.upgrade)
-        if (typeof options.upgrade == "function") {
-          let temp = options.upgrade(context);
-          temp instanceof Promise && await temp;
-        } else
-          options.upgrade && Object.assign(set2.headers, options.upgrade);
-      if (set2.cookie && isNotEmpty(set2.cookie)) {
-        let cookie = serializeCookie(set2.cookie);
-        cookie && (set2.headers["set-cookie"] = cookie);
       }
-      set2.headers["set-cookie"] && Array.isArray(set2.headers["set-cookie"]) && (set2.headers = parseSetCookies(new Headers(set2.headers), set2.headers["set-cookie"]));
-      let handleResponse3 = createHandleWSResponse(validateResponse), parseMessage = createWSMessageParser(parse22), _id, errorHandlers = [
-        ...Array.isArray(options.error) ? options.error : [options.error],
-        ...(app.event.error ?? []).map((x2) => typeof x2 == "function" ? x2 : x2.fn)
-      ].filter((x2) => x2), handleErrors = errorHandlers.length ? async (ws, error2) => {
-        for (let handleError of errorHandlers) {
-          let response2 = handleError(Object.assign(context, { error: error2 }));
-          if (response2 instanceof Promise && (response2 = await response2), await handleResponse3(ws, response2), response2)
-            break;
-        }
-      } : () => {};
-      if (!server?.upgrade(context.request, {
-        headers: isNotEmpty(set2.headers) ? set2.headers : undefined,
-        data: {
-          ...context,
-          get id() {
-            return _id || (_id = randomId());
-          },
-          validator: validateResponse,
-          ping(data) {
-            options.ping?.(data);
-          },
-          pong(data) {
-            options.pong?.(data);
-          },
-          open(ws) {
-            try {
-              handleResponse3(ws, options.open?.(new ElysiaWS(ws, context)));
-            } catch (error2) {
-              handleErrors(ws, error2);
-            }
-          },
-          message: async (ws, _message) => {
-            let message = await parseMessage(ws, _message);
-            if (validateMessage?.Check(message) === false)
-              return void ws.send(new ValidationError("message", validateMessage, message).message);
-            try {
-              handleResponse3(ws, options.message?.(new ElysiaWS(ws, context, message), message));
-            } catch (error2) {
-              handleErrors(ws, error2);
-            }
-          },
-          drain(ws) {
-            try {
-              handleResponse3(ws, options.drain?.(new ElysiaWS(ws, context)));
-            } catch (error2) {
-              handleErrors(ws, error2);
-            }
-          },
-          close(ws, code, reason) {
-            try {
-              handleResponse3(ws, options.close?.(new ElysiaWS(ws, context), code, reason));
-            } catch (error2) {
-              handleErrors(ws, error2);
-            }
-          }
-        }
-      }))
-        return set2.status = 400, "Expected a websocket connection";
-    }, {
-      ...rest,
-      websocket: options
+    }), app.promisedModules.then(async () => {
+      app.server?.reload({ ...serve, fetch: app.fetch, routes: mergeRoutes(mergeRoutes(await createStaticRoute(app.router.response, { withAsync: true }), mapRoutes(app)), app.config.serve?.routes) }), Bun?.gc(false);
     });
-  }
-};
-var env2 = isBun ? Bun.env : typeof process < "u" && process?.env ? process.env : {};
+  };
+}, ws(app, path, options) {
+  let { parse: parse2, body, response, ...rest } = options, validateMessage = getSchemaValidator(body, { modules: app.definitions.typebox, models: app.definitions.type, normalize: app.config.normalize }), validateResponse = getSchemaValidator(response, { modules: app.definitions.typebox, models: app.definitions.type, normalize: app.config.normalize });
+  app.route("WS", path, async (context) => {
+    let server = app.getServer(), { set: set2, path: path2, qi, headers, query, params } = context;
+    if (context.validator = validateResponse, options.upgrade) {
+      if (typeof options.upgrade === "function") {
+        let temp = options.upgrade(context);
+        if (temp instanceof Promise)
+          await temp;
+      } else if (options.upgrade)
+        Object.assign(set2.headers, options.upgrade);
+    }
+    if (set2.cookie && isNotEmpty(set2.cookie)) {
+      let cookie = serializeCookie(set2.cookie);
+      if (cookie)
+        set2.headers["set-cookie"] = cookie;
+    }
+    if (set2.headers["set-cookie"] && Array.isArray(set2.headers["set-cookie"]))
+      set2.headers = parseSetCookies(new Headers(set2.headers), set2.headers["set-cookie"]);
+    let handleResponse3 = createHandleWSResponse(validateResponse), parseMessage = createWSMessageParser(parse2), _id, errorHandlers = [...Array.isArray(options.error) ? options.error : [options.error], ...(app.event.error ?? []).map((x2) => typeof x2 === "function" ? x2 : x2.fn)].filter((x2) => x2), handleErrors = !errorHandlers.length ? () => {} : async (ws, error2) => {
+      for (let handleError of errorHandlers) {
+        let response2 = handleError(Object.assign(context, { error: error2 }));
+        if (response2 instanceof Promise)
+          response2 = await response2;
+        if (await handleResponse3(ws, response2), response2)
+          break;
+      }
+    };
+    if (server?.upgrade(context.request, { headers: isNotEmpty(set2.headers) ? set2.headers : undefined, data: { ...context, get id() {
+      if (_id)
+        return _id;
+      return _id = randomId();
+    }, validator: validateResponse, ping(data) {
+      options.ping?.(data);
+    }, pong(data) {
+      options.pong?.(data);
+    }, open(ws) {
+      try {
+        handleResponse3(ws, options.open?.(new ElysiaWS(ws, context)));
+      } catch (error2) {
+        handleErrors(ws, error2);
+      }
+    }, message: async (ws, _message) => {
+      let message = await parseMessage(ws, _message);
+      if (validateMessage?.Check(message) === false)
+        return void ws.send(new ValidationError("message", validateMessage, message).message);
+      try {
+        handleResponse3(ws, options.message?.(new ElysiaWS(ws, context, message), message));
+      } catch (error2) {
+        handleErrors(ws, error2);
+      }
+    }, drain(ws) {
+      try {
+        handleResponse3(ws, options.drain?.(new ElysiaWS(ws, context)));
+      } catch (error2) {
+        handleErrors(ws, error2);
+      }
+    }, close(ws, code, reason) {
+      try {
+        handleResponse3(ws, options.close?.(new ElysiaWS(ws, context), code, reason));
+      } catch (error2) {
+        handleErrors(ws, error2);
+      }
+    } } }))
+      return;
+    return set2.status = 400, "Expected a websocket connection";
+  }, { ...rest, websocket: options });
+} };
+var env2 = isBun ? Bun.env : typeof process !== "undefined" && process?.env ? process.env : {};
 var injectDefaultValues = (typeChecker, obj) => {
   for (let [key, keySchema] of Object.entries(typeChecker.schema.properties))
     obj[key] ??= keySchema.default;
@@ -16009,25 +15604,14 @@ var injectDefaultValues = (typeChecker, obj) => {
 var createDynamicHandler = (app) => {
   let { mapResponse: mapResponse3, mapEarlyResponse: mapEarlyResponse3 } = app["~adapter"].handler;
   return async (request) => {
-    let url = request.url, s = url.indexOf("/", 11), qi = url.indexOf("?", s + 1), path = qi === -1 ? url.substring(s) : url.substring(s, qi), set2 = {
-      cookie: {},
-      status: 200,
-      headers: {}
-    }, context = Object.assign({}, app.singleton.decorator, {
-      set: set2,
-      store: app.singleton.store,
-      request,
-      path,
-      qi,
-      error: status,
-      status,
-      redirect
-    });
+    let url = request.url, s = url.indexOf("/", 11), qi = url.indexOf("?", s + 1), path = qi === -1 ? url.substring(s) : url.substring(s, qi), set2 = { cookie: {}, status: 200, headers: {} }, context = Object.assign({}, app.singleton.decorator, { set: set2, store: app.singleton.store, request, path, qi, error: status, status, redirect });
     try {
       if (app.event.request)
         for (let i2 = 0;i2 < app.event.request.length; i2++) {
           let onRequest = app.event.request[i2].fn, response2 = onRequest(context);
-          if (response2 instanceof Promise && (response2 = await response2), response2 = mapEarlyResponse3(response2, set2), response2)
+          if (response2 instanceof Promise)
+            response2 = await response2;
+          if (response2 = mapEarlyResponse3(response2, set2), response2)
             return context.response = response2;
         }
       let handler = app.router.dynamic.find(request.method, path) ?? app.router.dynamic.find("ALL", path);
@@ -16056,7 +15640,10 @@ var createDynamicHandler = (app) => {
                 if (body[key])
                   continue;
                 let value = form2.getAll(key);
-                value.length === 1 ? body[key] = value[0] : body[key] = value;
+                if (value.length === 1)
+                  body[key] = value[0];
+                else
+                  body[key] = value;
               }
               break;
           }
@@ -16064,10 +15651,14 @@ var createDynamicHandler = (app) => {
           let contentType = request.headers.get("content-type");
           if (contentType) {
             let index = contentType.indexOf(";");
-            if (index !== -1 && (contentType = contentType.slice(0, index)), context.contentType = contentType, hooks.parse)
+            if (index !== -1)
+              contentType = contentType.slice(0, index);
+            if (context.contentType = contentType, hooks.parse)
               for (let i2 = 0;i2 < hooks.parse.length; i2++) {
                 let hook = hooks.parse[i2].fn, temp = hook(context, contentType);
-                if (temp instanceof Promise && (temp = await temp), temp) {
+                if (temp instanceof Promise)
+                  temp = await temp;
+                if (temp) {
                   body = temp;
                   break;
                 }
@@ -16093,7 +15684,10 @@ var createDynamicHandler = (app) => {
                     if (body[key])
                       continue;
                     let value = form2.getAll(key);
-                    value.length === 1 ? body[key] = value[0] : body[key] = value;
+                    if (value.length === 1)
+                      body[key] = value[0];
+                    else
+                      body[key] = value;
                   }
                   break;
               }
@@ -16103,24 +15697,28 @@ var createDynamicHandler = (app) => {
       for (let [key, value] of request.headers.entries())
         context.headers[key] = value;
       let cookieMeta = Object.assign({}, app.config?.cookie, validator?.cookie?.config), cookieHeaderValue = request.headers.get("cookie");
-      context.cookie = await parseCookie(context.set, cookieHeaderValue, cookieMeta ? {
-        secrets: cookieMeta.secrets !== undefined ? typeof cookieMeta.secrets == "string" ? cookieMeta.secrets : cookieMeta.secrets.join(",") : undefined,
-        sign: cookieMeta.sign === true ? true : cookieMeta.sign !== undefined ? typeof cookieMeta.sign == "string" ? cookieMeta.sign : cookieMeta.sign.join(",") : undefined
-      } : undefined);
+      context.cookie = await parseCookie(context.set, cookieHeaderValue, cookieMeta ? { secrets: cookieMeta.secrets !== undefined ? typeof cookieMeta.secrets === "string" ? cookieMeta.secrets : cookieMeta.secrets.join(",") : undefined, sign: cookieMeta.sign === true ? true : cookieMeta.sign !== undefined ? typeof cookieMeta.sign === "string" ? cookieMeta.sign : cookieMeta.sign.join(",") : undefined } : undefined);
       let headerValidator = validator?.createHeaders?.();
-      headerValidator && injectDefaultValues(headerValidator, context.headers);
+      if (headerValidator)
+        injectDefaultValues(headerValidator, context.headers);
       let paramsValidator = validator?.createParams?.();
-      paramsValidator && injectDefaultValues(paramsValidator, context.params);
+      if (paramsValidator)
+        injectDefaultValues(paramsValidator, context.params);
       let queryValidator = validator?.createQuery?.();
-      if (queryValidator && injectDefaultValues(queryValidator, context.query), hooks.transform)
+      if (queryValidator)
+        injectDefaultValues(queryValidator, context.query);
+      if (hooks.transform)
         for (let i2 = 0;i2 < hooks.transform.length; i2++) {
           let hook = hooks.transform[i2], response2 = hook.fn(context);
-          if (response2 instanceof Promise && (response2 = await response2), response2 instanceof ElysiaCustomStatusResponse) {
+          if (response2 instanceof Promise)
+            response2 = await response2;
+          if (response2 instanceof ElysiaCustomStatusResponse) {
             let result = mapEarlyResponse3(response2, context.set);
             if (result)
               return context.response = result;
           }
-          hook.subType === "derive" && Object.assign(context, response2);
+          if (hook.subType === "derive")
+            Object.assign(context, response2);
         }
       if (validator) {
         if (headerValidator) {
@@ -16129,28 +15727,36 @@ var createDynamicHandler = (app) => {
             _header[key] = value;
           if (validator.headers.Check(_header) === false)
             throw new ValidationError("header", validator.headers, _header);
-        } else
-          validator.headers?.Decode && (context.headers = validator.headers.Decode(context.headers));
+        } else if (validator.headers?.Decode)
+          context.headers = validator.headers.Decode(context.headers);
         if (paramsValidator?.Check(context.params) === false)
           throw new ValidationError("params", validator.params, context.params);
-        if (validator.params?.Decode && (context.params = validator.params.Decode(context.params)), queryValidator?.Check(context.query) === false)
+        else if (validator.params?.Decode)
+          context.params = validator.params.Decode(context.params);
+        if (queryValidator?.Check(context.query) === false)
           throw new ValidationError("query", validator.query, context.query);
-        if (validator.query?.Decode && (context.query = validator.query.Decode(context.query)), validator.createCookie?.()) {
+        else if (validator.query?.Decode)
+          context.query = validator.query.Decode(context.query);
+        if (validator.createCookie?.()) {
           let cookieValue = {};
           for (let [key, value] of Object.entries(context.cookie))
             cookieValue[key] = value.value;
           if (validator.cookie.Check(cookieValue) === false)
             throw new ValidationError("cookie", validator.cookie, cookieValue);
-          validator.cookie?.Decode && (cookieValue = validator.cookie.Decode(cookieValue));
+          else if (validator.cookie?.Decode)
+            cookieValue = validator.cookie.Decode(cookieValue);
         }
         if (validator.createBody?.()?.Check(body) === false)
           throw new ValidationError("body", validator.body, body);
-        validator.body?.Decode && (context.body = validator.body.Decode(body));
+        else if (validator.body?.Decode)
+          context.body = validator.body.Decode(body);
       }
       if (hooks.beforeHandle)
         for (let i2 = 0;i2 < hooks.beforeHandle.length; i2++) {
           let hook = hooks.beforeHandle[i2], response2 = hook.fn(context);
-          if (response2 instanceof Promise && (response2 = await response2), response2 instanceof ElysiaCustomStatusResponse) {
+          if (response2 instanceof Promise)
+            response2 = await response2;
+          if (response2 instanceof ElysiaCustomStatusResponse) {
             let result = mapEarlyResponse3(response2, context.set);
             if (result)
               return context.response = result;
@@ -16163,43 +15769,56 @@ var createDynamicHandler = (app) => {
             if (context.response = response2, hooks.afterHandle)
               for (let i22 = 0;i22 < hooks.afterHandle.length; i22++) {
                 let newResponse = hooks.afterHandle[i22].fn(context);
-                newResponse instanceof Promise && (newResponse = await newResponse), newResponse && (response2 = newResponse);
+                if (newResponse instanceof Promise)
+                  newResponse = await newResponse;
+                if (newResponse)
+                  response2 = newResponse;
               }
             let result = mapEarlyResponse3(response2, context.set);
             if (result)
               return context.response = result;
           }
         }
-      let response = typeof handle == "function" ? handle(context) : handle;
-      if (response instanceof Promise && (response = await response), hooks.afterHandle)
-        if (hooks.afterHandle.length) {
+      let response = typeof handle === "function" ? handle(context) : handle;
+      if (response instanceof Promise)
+        response = await response;
+      if (hooks.afterHandle)
+        if (!hooks.afterHandle.length) {
+          let status2 = response instanceof ElysiaCustomStatusResponse ? response.code : set2.status ? typeof set2.status === "string" ? StatusMap[set2.status] : set2.status : 200, responseValidator = validator?.createResponse?.()?.[status2];
+          if (responseValidator?.Check(response) === false)
+            throw new ValidationError("response", responseValidator, response);
+          else if (responseValidator?.Decode)
+            response = responseValidator.Decode(response);
+        } else {
           context.response = response;
           for (let i2 = 0;i2 < hooks.afterHandle.length; i2++) {
             let newResponse = hooks.afterHandle[i2].fn(context);
-            newResponse instanceof Promise && (newResponse = await newResponse);
+            if (newResponse instanceof Promise)
+              newResponse = await newResponse;
             let result = mapEarlyResponse3(newResponse, context.set);
             if (result !== undefined) {
               let responseValidator = validator?.response?.[result.status];
               if (responseValidator?.Check(result) === false)
                 throw new ValidationError("response", responseValidator, result);
-              return responseValidator?.Decode && (response = responseValidator.Decode(response)), context.response = result;
+              else if (responseValidator?.Decode)
+                response = responseValidator.Decode(response);
+              return context.response = result;
             }
           }
-        } else {
-          let status2 = response instanceof ElysiaCustomStatusResponse ? response.code : set2.status ? typeof set2.status == "string" ? StatusMap[set2.status] : set2.status : 200, responseValidator = validator?.createResponse?.()?.[status2];
-          if (responseValidator?.Check(response) === false)
-            throw new ValidationError("response", responseValidator, response);
-          responseValidator?.Decode && (response = responseValidator.Decode(response));
         }
       if (context.set.cookie && cookieMeta?.sign) {
-        let secret = cookieMeta.secrets ? typeof cookieMeta.secrets == "string" ? cookieMeta.secrets : cookieMeta.secrets[0] : undefined;
+        let secret = !cookieMeta.secrets ? undefined : typeof cookieMeta.secrets === "string" ? cookieMeta.secrets : cookieMeta.secrets[0];
         if (cookieMeta.sign === true)
           for (let [key, cookie] of Object.entries(context.set.cookie))
             context.set.cookie[key].value = await signCookie(cookie.value, "${secret}");
         else {
           let properties = validator?.cookie?.schema?.properties;
-          for (let name of cookieMeta.sign)
-            name in properties && context.set.cookie[name]?.value && (context.set.cookie[name].value = await signCookie(context.set.cookie[name].value, secret));
+          for (let name of cookieMeta.sign) {
+            if (!(name in properties))
+              continue;
+            if (context.set.cookie[name]?.value)
+              context.set.cookie[name].value = await signCookie(context.set.cookie[name].value, secret);
+          }
         }
       }
       return mapResponse3(context.response = response, context.set);
@@ -16220,127 +15839,53 @@ var createDynamicErrorHandler = (app) => {
     if (errorContext.set = context.set, app.event.error)
       for (let i2 = 0;i2 < app.event.error.length; i2++) {
         let response = app.event.error[i2].fn(errorContext);
-        if (response instanceof Promise && (response = await response), response != null)
+        if (response instanceof Promise)
+          response = await response;
+        if (response !== undefined && response !== null)
           return context.response = mapResponse3(response, context.set);
       }
-    return new Response(typeof error2.cause == "string" ? error2.cause : error2.message, {
-      headers: context.set.headers,
-      status: error2.status ?? 500
-    });
+    return new Response(typeof error2.cause === "string" ? error2.cause : error2.message, { headers: context.set.headers, status: error2.status ?? 500 });
   };
 };
-var Elysia = class _Elysia {
-  constructor(config = {}) {
-    this.server = null;
-    this.dependencies = {};
-    this["~Prefix"] = "";
-    this["~Singleton"] = null;
-    this["~Definitions"] = null;
-    this["~Metadata"] = null;
-    this["~Ephemeral"] = null;
-    this["~Volatile"] = null;
-    this["~Routes"] = null;
-    this.singleton = {
-      decorator: {},
-      store: {},
-      derive: {},
-      resolve: {}
-    };
-    this.definitions = {
-      typebox: t.Module({}),
-      type: {},
-      error: {}
-    };
-    this.extender = {
-      macros: [],
-      higherOrderFunctions: []
-    };
-    this.validator = {
-      global: null,
-      scoped: null,
-      local: null,
-      getCandidate() {
-        return !this.global && !this.scoped && !this.local ? {
-          body: undefined,
-          headers: undefined,
-          params: undefined,
-          query: undefined,
-          cookie: undefined,
-          response: undefined
-        } : mergeSchemaValidator(mergeSchemaValidator(this.global, this.scoped), this.local);
-      }
-    };
-    this.standaloneValidator = {
-      global: null,
-      scoped: null,
-      local: null
-    };
-    this.event = {};
-    this.router = {
-      "~http": undefined,
-      get http() {
-        return this["~http"] || (this["~http"] = new Memoirist({ lazy: true })), this["~http"];
-      },
-      "~dynamic": undefined,
-      get dynamic() {
-        return this["~dynamic"] || (this["~dynamic"] = new Memoirist), this["~dynamic"];
-      },
-      static: {},
-      response: {},
-      history: []
-    };
-    this.routeTree = {};
-    this.inference = {
-      body: false,
-      cookie: false,
-      headers: false,
-      query: false,
-      set: false,
-      server: false,
-      path: false,
-      route: false,
-      url: false
-    };
-    this["~parser"] = {};
-    this.handle = async (request) => this.fetch(request);
-    this.fetch = (request) => (this.fetch = this.config.aot ? composeGeneralHandler(this) : createDynamicHandler(this))(request);
-    this.handleError = async (context, error2) => (this.handleError = this.config.aot ? composeErrorHandler(this) : createDynamicErrorHandler(this))(context, error2);
-    this.listen = (options, callback) => (this["~adapter"].listen(this)(options, callback), this.promisedModules.size && clearSucroseCache(5000), this.promisedModules.then(() => {
-      clearSucroseCache(1000);
-    }), this);
-    this.stop = async (closeActiveConnections) => {
-      if (!this.server)
-        throw new Error("Elysia isn't running. Call `app.listen` to start the server.");
-      if (this.server && (this.server.stop(closeActiveConnections), this.server = null, this.event.stop?.length))
-        for (let i2 = 0;i2 < this.event.stop.length; i2++)
-          this.event.stop[i2].fn(this);
-    };
-    config.tags && (config.detail ? config.detail.tags = config.tags : config.detail = {
-      tags: config.tags
-    }), this.config = {
-      prefix: "",
-      aot: env2.ELYSIA_AOT !== "false",
-      nativeStaticResponse: true,
-      systemRouter: true,
-      encodeSchema: true,
-      normalize: true,
-      ...config,
-      cookie: {
-        path: "/",
-        ...config?.cookie
-      },
-      experimental: config?.experimental ?? {},
-      seed: config?.seed === undefined ? "" : config?.seed
-    }, this["~adapter"] = config.adapter ?? (typeof Bun < "u" ? BunAdapter : WebStandardAdapter), config?.analytic && (config?.name || config?.seed !== undefined) && (this.telemetry = {
-      stack: new Error().stack
-    });
-  }
+
+class Elysia {
+  config;
+  server = null;
+  dependencies = {};
+  "~Prefix" = "";
+  "~Singleton" = null;
+  "~Definitions" = null;
+  "~Metadata" = null;
+  "~Ephemeral" = null;
+  "~Volatile" = null;
+  "~Routes" = null;
+  singleton = { decorator: {}, store: {}, derive: {}, resolve: {} };
   get store() {
     return this.singleton.store;
   }
   get decorator() {
     return this.singleton.decorator;
   }
+  definitions = { typebox: t.Module({}), type: {}, error: {} };
+  extender = { macros: [], higherOrderFunctions: [] };
+  validator = { global: null, scoped: null, local: null, getCandidate() {
+    if (!this.global && !this.scoped && !this.local)
+      return { body: undefined, headers: undefined, params: undefined, query: undefined, cookie: undefined, response: undefined };
+    return mergeSchemaValidator(mergeSchemaValidator(this.global, this.scoped), this.local);
+  } };
+  standaloneValidator = { global: null, scoped: null, local: null };
+  event = {};
+  telemetry;
+  router = { "~http": undefined, get http() {
+    if (!this["~http"])
+      this["~http"] = new _({ lazy: true });
+    return this["~http"];
+  }, "~dynamic": undefined, get dynamic() {
+    if (!this["~dynamic"])
+      this["~dynamic"] = new _;
+    return this["~dynamic"];
+  }, static: {}, response: {}, history: [] };
+  routeTree = {};
   get routes() {
     return this.router.history;
   }
@@ -16350,23 +15895,32 @@ var Elysia = class _Elysia {
   getGlobalDefinitions() {
     return this.definitions;
   }
+  inference = { body: false, cookie: false, headers: false, query: false, set: false, server: false, path: false, route: false, url: false };
   getServer() {
     return this.server;
   }
   getParent() {
     return null;
   }
+  "~parser" = {};
+  _promisedModules;
   get promisedModules() {
-    return this._promisedModules || (this._promisedModules = new PromiseGroup(console.error, () => {})), this._promisedModules;
+    if (!this._promisedModules)
+      this._promisedModules = new PromiseGroup(console.error, () => {});
+    return this._promisedModules;
   }
+  constructor(config = {}) {
+    if (config.tags)
+      if (!config.detail)
+        config.detail = { tags: config.tags };
+      else
+        config.detail.tags = config.tags;
+    if (this.config = { prefix: "", aot: env2.ELYSIA_AOT !== "false", nativeStaticResponse: true, systemRouter: true, encodeSchema: true, normalize: true, ...config, cookie: { path: "/", ...config?.cookie }, experimental: config?.experimental ?? {}, seed: config?.seed === undefined ? "" : config?.seed }, this["~adapter"] = config.adapter ?? (typeof Bun !== "undefined" ? BunAdapter : WebStandardAdapter), config?.analytic && (config?.name || config?.seed !== undefined))
+      this.telemetry = { stack: new Error().stack };
+  }
+  "~adapter";
   env(model, _env = env2) {
-    if (getSchemaValidator(model, {
-      modules: this.definitions.typebox,
-      dynamic: true,
-      additionalProperties: true,
-      coerce: true,
-      sanitize: () => this.config.sanitize
-    }).Check(_env) === false) {
+    if (getSchemaValidator(model, { modules: this.definitions.typebox, dynamic: true, additionalProperties: true, coerce: true, sanitize: () => this.config.sanitize }).Check(_env) === false) {
       let error2 = new ValidationError("env", model, _env);
       throw new Error(error2.all.map((x2) => x2.summary).join(`
 `));
@@ -16374,47 +15928,25 @@ var Elysia = class _Elysia {
     return this;
   }
   wrap(fn) {
-    return this.extender.higherOrderFunctions.push({
-      checksum: checksum(JSON.stringify({
-        name: this.config.name,
-        seed: this.config.seed,
-        content: fn.toString()
-      })),
-      fn
-    }), this;
+    return this.extender.higherOrderFunctions.push({ checksum: checksum(JSON.stringify({ name: this.config.name, seed: this.config.seed, content: fn.toString() })), fn }), this;
   }
   applyMacro(localHook) {
     if (this.extender.macros.length) {
-      let manage = createMacroManager({
-        globalHook: this.event,
-        localHook
-      }), manager = {
-        events: {
-          global: this.event,
-          local: localHook
-        },
-        get onParse() {
-          return manage("parse");
-        },
-        get onTransform() {
-          return manage("transform");
-        },
-        get onBeforeHandle() {
-          return manage("beforeHandle");
-        },
-        get onAfterHandle() {
-          return manage("afterHandle");
-        },
-        get mapResponse() {
-          return manage("mapResponse");
-        },
-        get onAfterResponse() {
-          return manage("afterResponse");
-        },
-        get onError() {
-          return manage("error");
-        }
-      };
+      let manage = createMacroManager({ globalHook: this.event, localHook }), manager = { events: { global: this.event, local: localHook }, get onParse() {
+        return manage("parse");
+      }, get onTransform() {
+        return manage("transform");
+      }, get onBeforeHandle() {
+        return manage("beforeHandle");
+      }, get onAfterHandle() {
+        return manage("afterHandle");
+      }, get mapResponse() {
+        return manage("mapResponse");
+      }, get onAfterResponse() {
+        return manage("afterResponse");
+      }, get onError() {
+        return manage("error");
+      } };
       for (let macro of this.extender.macros)
         traceBackMacro(macro.fn(manager), localHook, manage);
     }
@@ -16427,7 +15959,19 @@ var Elysia = class _Elysia {
   }
   add(method, path, handle, localHook, options, standaloneValidators) {
     let skipPrefix = options?.skipPrefix ?? false, allowMeta = options?.allowMeta ?? false;
-    if (localHook ??= {}, standaloneValidators === undefined && (standaloneValidators = [], this.standaloneValidator.local && (standaloneValidators = standaloneValidators.concat(this.standaloneValidator.local)), this.standaloneValidator.scoped && (standaloneValidators = standaloneValidators.concat(this.standaloneValidator.scoped)), this.standaloneValidator.global && (standaloneValidators = standaloneValidators.concat(this.standaloneValidator.global))), path !== "" && path.charCodeAt(0) !== 47 && (path = "/" + path), this.config.prefix && !skipPrefix && (path = this.config.prefix + path), localHook?.type)
+    if (localHook ??= {}, standaloneValidators === undefined) {
+      if (standaloneValidators = [], this.standaloneValidator.local)
+        standaloneValidators = standaloneValidators.concat(this.standaloneValidator.local);
+      if (this.standaloneValidator.scoped)
+        standaloneValidators = standaloneValidators.concat(this.standaloneValidator.scoped);
+      if (this.standaloneValidator.global)
+        standaloneValidators = standaloneValidators.concat(this.standaloneValidator.global);
+    }
+    if (path !== "" && path.charCodeAt(0) !== 47)
+      path = "/" + path;
+    if (this.config.prefix && !skipPrefix)
+      path = this.config.prefix + path;
+    if (localHook?.type)
       switch (localHook.type) {
         case "text":
           localHook.type = "text/plain";
@@ -16447,207 +15991,87 @@ var Elysia = class _Elysia {
         default:
           break;
       }
-    let instanceValidator = this.validator.getCandidate(), cloned = {
-      body: localHook?.body ?? instanceValidator?.body,
-      headers: localHook?.headers ?? instanceValidator?.headers,
-      params: localHook?.params ?? instanceValidator?.params,
-      query: localHook?.query ?? instanceValidator?.query,
-      cookie: localHook?.cookie ?? instanceValidator?.cookie,
-      response: localHook?.response ?? instanceValidator?.response
-    }, shouldPrecompile = this.config.precompile === true || typeof this.config.precompile == "object" && this.config.precompile.compose === true, createValidator = () => {
+    let instanceValidator = this.validator.getCandidate(), cloned = { body: localHook?.body ?? instanceValidator?.body, headers: localHook?.headers ?? instanceValidator?.headers, params: localHook?.params ?? instanceValidator?.params, query: localHook?.query ?? instanceValidator?.query, cookie: localHook?.cookie ?? instanceValidator?.cookie, response: localHook?.response ?? instanceValidator?.response }, shouldPrecompile = this.config.precompile === true || typeof this.config.precompile === "object" && this.config.precompile.compose === true, createValidator = () => {
       let models = this.definitions.type, dynamic = !this.config.aot, normalize = this.config.normalize, modules = this.definitions.typebox, sanitize2 = () => this.config.sanitize, cookieValidator = () => {
         if (cloned.cookie || standaloneValidators.find((x2) => x2.cookie))
-          return getCookieValidator({
-            modules,
-            validator: cloned.cookie,
-            defaultConfig: this.config.cookie,
-            config: cloned.cookie?.config ?? {},
-            dynamic,
-            models,
-            validators: standaloneValidators.map((x2) => x2.cookie),
-            sanitize: sanitize2
-          });
+          return getCookieValidator({ modules, validator: cloned.cookie, defaultConfig: this.config.cookie, config: cloned.cookie?.config ?? {}, dynamic, models, validators: standaloneValidators.map((x2) => x2.cookie), sanitize: sanitize2 });
       };
-      return shouldPrecompile ? {
-        body: getSchemaValidator(cloned.body, {
-          modules,
-          dynamic,
-          models,
-          normalize,
-          additionalCoerce: coercePrimitiveRoot(),
-          validators: standaloneValidators.map((x2) => x2.body),
-          sanitize: sanitize2
-        }),
-        headers: getSchemaValidator(cloned.headers, {
-          modules,
-          dynamic,
-          models,
-          additionalProperties: true,
-          coerce: true,
-          additionalCoerce: stringToStructureCoercions(),
-          validators: standaloneValidators.map((x2) => x2.headers),
-          sanitize: sanitize2
-        }),
-        params: getSchemaValidator(cloned.params, {
-          modules,
-          dynamic,
-          models,
-          coerce: true,
-          additionalCoerce: stringToStructureCoercions(),
-          validators: standaloneValidators.map((x2) => x2.params),
-          sanitize: sanitize2
-        }),
-        query: getSchemaValidator(cloned.query, {
-          modules,
-          dynamic,
-          models,
-          normalize,
-          coerce: true,
-          additionalCoerce: stringToStructureCoercions(),
-          validators: standaloneValidators.map((x2) => x2.query),
-          sanitize: sanitize2
-        }),
-        cookie: cookieValidator(),
-        response: getResponseSchemaValidator(cloned.response, {
-          modules,
-          dynamic,
-          models,
-          normalize,
-          validators: standaloneValidators.map((x2) => x2.response),
-          sanitize: sanitize2
-        })
-      } : {
-        createBody() {
-          return this.body ? this.body : this.body = getSchemaValidator(cloned.body, {
-            modules,
-            dynamic,
-            models,
-            normalize,
-            additionalCoerce: coercePrimitiveRoot(),
-            validators: standaloneValidators.map((x2) => x2.body),
-            sanitize: sanitize2
-          });
-        },
-        createHeaders() {
-          return this.headers ? this.headers : this.headers = getSchemaValidator(cloned.headers, {
-            modules,
-            dynamic,
-            models,
-            additionalProperties: !normalize,
-            coerce: true,
-            additionalCoerce: stringToStructureCoercions(),
-            validators: standaloneValidators.map((x2) => x2.headers),
-            sanitize: sanitize2
-          });
-        },
-        createParams() {
-          return this.params ? this.params : this.params = getSchemaValidator(cloned.params, {
-            modules,
-            dynamic,
-            models,
-            coerce: true,
-            additionalCoerce: stringToStructureCoercions(),
-            validators: standaloneValidators.map((x2) => x2.params),
-            sanitize: sanitize2
-          });
-        },
-        createQuery() {
-          return this.query ? this.query : this.query = getSchemaValidator(cloned.query, {
-            modules,
-            dynamic,
-            models,
-            coerce: true,
-            additionalCoerce: stringToStructureCoercions(),
-            validators: standaloneValidators.map((x2) => x2.query),
-            sanitize: sanitize2
-          });
-        },
-        createCookie() {
-          return this.cookie ? this.cookie : this.cookie = cookieValidator();
-        },
-        createResponse() {
-          return this.response ? this.response : this.response = getResponseSchemaValidator(cloned.response, {
-            modules,
-            dynamic,
-            models,
-            normalize,
-            validators: standaloneValidators.map((x2) => x2.response),
-            sanitize: sanitize2
-          });
-        }
-      };
+      return shouldPrecompile ? { body: getSchemaValidator(cloned.body, { modules, dynamic, models, normalize, additionalCoerce: coercePrimitiveRoot(), validators: standaloneValidators.map((x2) => x2.body), sanitize: sanitize2 }), headers: getSchemaValidator(cloned.headers, { modules, dynamic, models, additionalProperties: true, coerce: true, additionalCoerce: stringToStructureCoercions(), validators: standaloneValidators.map((x2) => x2.headers), sanitize: sanitize2 }), params: getSchemaValidator(cloned.params, { modules, dynamic, models, coerce: true, additionalCoerce: stringToStructureCoercions(), validators: standaloneValidators.map((x2) => x2.params), sanitize: sanitize2 }), query: getSchemaValidator(cloned.query, { modules, dynamic, models, normalize, coerce: true, additionalCoerce: stringToStructureCoercions(), validators: standaloneValidators.map((x2) => x2.query), sanitize: sanitize2 }), cookie: cookieValidator(), response: getResponseSchemaValidator(cloned.response, { modules, dynamic, models, normalize, validators: standaloneValidators.map((x2) => x2.response), sanitize: sanitize2 }) } : { createBody() {
+        if (this.body)
+          return this.body;
+        return this.body = getSchemaValidator(cloned.body, { modules, dynamic, models, normalize, additionalCoerce: coercePrimitiveRoot(), validators: standaloneValidators.map((x2) => x2.body), sanitize: sanitize2 });
+      }, createHeaders() {
+        if (this.headers)
+          return this.headers;
+        return this.headers = getSchemaValidator(cloned.headers, { modules, dynamic, models, additionalProperties: !normalize, coerce: true, additionalCoerce: stringToStructureCoercions(), validators: standaloneValidators.map((x2) => x2.headers), sanitize: sanitize2 });
+      }, createParams() {
+        if (this.params)
+          return this.params;
+        return this.params = getSchemaValidator(cloned.params, { modules, dynamic, models, coerce: true, additionalCoerce: stringToStructureCoercions(), validators: standaloneValidators.map((x2) => x2.params), sanitize: sanitize2 });
+      }, createQuery() {
+        if (this.query)
+          return this.query;
+        return this.query = getSchemaValidator(cloned.query, { modules, dynamic, models, coerce: true, additionalCoerce: stringToStructureCoercions(), validators: standaloneValidators.map((x2) => x2.query), sanitize: sanitize2 });
+      }, createCookie() {
+        if (this.cookie)
+          return this.cookie;
+        return this.cookie = cookieValidator();
+      }, createResponse() {
+        if (this.response)
+          return this.response;
+        return this.response = getResponseSchemaValidator(cloned.response, { modules, dynamic, models, normalize, validators: standaloneValidators.map((x2) => x2.response), sanitize: sanitize2 });
+      } };
     };
-    (instanceValidator.body || instanceValidator.cookie || instanceValidator.headers || instanceValidator.params || instanceValidator.query || instanceValidator.response) && (localHook = mergeHook(localHook, instanceValidator)), localHook.tags && (localHook.detail ? localHook.detail.tags = localHook.tags : localHook.detail = {
-      tags: localHook.tags
-    }), isNotEmpty(this.config.detail) && (localHook.detail = mergeDeep(Object.assign({}, this.config.detail), localHook.detail)), this.applyMacro(localHook);
+    if (instanceValidator.body || instanceValidator.cookie || instanceValidator.headers || instanceValidator.params || instanceValidator.query || instanceValidator.response)
+      localHook = mergeHook(localHook, instanceValidator);
+    if (localHook.tags)
+      if (!localHook.detail)
+        localHook.detail = { tags: localHook.tags };
+      else
+        localHook.detail.tags = localHook.tags;
+    if (isNotEmpty(this.config.detail))
+      localHook.detail = mergeDeep(Object.assign({}, this.config.detail), localHook.detail);
+    this.applyMacro(localHook);
     let hooks = isNotEmpty(this.event) ? mergeHook(this.event, localHookToLifeCycleStore(localHook)) : lifeCycleToArray(localHookToLifeCycleStore(localHook));
     if (this.config.aot === false) {
       let validator = createValidator();
-      this.router.dynamic.add(method, path, {
-        validator,
-        hooks,
-        content: localHook?.type,
-        handle,
-        route: path
-      });
+      this.router.dynamic.add(method, path, { validator, hooks, content: localHook?.type, handle, route: path });
       let encoded = encodePath(path, { dynamic: true });
-      if (path !== encoded && this.router.dynamic.add(method, encoded, {
-        validator,
-        hooks,
-        content: localHook?.type,
-        handle,
-        route: path
-      }), this.config.strictPath === false) {
+      if (path !== encoded)
+        this.router.dynamic.add(method, encoded, { validator, hooks, content: localHook?.type, handle, route: path });
+      if (this.config.strictPath === false) {
         let loosePath = getLoosePath(path);
-        this.router.dynamic.add(method, loosePath, {
-          validator,
-          hooks,
-          content: localHook?.type,
-          handle,
-          route: path
-        });
+        this.router.dynamic.add(method, loosePath, { validator, hooks, content: localHook?.type, handle, route: path });
         let encoded2 = encodePath(loosePath);
-        loosePath !== encoded2 && this.router.dynamic.add(method, loosePath, {
-          validator,
-          hooks,
-          content: localHook?.type,
-          handle,
-          route: path
-        });
+        if (loosePath !== encoded2)
+          this.router.dynamic.add(method, loosePath, { validator, hooks, content: localHook?.type, handle, route: path });
       }
-      this.router.history.push({
-        method,
-        path,
-        composed: null,
-        handler: handle,
-        compile: undefined,
-        hooks,
-        standaloneValidators
-      });
+      this.router.history.push({ method, path, composed: null, handler: handle, compile: undefined, hooks, standaloneValidators });
       return;
     }
-    let adapter = this["~adapter"].handler, nativeStaticHandler = typeof handle != "function" ? () => {
+    let adapter = this["~adapter"].handler, nativeStaticHandler = typeof handle !== "function" ? () => {
       let fn = adapter.createNativeStaticHandler?.(handle, hooks, this.setHeaders);
       return fn instanceof Promise ? fn.then((fn2) => {
         if (fn2)
           return fn2;
       }) : fn?.();
     } : undefined, useNativeStaticResponse = this.config.nativeStaticResponse === true, addResponsePath = (path2) => {
-      !useNativeStaticResponse || !nativeStaticHandler || (supportPerMethodInlineHandler ? this.router.response[path2] ? this.router.response[path2][method] = nativeStaticHandler() : this.router.response[path2] = {
-        [method]: nativeStaticHandler()
-      } : this.router.response[path2] = nativeStaticHandler());
+      if (!useNativeStaticResponse || !nativeStaticHandler)
+        return;
+      if (supportPerMethodInlineHandler)
+        if (this.router.response[path2])
+          this.router.response[path2][method] = nativeStaticHandler();
+        else
+          this.router.response[path2] = { [method]: nativeStaticHandler() };
+      else
+        this.router.response[path2] = nativeStaticHandler();
     };
     addResponsePath(path);
-    let _compiled, compile2 = () => _compiled || (_compiled = composeHandler({
-      app: this,
-      path,
-      method,
-      hooks,
-      validator: createValidator(),
-      handler: typeof handle != "function" && typeof adapter.createStaticHandler != "function" ? () => handle : handle,
-      allowMeta,
-      inference: this.inference
-    })), oldIndex;
+    let _compiled, compile2 = () => {
+      if (_compiled)
+        return _compiled;
+      return _compiled = composeHandler({ app: this, path, method, hooks, validator: createValidator(), handler: typeof handle !== "function" && typeof adapter.createStaticHandler !== "function" ? () => handle : handle, allowMeta, inference: this.inference });
+    }, oldIndex;
     if (`${method}_${path}` in this.routeTree)
       for (let i2 = 0;i2 < this.router.history.length; i2++) {
         let route = this.router.history[i2];
@@ -16659,58 +16083,52 @@ var Elysia = class _Elysia {
     else
       this.routeTree[`${method}_${path}`] = this.router.history.length;
     let index = oldIndex ?? this.router.history.length, mainHandler = shouldPrecompile ? compile2() : (ctx) => (this.router.history[index].composed = compile2())(ctx);
-    oldIndex !== undefined ? this.router.history[oldIndex] = Object.assign({
-      method,
-      path,
-      composed: mainHandler,
-      compile: compile2,
-      handler: handle,
-      hooks
-    }, standaloneValidators.length ? {
-      standaloneValidators
-    } : undefined, localHook.webSocket ? { websocket: localHook.websocket } : undefined) : this.router.history.push(Object.assign({
-      method,
-      path,
-      composed: mainHandler,
-      compile: compile2,
-      handler: handle,
-      hooks
-    }, standaloneValidators.length ? {
-      standaloneValidators
-    } : undefined, localHook.webSocket ? { websocket: localHook.websocket } : undefined));
-    let handler = {
-      handler: shouldPrecompile ? mainHandler : undefined,
-      compile() {
-        return this.handler = compile2();
-      }
-    }, staticRouter = this.router.static, isStaticPath = path.indexOf(":") === -1 && path.indexOf("*") === -1;
+    if (oldIndex !== undefined)
+      this.router.history[oldIndex] = Object.assign({ method, path, composed: mainHandler, compile: compile2, handler: handle, hooks }, standaloneValidators.length ? { standaloneValidators } : undefined, localHook.webSocket ? { websocket: localHook.websocket } : undefined);
+    else
+      this.router.history.push(Object.assign({ method, path, composed: mainHandler, compile: compile2, handler: handle, hooks }, standaloneValidators.length ? { standaloneValidators } : undefined, localHook.webSocket ? { websocket: localHook.websocket } : undefined));
+    let handler = { handler: shouldPrecompile ? mainHandler : undefined, compile() {
+      return this.handler = compile2();
+    } }, staticRouter = this.router.static, isStaticPath = path.indexOf(":") === -1 && path.indexOf("*") === -1;
     if (method === "WS") {
       if (isStaticPath) {
-        path in staticRouter ? staticRouter[path][method] = index : staticRouter[path] = {
-          [method]: index
-        };
+        if (path in staticRouter)
+          staticRouter[path][method] = index;
+        else
+          staticRouter[path] = { [method]: index };
         return;
       }
-      this.router.http.add("WS", path, handler), this.config.strictPath || this.router.http.add("WS", getLoosePath(path), handler);
+      if (this.router.http.add("WS", path, handler), !this.config.strictPath)
+        this.router.http.add("WS", getLoosePath(path), handler);
       let encoded = encodePath(path, { dynamic: true });
-      path !== encoded && this.router.http.add("WS", encoded, handler);
+      if (path !== encoded)
+        this.router.http.add("WS", encoded, handler);
       return;
     }
-    if (isStaticPath)
-      path in staticRouter ? staticRouter[path][method] = index : staticRouter[path] = {
-        [method]: index
-      }, this.config.strictPath || addResponsePath(getLoosePath(path));
-    else {
+    if (isStaticPath) {
+      if (path in staticRouter)
+        staticRouter[path][method] = index;
+      else
+        staticRouter[path] = { [method]: index };
+      if (!this.config.strictPath)
+        addResponsePath(getLoosePath(path));
+    } else {
       if (this.router.http.add(method, path, handler), !this.config.strictPath) {
         let loosePath = getLoosePath(path);
         addResponsePath(loosePath), this.router.http.add(method, loosePath, handler);
       }
       let encoded = encodePath(path, { dynamic: true });
-      path !== encoded && (this.router.http.add(method, encoded, handler), addResponsePath(encoded));
+      if (path !== encoded)
+        this.router.http.add(method, encoded, handler), addResponsePath(encoded);
     }
   }
+  setHeaders;
   headers(header) {
-    return header ? (this.setHeaders || (this.setHeaders = {}), this.setHeaders = mergeDeep(this.setHeaders, header), this) : this;
+    if (!header)
+      return this;
+    if (!this.setHeaders)
+      this.setHeaders = {};
+    return this.setHeaders = mergeDeep(this.setHeaders, header), this;
   }
   onStart(handler) {
     return this.on("start", handler), this;
@@ -16719,44 +16137,58 @@ var Elysia = class _Elysia {
     return this.on("request", handler), this;
   }
   onParse(options, handler) {
-    return handler ? this.on(options, "parse", handler) : typeof options == "string" ? this.on("parse", this["~parser"][options]) : this.on("parse", options);
+    if (!handler) {
+      if (typeof options === "string")
+        return this.on("parse", this["~parser"][options]);
+      return this.on("parse", options);
+    }
+    return this.on(options, "parse", handler);
   }
   parser(name, parser) {
     return this["~parser"][name] = parser, this;
   }
   onTransform(options, handler) {
-    return handler ? this.on(options, "transform", handler) : this.on("transform", options);
+    if (!handler)
+      return this.on("transform", options);
+    return this.on(options, "transform", handler);
   }
   resolve(optionsOrResolve, resolve) {
-    resolve || (resolve = optionsOrResolve, optionsOrResolve = { as: "local" });
-    let hook = {
-      subType: "resolve",
-      fn: resolve
-    };
+    if (!resolve)
+      resolve = optionsOrResolve, optionsOrResolve = { as: "local" };
+    let hook = { subType: "resolve", fn: resolve };
     return this.onBeforeHandle(optionsOrResolve, hook);
   }
   mapResolve(optionsOrResolve, mapper) {
-    mapper || (mapper = optionsOrResolve, optionsOrResolve = { as: "local" });
-    let hook = {
-      subType: "mapResolve",
-      fn: mapper
-    };
+    if (!mapper)
+      mapper = optionsOrResolve, optionsOrResolve = { as: "local" };
+    let hook = { subType: "mapResolve", fn: mapper };
     return this.onBeforeHandle(optionsOrResolve, hook);
   }
   onBeforeHandle(options, handler) {
-    return handler ? this.on(options, "beforeHandle", handler) : this.on("beforeHandle", options);
+    if (!handler)
+      return this.on("beforeHandle", options);
+    return this.on(options, "beforeHandle", handler);
   }
   onAfterHandle(options, handler) {
-    return handler ? this.on(options, "afterHandle", handler) : this.on("afterHandle", options);
+    if (!handler)
+      return this.on("afterHandle", options);
+    return this.on(options, "afterHandle", handler);
   }
   mapResponse(options, handler) {
-    return handler ? this.on(options, "mapResponse", handler) : this.on("mapResponse", options);
+    if (!handler)
+      return this.on("mapResponse", options);
+    return this.on(options, "mapResponse", handler);
   }
   onAfterResponse(options, handler) {
-    return handler ? this.on(options, "afterResponse", handler) : this.on("afterResponse", options);
+    if (!handler)
+      return this.on("afterResponse", options);
+    return this.on(options, "afterResponse", handler);
   }
   trace(options, handler) {
-    handler || (handler = options, options = { as: "local" }), Array.isArray(handler) || (handler = [handler]);
+    if (!handler)
+      handler = options, options = { as: "local" };
+    if (!Array.isArray(handler))
+      handler = [handler];
     for (let fn of handler)
       this.on(options, "trace", createTracer(fn));
     return this;
@@ -16773,7 +16205,9 @@ var Elysia = class _Elysia {
     return this;
   }
   onError(options, handler) {
-    return handler ? this.on(options, "error", handler) : this.on("error", options);
+    if (!handler)
+      return this.on("error", options);
+    return this.on(options, "error", handler);
   }
   onStop(handler) {
     return this.on("stop", handler), this;
@@ -16785,20 +16219,22 @@ var Elysia = class _Elysia {
         type = optionsOrType, handlers = typeOrHandlers;
         break;
       case "object":
-        type = typeOrHandlers, !Array.isArray(typeOrHandlers) && typeof typeOrHandlers == "object" && (handlers = typeOrHandlers);
+        if (type = typeOrHandlers, !Array.isArray(typeOrHandlers) && typeof typeOrHandlers === "object")
+          handlers = typeOrHandlers;
         break;
     }
-    Array.isArray(handlers) ? handlers = fnToContainer(handlers) : typeof handlers == "function" ? handlers = [
-      {
-        fn: handlers
-      }
-    ] : handlers = [handlers];
+    if (Array.isArray(handlers))
+      handlers = fnToContainer(handlers);
+    else if (typeof handlers === "function")
+      handlers = [{ fn: handlers }];
+    else
+      handlers = [handlers];
     let handles = handlers;
     for (let handle of handles)
-      handle.scope = typeof optionsOrType == "string" ? "local" : optionsOrType?.as ?? "local", (type === "resolve" || type === "derive") && (handle.subType = type);
-    type !== "trace" && (this.inference = sucrose({
-      [type]: handles.map((x2) => x2.fn)
-    }, this.inference));
+      if (handle.scope = typeof optionsOrType === "string" ? "local" : optionsOrType?.as ?? "local", type === "resolve" || type === "derive")
+        handle.subType = type;
+    if (type !== "trace")
+      this.inference = sucrose({ [type]: handles.map((x2) => x2.fn) }, this.inference);
     for (let handle of handles) {
       let fn = asHookType(handle, "global", { skipIfHasType: true });
       switch (type) {
@@ -16846,101 +16282,79 @@ var Elysia = class _Elysia {
     return this;
   }
   as(type) {
-    return promoteEvent(this.event.parse, type), promoteEvent(this.event.transform, type), promoteEvent(this.event.beforeHandle, type), promoteEvent(this.event.afterHandle, type), promoteEvent(this.event.mapResponse, type), promoteEvent(this.event.afterResponse, type), promoteEvent(this.event.trace, type), promoteEvent(this.event.error, type), type === "scoped" ? (this.validator.scoped = mergeSchemaValidator(this.validator.scoped, this.validator.local), this.validator.local = null) : type === "global" && (this.validator.global = mergeSchemaValidator(this.validator.global, mergeSchemaValidator(this.validator.scoped, this.validator.local)), this.validator.scoped = null, this.validator.local = null), this;
+    if (promoteEvent(this.event.parse, type), promoteEvent(this.event.transform, type), promoteEvent(this.event.beforeHandle, type), promoteEvent(this.event.afterHandle, type), promoteEvent(this.event.mapResponse, type), promoteEvent(this.event.afterResponse, type), promoteEvent(this.event.trace, type), promoteEvent(this.event.error, type), type === "scoped")
+      this.validator.scoped = mergeSchemaValidator(this.validator.scoped, this.validator.local), this.validator.local = null;
+    else if (type === "global")
+      this.validator.global = mergeSchemaValidator(this.validator.global, mergeSchemaValidator(this.validator.scoped, this.validator.local)), this.validator.scoped = null, this.validator.local = null;
+    return this;
   }
   group(prefix, schemaOrRun, run) {
-    let instance = new _Elysia({
-      ...this.config,
-      prefix: ""
-    });
-    instance.singleton = { ...this.singleton }, instance.definitions = { ...this.definitions }, instance.getServer = () => this.getServer(), instance.inference = cloneInference(this.inference), instance.extender = { ...this.extender }, instance["~parser"] = this["~parser"], instance.standaloneValidator = {
-      local: [...this.standaloneValidator.local ?? []],
-      scoped: [...this.standaloneValidator.scoped ?? []],
-      global: [...this.standaloneValidator.global ?? []]
-    };
-    let isSchema = typeof schemaOrRun == "object", sandbox = (isSchema ? run : schemaOrRun)(instance);
-    return this.singleton = mergeDeep(this.singleton, instance.singleton), this.definitions = mergeDeep(this.definitions, instance.definitions), sandbox.event.request?.length && (this.event.request = [
-      ...this.event.request || [],
-      ...sandbox.event.request || []
-    ]), sandbox.event.mapResponse?.length && (this.event.mapResponse = [
-      ...this.event.mapResponse || [],
-      ...sandbox.event.mapResponse || []
-    ]), this.model(sandbox.definitions.type), Object.values(instance.router.history).forEach(({ method, path, handler, hooks, standaloneValidators }) => {
+    let instance = new Elysia({ ...this.config, prefix: "" });
+    instance.singleton = { ...this.singleton }, instance.definitions = { ...this.definitions }, instance.getServer = () => this.getServer(), instance.inference = cloneInference(this.inference), instance.extender = { ...this.extender }, instance["~parser"] = this["~parser"], instance.standaloneValidator = { local: [...this.standaloneValidator.local ?? []], scoped: [...this.standaloneValidator.scoped ?? []], global: [...this.standaloneValidator.global ?? []] };
+    let isSchema = typeof schemaOrRun === "object", sandbox = (isSchema ? run : schemaOrRun)(instance);
+    if (this.singleton = mergeDeep(this.singleton, instance.singleton), this.definitions = mergeDeep(this.definitions, instance.definitions), sandbox.event.request?.length)
+      this.event.request = [...this.event.request || [], ...sandbox.event.request || []];
+    if (sandbox.event.mapResponse?.length)
+      this.event.mapResponse = [...this.event.mapResponse || [], ...sandbox.event.mapResponse || []];
+    return this.model(sandbox.definitions.type), Object.values(instance.router.history).forEach(({ method, path, handler, hooks, standaloneValidators }) => {
       if (path = (isSchema ? "" : this.config.prefix) + prefix + path, isSchema) {
         let hook = schemaOrRun, localHook = hooks;
-        this.add(method, path, handler, mergeHook(hook, {
-          ...localHook || {},
-          error: localHook.error ? Array.isArray(localHook.error) ? [
-            ...localHook.error ?? [],
-            ...sandbox.event.error ?? []
-          ] : [
-            localHook.error,
-            ...sandbox.event.error ?? []
-          ] : sandbox.event.error
-        }), undefined, standaloneValidators);
+        this.add(method, path, handler, mergeHook(hook, { ...localHook || {}, error: !localHook.error ? sandbox.event.error : Array.isArray(localHook.error) ? [...localHook.error ?? [], ...sandbox.event.error ?? []] : [localHook.error, ...sandbox.event.error ?? []] }), undefined, standaloneValidators);
       } else
-        this.add(method, path, handler, mergeHook(hooks, {
-          error: sandbox.event.error
-        }), {
-          skipPrefix: true
-        }, standaloneValidators);
+        this.add(method, path, handler, mergeHook(hooks, { error: sandbox.event.error }), { skipPrefix: true }, standaloneValidators);
     }), this;
   }
   guard(hook, run) {
     if (!run) {
-      if (typeof hook == "object") {
-        this.applyMacro(hook), hook.detail && (this.config.detail ? this.config.detail = mergeDeep(Object.assign({}, this.config.detail), hook.detail) : this.config.detail = hook.detail), hook.tags && (this.config.detail ? this.config.detail.tags = hook.tags : this.config.detail = {
-          tags: hook.tags
-        });
+      if (typeof hook === "object") {
+        if (this.applyMacro(hook), hook.detail)
+          if (this.config.detail)
+            this.config.detail = mergeDeep(Object.assign({}, this.config.detail), hook.detail);
+          else
+            this.config.detail = hook.detail;
+        if (hook.tags)
+          if (!this.config.detail)
+            this.config.detail = { tags: hook.tags };
+          else
+            this.config.detail.tags = hook.tags;
         let type = hook.as ?? "local";
         if (hook.schema === "standalone") {
-          this.standaloneValidator[type] || (this.standaloneValidator[type] = []);
-          let response = hook?.response || typeof hook?.response == "string" || hook?.response && Kind in hook.response ? {
-            200: hook.response
-          } : hook?.response;
-          return this.standaloneValidator[type].push({
-            body: hook.body,
-            headers: hook.headers,
-            params: hook.params,
-            query: hook.query,
-            response,
-            cookie: hook.cookie
-          }), this;
+          if (!this.standaloneValidator[type])
+            this.standaloneValidator[type] = [];
+          let response = hook?.response || typeof hook?.response === "string" || hook?.response && Kind in hook.response ? { 200: hook.response } : hook?.response;
+          return this.standaloneValidator[type].push({ body: hook.body, headers: hook.headers, params: hook.params, query: hook.query, response, cookie: hook.cookie }), this;
         }
-        return this.validator[type] = {
-          body: hook.body ?? this.validator[type]?.body,
-          headers: hook.headers ?? this.validator[type]?.headers,
-          params: hook.params ?? this.validator[type]?.params,
-          query: hook.query ?? this.validator[type]?.query,
-          response: hook.response ?? this.validator[type]?.response,
-          cookie: hook.cookie ?? this.validator[type]?.cookie
-        }, hook.parse && this.on({ as: type }, "parse", hook.parse), hook.transform && this.on({ as: type }, "transform", hook.transform), hook.derive && this.on({ as: type }, "derive", hook.derive), hook.beforeHandle && this.on({ as: type }, "beforeHandle", hook.beforeHandle), hook.resolve && this.on({ as: type }, "resolve", hook.resolve), hook.afterHandle && this.on({ as: type }, "afterHandle", hook.afterHandle), hook.mapResponse && this.on({ as: type }, "mapResponse", hook.mapResponse), hook.afterResponse && this.on({ as: type }, "afterResponse", hook.afterResponse), hook.error && this.on({ as: type }, "error", hook.error), this;
+        if (this.validator[type] = { body: hook.body ?? this.validator[type]?.body, headers: hook.headers ?? this.validator[type]?.headers, params: hook.params ?? this.validator[type]?.params, query: hook.query ?? this.validator[type]?.query, response: hook.response ?? this.validator[type]?.response, cookie: hook.cookie ?? this.validator[type]?.cookie }, hook.parse)
+          this.on({ as: type }, "parse", hook.parse);
+        if (hook.transform)
+          this.on({ as: type }, "transform", hook.transform);
+        if (hook.derive)
+          this.on({ as: type }, "derive", hook.derive);
+        if (hook.beforeHandle)
+          this.on({ as: type }, "beforeHandle", hook.beforeHandle);
+        if (hook.resolve)
+          this.on({ as: type }, "resolve", hook.resolve);
+        if (hook.afterHandle)
+          this.on({ as: type }, "afterHandle", hook.afterHandle);
+        if (hook.mapResponse)
+          this.on({ as: type }, "mapResponse", hook.mapResponse);
+        if (hook.afterResponse)
+          this.on({ as: type }, "afterResponse", hook.afterResponse);
+        if (hook.error)
+          this.on({ as: type }, "error", hook.error);
+        return this;
       }
       return this.guard({}, hook);
     }
-    let instance = new _Elysia({
-      ...this.config,
-      prefix: ""
-    });
+    let instance = new Elysia({ ...this.config, prefix: "" });
     instance.singleton = { ...this.singleton }, instance.definitions = { ...this.definitions }, instance.inference = cloneInference(this.inference), instance.extender = { ...this.extender };
     let sandbox = run(instance);
-    return this.singleton = mergeDeep(this.singleton, instance.singleton), this.definitions = mergeDeep(this.definitions, instance.definitions), sandbox.getServer = () => this.server, sandbox.event.request?.length && (this.event.request = [
-      ...this.event.request || [],
-      ...sandbox.event.request || []
-    ]), sandbox.event.mapResponse?.length && (this.event.mapResponse = [
-      ...this.event.mapResponse || [],
-      ...sandbox.event.mapResponse || []
-    ]), this.model(sandbox.definitions.type), Object.values(instance.router.history).forEach(({ method, path, handler, hooks: localHook }) => {
-      this.add(method, path, handler, mergeHook(hook, {
-        ...localHook || {},
-        error: localHook.error ? Array.isArray(localHook.error) ? [
-          ...localHook.error ?? [],
-          ...sandbox.event.error ?? []
-        ] : [
-          localHook.error,
-          ...sandbox.event.error ?? []
-        ] : sandbox.event.error
-      }));
+    if (this.singleton = mergeDeep(this.singleton, instance.singleton), this.definitions = mergeDeep(this.definitions, instance.definitions), sandbox.getServer = () => this.server, sandbox.event.request?.length)
+      this.event.request = [...this.event.request || [], ...sandbox.event.request || []];
+    if (sandbox.event.mapResponse?.length)
+      this.event.mapResponse = [...this.event.mapResponse || [], ...sandbox.event.mapResponse || []];
+    return this.model(sandbox.definitions.type), Object.values(instance.router.history).forEach(({ method, path, handler, hooks: localHook }) => {
+      this.add(method, path, handler, mergeHook(hook, { ...localHook || {}, error: !localHook.error ? sandbox.event.error : Array.isArray(localHook.error) ? [...localHook.error ?? [], ...sandbox.event.error ?? []] : [localHook.error, ...sandbox.event.error ?? []] }));
     }), this;
   }
   use(plugin) {
@@ -16950,27 +16364,33 @@ var Elysia = class _Elysia {
         app = app.use(p);
       return app;
     }
-    return plugin instanceof Promise ? (this.promisedModules.add(plugin.then((plugin2) => {
-      if (typeof plugin2 == "function")
-        return plugin2(this);
-      if (plugin2 instanceof _Elysia)
-        return this._use(plugin2).compile();
-      if (plugin2.constructor.name === "Elysia")
-        return this._use(plugin2).compile();
-      if (typeof plugin2.default == "function")
-        return plugin2.default(this);
-      if (plugin2.default instanceof _Elysia)
-        return this._use(plugin2.default);
-      if (plugin2.constructor.name === "Elysia")
-        return this._use(plugin2.default);
-      if (plugin2.constructor.name === "_Elysia")
-        return this._use(plugin2.default);
-      try {
-        return this._use(plugin2.default);
-      } catch (error2) {
-        throw console.error('Invalid plugin type. Expected Elysia instance, function, or module with "default" as Elysia instance or function that returns Elysia instance.'), error2;
-      }
-    }).then((v) => (v && typeof v.compile == "function" && v.compile(), v))), this) : this._use(plugin);
+    if (plugin instanceof Promise)
+      return this.promisedModules.add(plugin.then((plugin2) => {
+        if (typeof plugin2 === "function")
+          return plugin2(this);
+        if (plugin2 instanceof Elysia)
+          return this._use(plugin2).compile();
+        if (plugin2.constructor.name === "Elysia")
+          return this._use(plugin2).compile();
+        if (typeof plugin2.default === "function")
+          return plugin2.default(this);
+        if (plugin2.default instanceof Elysia)
+          return this._use(plugin2.default);
+        if (plugin2.constructor.name === "Elysia")
+          return this._use(plugin2.default);
+        if (plugin2.constructor.name === "_Elysia")
+          return this._use(plugin2.default);
+        try {
+          return this._use(plugin2.default);
+        } catch (error2) {
+          throw console.error('Invalid plugin type. Expected Elysia instance, function, or module with "default" as Elysia instance or function that returns Elysia instance.'), error2;
+        }
+      }).then((v) => {
+        if (v && typeof v.compile === "function")
+          v.compile();
+        return v;
+      })), this;
+    return this._use(plugin);
   }
   propagatePromiseModules(plugin) {
     if (plugin.promisedModules.size <= 0)
@@ -16980,198 +16400,140 @@ var Elysia = class _Elysia {
         if (!v)
           return;
         let t2 = this._use(v);
-        return t2 instanceof Promise ? t2.then((v2) => {
-          v2 ? v2.compile() : v.compile();
-        }) : v.compile();
+        if (t2 instanceof Promise)
+          return t2.then((v2) => {
+            if (v2)
+              v2.compile();
+            else
+              v.compile();
+          });
+        return v.compile();
       }));
     return this;
   }
   _use(plugin) {
-    if (typeof plugin == "function") {
+    if (typeof plugin === "function") {
       let instance = plugin(this);
-      return instance instanceof Promise ? (this.promisedModules.add(instance.then((plugin2) => {
-        if (plugin2 instanceof _Elysia) {
-          plugin2.getServer = () => this.getServer(), plugin2.getGlobalRoutes = () => this.getGlobalRoutes(), plugin2.getGlobalDefinitions = () => this.getGlobalDefinitions(), plugin2.model(this.definitions.type), plugin2.error(this.definitions.error);
-          for (let {
-            method,
-            path,
-            handler,
-            hooks,
-            standaloneValidators
-          } of Object.values(plugin2.router.history))
-            this.add(method, path, handler, isNotEmpty(plugin2.event.error) ? mergeHook(hooks, {
-              error: plugin2.event.error
-            }) : hooks, undefined, standaloneValidators);
-          return plugin2 === this ? undefined : (this.propagatePromiseModules(plugin2), plugin2);
-        }
-        return typeof plugin2 == "function" ? plugin2(this) : typeof plugin2.default == "function" ? plugin2.default(this) : this._use(plugin2);
-      }).then((v) => (v && typeof v.compile == "function" && v.compile(), v))), this) : instance;
+      if (instance instanceof Promise)
+        return this.promisedModules.add(instance.then((plugin2) => {
+          if (plugin2 instanceof Elysia) {
+            plugin2.getServer = () => this.getServer(), plugin2.getGlobalRoutes = () => this.getGlobalRoutes(), plugin2.getGlobalDefinitions = () => this.getGlobalDefinitions(), plugin2.model(this.definitions.type), plugin2.error(this.definitions.error);
+            for (let { method, path, handler, hooks, standaloneValidators } of Object.values(plugin2.router.history))
+              this.add(method, path, handler, isNotEmpty(plugin2.event.error) ? mergeHook(hooks, { error: plugin2.event.error }) : hooks, undefined, standaloneValidators);
+            if (plugin2 === this)
+              return;
+            return this.propagatePromiseModules(plugin2), plugin2;
+          }
+          if (typeof plugin2 === "function")
+            return plugin2(this);
+          if (typeof plugin2.default === "function")
+            return plugin2.default(this);
+          return this._use(plugin2);
+        }).then((v) => {
+          if (v && typeof v.compile === "function")
+            v.compile();
+          return v;
+        })), this;
+      return instance;
     }
     this.propagatePromiseModules(plugin);
     let name = plugin.config.name, seed = plugin.config.seed;
-    if (plugin.getParent = () => this, plugin.getServer = () => this.getServer(), plugin.getGlobalRoutes = () => this.getGlobalRoutes(), plugin.getGlobalDefinitions = () => this.getGlobalDefinitions(), plugin.standaloneValidator?.scoped && (this.standaloneValidator.local ? this.standaloneValidator.local = this.standaloneValidator.local.concat(plugin.standaloneValidator.scoped) : this.standaloneValidator.local = plugin.standaloneValidator.scoped), plugin.standaloneValidator?.global && (this.standaloneValidator.global ? this.standaloneValidator.global = this.standaloneValidator.global.concat(plugin.standaloneValidator.global) : this.standaloneValidator.global = plugin.standaloneValidator.global), isNotEmpty(plugin["~parser"]) && (this["~parser"] = {
-      ...plugin["~parser"],
-      ...this["~parser"]
-    }), plugin.setHeaders && this.headers(plugin.setHeaders), name) {
-      name in this.dependencies || (this.dependencies[name] = []);
+    if (plugin.getParent = () => this, plugin.getServer = () => this.getServer(), plugin.getGlobalRoutes = () => this.getGlobalRoutes(), plugin.getGlobalDefinitions = () => this.getGlobalDefinitions(), plugin.standaloneValidator?.scoped)
+      if (this.standaloneValidator.local)
+        this.standaloneValidator.local = this.standaloneValidator.local.concat(plugin.standaloneValidator.scoped);
+      else
+        this.standaloneValidator.local = plugin.standaloneValidator.scoped;
+    if (plugin.standaloneValidator?.global)
+      if (this.standaloneValidator.global)
+        this.standaloneValidator.global = this.standaloneValidator.global.concat(plugin.standaloneValidator.global);
+      else
+        this.standaloneValidator.global = plugin.standaloneValidator.global;
+    if (isNotEmpty(plugin["~parser"]))
+      this["~parser"] = { ...plugin["~parser"], ...this["~parser"] };
+    if (plugin.setHeaders)
+      this.headers(plugin.setHeaders);
+    if (name) {
+      if (!(name in this.dependencies))
+        this.dependencies[name] = [];
       let current = seed !== undefined ? checksum(name + JSON.stringify(seed)) : 0;
-      this.dependencies[name].some(({ checksum: checksum2 }) => current === checksum2) || (this.extender.macros = this.extender.macros.concat(plugin.extender.macros), this.extender.higherOrderFunctions = this.extender.higherOrderFunctions.concat(plugin.extender.higherOrderFunctions));
-    } else
-      plugin.extender.macros.length && (this.extender.macros = this.extender.macros.concat(plugin.extender.macros)), plugin.extender.higherOrderFunctions.length && (this.extender.higherOrderFunctions = this.extender.higherOrderFunctions.concat(plugin.extender.higherOrderFunctions));
+      if (!this.dependencies[name].some(({ checksum: checksum2 }) => current === checksum2))
+        this.extender.macros = this.extender.macros.concat(plugin.extender.macros), this.extender.higherOrderFunctions = this.extender.higherOrderFunctions.concat(plugin.extender.higherOrderFunctions);
+    } else {
+      if (plugin.extender.macros.length)
+        this.extender.macros = this.extender.macros.concat(plugin.extender.macros);
+      if (plugin.extender.higherOrderFunctions.length)
+        this.extender.higherOrderFunctions = this.extender.higherOrderFunctions.concat(plugin.extender.higherOrderFunctions);
+    }
     if (deduplicateChecksum(this.extender.macros), plugin.extender.higherOrderFunctions.length) {
       deduplicateChecksum(this.extender.higherOrderFunctions);
       let hofHashes = [];
       for (let i2 = 0;i2 < this.extender.higherOrderFunctions.length; i2++) {
         let hof = this.extender.higherOrderFunctions[i2];
-        hof.checksum && (hofHashes.includes(hof.checksum) && (this.extender.higherOrderFunctions.splice(i2, 1), i2--), hofHashes.push(hof.checksum));
+        if (hof.checksum) {
+          if (hofHashes.includes(hof.checksum))
+            this.extender.higherOrderFunctions.splice(i2, 1), i2--;
+          hofHashes.push(hof.checksum);
+        }
       }
       hofHashes.length = 0;
     }
-    this.inference = mergeInference(this.inference, plugin.inference), isNotEmpty(plugin.singleton.decorator) && this.decorate(plugin.singleton.decorator), isNotEmpty(plugin.singleton.store) && this.state(plugin.singleton.store), isNotEmpty(plugin.definitions.type) && this.model(plugin.definitions.type), isNotEmpty(plugin.definitions.error) && this.error(plugin.definitions.error), isNotEmpty(plugin.definitions.error) && (plugin.extender.macros = this.extender.macros.concat(plugin.extender.macros));
-    for (let {
-      method,
-      path,
-      handler,
-      hooks,
-      standaloneValidators
-    } of Object.values(plugin.router.history))
-      this.add(method, path, handler, isNotEmpty(plugin.event.error) ? mergeHook(hooks, {
-        error: plugin.event.error
-      }) : hooks, undefined, standaloneValidators);
+    if (this.inference = mergeInference(this.inference, plugin.inference), isNotEmpty(plugin.singleton.decorator))
+      this.decorate(plugin.singleton.decorator);
+    if (isNotEmpty(plugin.singleton.store))
+      this.state(plugin.singleton.store);
+    if (isNotEmpty(plugin.definitions.type))
+      this.model(plugin.definitions.type);
+    if (isNotEmpty(plugin.definitions.error))
+      this.error(plugin.definitions.error);
+    if (isNotEmpty(plugin.definitions.error))
+      plugin.extender.macros = this.extender.macros.concat(plugin.extender.macros);
+    for (let { method, path, handler, hooks, standaloneValidators } of Object.values(plugin.router.history))
+      this.add(method, path, handler, isNotEmpty(plugin.event.error) ? mergeHook(hooks, { error: plugin.event.error }) : hooks, undefined, standaloneValidators);
     if (name) {
-      name in this.dependencies || (this.dependencies[name] = []);
+      if (!(name in this.dependencies))
+        this.dependencies[name] = [];
       let current = seed !== undefined ? checksum(name + JSON.stringify(seed)) : 0;
       if (this.dependencies[name].some(({ checksum: checksum2 }) => current === checksum2))
         return this;
-      this.dependencies[name].push(this.config?.analytic ? {
-        name: plugin.config.name,
-        seed: plugin.config.seed,
-        checksum: current,
-        dependencies: plugin.dependencies,
-        stack: plugin.telemetry?.stack,
-        routes: plugin.router.history,
-        decorators: plugin.singleton,
-        store: plugin.singleton.store,
-        error: plugin.definitions.error,
-        derive: plugin.event.transform?.filter((x2) => x2?.subType === "derive").map((x2) => ({
-          fn: x2.toString(),
-          stack: new Error().stack ?? ""
-        })),
-        resolve: plugin.event.transform?.filter((x2) => x2?.subType === "resolve").map((x2) => ({
-          fn: x2.toString(),
-          stack: new Error().stack ?? ""
-        }))
-      } : {
-        name: plugin.config.name,
-        seed: plugin.config.seed,
-        checksum: current,
-        dependencies: plugin.dependencies
-      }), isNotEmpty(plugin.event) && (this.event = mergeLifeCycle(this.event, filterGlobalHook(plugin.event), current));
-    } else
-      isNotEmpty(plugin.event) && (this.event = mergeLifeCycle(this.event, filterGlobalHook(plugin.event)));
-    return plugin.validator.global && (this.validator.global = mergeHook(this.validator.global, {
-      ...plugin.validator.global
-    })), plugin.validator.scoped && (this.validator.local = mergeHook(this.validator.local, {
-      ...plugin.validator.scoped
-    })), this;
+      if (this.dependencies[name].push(this.config?.analytic ? { name: plugin.config.name, seed: plugin.config.seed, checksum: current, dependencies: plugin.dependencies, stack: plugin.telemetry?.stack, routes: plugin.router.history, decorators: plugin.singleton, store: plugin.singleton.store, error: plugin.definitions.error, derive: plugin.event.transform?.filter((x2) => x2?.subType === "derive").map((x2) => ({ fn: x2.toString(), stack: new Error().stack ?? "" })), resolve: plugin.event.transform?.filter((x2) => x2?.subType === "resolve").map((x2) => ({ fn: x2.toString(), stack: new Error().stack ?? "" })) } : { name: plugin.config.name, seed: plugin.config.seed, checksum: current, dependencies: plugin.dependencies }), isNotEmpty(plugin.event))
+        this.event = mergeLifeCycle(this.event, filterGlobalHook(plugin.event), current);
+    } else if (isNotEmpty(plugin.event))
+      this.event = mergeLifeCycle(this.event, filterGlobalHook(plugin.event));
+    if (plugin.validator.global)
+      this.validator.global = mergeHook(this.validator.global, { ...plugin.validator.global });
+    if (plugin.validator.scoped)
+      this.validator.local = mergeHook(this.validator.local, { ...plugin.validator.scoped });
+    return this;
   }
   macro(macro) {
-    if (typeof macro == "function") {
-      let hook = {
-        checksum: checksum(JSON.stringify({
-          name: this.config.name,
-          seed: this.config.seed,
-          content: macro.toString()
-        })),
-        fn: macro
-      };
+    if (typeof macro === "function") {
+      let hook = { checksum: checksum(JSON.stringify({ name: this.config.name, seed: this.config.seed, content: macro.toString() })), fn: macro };
       this.extender.macros.push(hook);
-    } else if (typeof macro == "object") {
+    } else if (typeof macro === "object") {
       for (let name of Object.keys(macro))
-        if (typeof macro[name] == "object") {
+        if (typeof macro[name] === "object") {
           let actualValue = { ...macro[name] };
           macro[name] = (v) => {
             if (v === true)
               return actualValue;
           };
         }
-      let hook = {
-        checksum: checksum(JSON.stringify({
-          name: this.config.name,
-          seed: this.config.seed,
-          content: Object.entries(macro).map(([k, v]) => `${k}+${v}`).join(",")
-        })),
-        fn: () => macro
-      };
+      let hook = { checksum: checksum(JSON.stringify({ name: this.config.name, seed: this.config.seed, content: Object.entries(macro).map(([k2, v]) => `${k2}+${v}`).join(",") })), fn: () => macro };
       this.extender.macros.push(hook);
     }
     return this;
   }
   mount(path, handleOrConfig, config) {
-    if (path instanceof _Elysia || typeof path == "function" || path.length === 0 || path === "/") {
-      let run = typeof path == "function" ? path : path instanceof _Elysia ? path.compile().fetch : handleOrConfig instanceof _Elysia ? handleOrConfig.compile().fetch : typeof handleOrConfig == "function" ? handleOrConfig : (() => {
+    if (path instanceof Elysia || typeof path === "function" || path.length === 0 || path === "/") {
+      let run = typeof path === "function" ? path : path instanceof Elysia ? path.compile().fetch : handleOrConfig instanceof Elysia ? handleOrConfig.compile().fetch : typeof handleOrConfig === "function" ? handleOrConfig : (() => {
         throw new Error("Invalid handler");
-      })(), handler2 = ({ request, path: path2 }) => run(new Request(replaceUrlPath(request.url, path2), {
-        method: request.method,
-        headers: request.headers,
-        signal: request.signal,
-        credentials: request.credentials,
-        referrerPolicy: request.referrerPolicy,
-        duplex: request.duplex,
-        redirect: request.redirect,
-        mode: request.mode,
-        keepalive: request.keepalive,
-        integrity: request.integrity,
-        body: request.body
-      }));
-      return this.route("ALL", "/*", handler2, {
-        parse: "none",
-        ...config,
-        detail: {
-          ...config?.detail,
-          hide: true
-        },
-        config: {
-          mount: run
-        }
-      }), this;
+      })(), handler2 = ({ request, path: path2 }) => run(new Request(replaceUrlPath(request.url, path2), { method: request.method, headers: request.headers, signal: request.signal, credentials: request.credentials, referrerPolicy: request.referrerPolicy, duplex: request.duplex, redirect: request.redirect, mode: request.mode, keepalive: request.keepalive, integrity: request.integrity, body: request.body }));
+      return this.route("ALL", "/*", handler2, { parse: "none", ...config, detail: { ...config?.detail, hide: true }, config: { mount: run } }), this;
     }
-    let handle = handleOrConfig instanceof _Elysia ? handleOrConfig.compile().fetch : typeof handleOrConfig == "function" ? handleOrConfig : (() => {
+    let handle = handleOrConfig instanceof Elysia ? handleOrConfig.compile().fetch : typeof handleOrConfig === "function" ? handleOrConfig : (() => {
       throw new Error("Invalid handler");
-    })(), length = path.length - (path.endsWith("*") ? 1 : 0), handler = ({ request, path: path2 }) => handle(new Request(replaceUrlPath(request.url, path2.slice(length) || "/"), {
-      method: request.method,
-      headers: request.headers,
-      signal: request.signal,
-      credentials: request.credentials,
-      referrerPolicy: request.referrerPolicy,
-      duplex: request.duplex,
-      redirect: request.redirect,
-      mode: request.mode,
-      keepalive: request.keepalive,
-      integrity: request.integrity,
-      body: request.body
-    }));
-    return this.route("ALL", path, handler, {
-      parse: "none",
-      ...config,
-      detail: {
-        ...config?.detail,
-        hide: true
-      },
-      config: {
-        mount: handle
-      }
-    }), this.route("ALL", path + (path.endsWith("/") ? "*" : "/*"), handler, {
-      parse: "none",
-      ...config,
-      detail: {
-        ...config?.detail,
-        hide: true
-      },
-      config: {
-        mount: handle
-      }
-    }), this;
+    })(), length = path.length - (path.endsWith("*") ? 1 : 0), handler = ({ request, path: path2 }) => handle(new Request(replaceUrlPath(request.url, path2.slice(length) || "/"), { method: request.method, headers: request.headers, signal: request.signal, credentials: request.credentials, referrerPolicy: request.referrerPolicy, duplex: request.duplex, redirect: request.redirect, mode: request.mode, keepalive: request.keepalive, integrity: request.integrity, body: request.body }));
+    return this.route("ALL", path, handler, { parse: "none", ...config, detail: { ...config?.detail, hide: true }, config: { mount: handle } }), this.route("ALL", path + (path.endsWith("/") ? "*" : "/*"), handler, { parse: "none", ...config, detail: { ...config?.detail, hide: true }, config: { mount: handle } }), this;
   }
   get(path, handler, hook) {
     return this.add("GET", path, handler, hook), this;
@@ -17204,50 +16566,92 @@ var Elysia = class _Elysia {
     return this.add(method.toUpperCase(), path, handler, hook, hook?.config), this;
   }
   ws(path, options) {
-    return this["~adapter"].ws ? this["~adapter"].ws(this, path, options) : console.warn("Current adapter doesn't support WebSocket"), this;
+    if (this["~adapter"].ws)
+      this["~adapter"].ws(this, path, options);
+    else
+      console.warn("Current adapter doesn't support WebSocket");
+    return this;
   }
   state(options, name, value) {
-    name === undefined ? (value = options, options = { as: "append" }, name = "") : value === undefined && (typeof options == "string" ? (value = name, name = options, options = { as: "append" }) : typeof options == "object" && (value = name, name = ""));
+    if (name === undefined)
+      value = options, options = { as: "append" }, name = "";
+    else if (value === undefined) {
+      if (typeof options === "string")
+        value = name, name = options, options = { as: "append" };
+      else if (typeof options === "object")
+        value = name, name = "";
+    }
     let { as } = options;
-    if (typeof name != "string")
+    if (typeof name !== "string")
       return this;
     switch (typeof value) {
       case "object":
-        return !value || !isNotEmpty(value) ? this : name ? ((name in this.singleton.store) ? this.singleton.store[name] = mergeDeep(this.singleton.store[name], value, {
-          override: as === "override"
-        }) : this.singleton.store[name] = value, this) : value === null ? this : (this.singleton.store = mergeDeep(this.singleton.store, value, {
-          override: as === "override"
-        }), this);
+        if (!value || !isNotEmpty(value))
+          return this;
+        if (name) {
+          if (name in this.singleton.store)
+            this.singleton.store[name] = mergeDeep(this.singleton.store[name], value, { override: as === "override" });
+          else
+            this.singleton.store[name] = value;
+          return this;
+        }
+        if (value === null)
+          return this;
+        return this.singleton.store = mergeDeep(this.singleton.store, value, { override: as === "override" }), this;
       case "function":
-        return name ? (as === "override" || !(name in this.singleton.store)) && (this.singleton.store[name] = value) : this.singleton.store = value(this.singleton.store), this;
+        if (name) {
+          if (as === "override" || !(name in this.singleton.store))
+            this.singleton.store[name] = value;
+        } else
+          this.singleton.store = value(this.singleton.store);
+        return this;
       default:
-        return (as === "override" || !(name in this.singleton.store)) && (this.singleton.store[name] = value), this;
+        if (as === "override" || !(name in this.singleton.store))
+          this.singleton.store[name] = value;
+        return this;
     }
   }
   decorate(options, name, value) {
-    name === undefined ? (value = options, options = { as: "append" }, name = "") : value === undefined && (typeof options == "string" ? (value = name, name = options, options = { as: "append" }) : typeof options == "object" && (value = name, name = ""));
+    if (name === undefined)
+      value = options, options = { as: "append" }, name = "";
+    else if (value === undefined) {
+      if (typeof options === "string")
+        value = name, name = options, options = { as: "append" };
+      else if (typeof options === "object")
+        value = name, name = "";
+    }
     let { as } = options;
-    if (typeof name != "string")
+    if (typeof name !== "string")
       return this;
     switch (typeof value) {
       case "object":
-        return name ? ((name in this.singleton.decorator) ? this.singleton.decorator[name] = mergeDeep(this.singleton.decorator[name], value, {
-          override: as === "override"
-        }) : this.singleton.decorator[name] = value, this) : value === null ? this : (this.singleton.decorator = mergeDeep(this.singleton.decorator, value, {
-          override: as === "override"
-        }), this);
+        if (name) {
+          if (name in this.singleton.decorator)
+            this.singleton.decorator[name] = mergeDeep(this.singleton.decorator[name], value, { override: as === "override" });
+          else
+            this.singleton.decorator[name] = value;
+          return this;
+        }
+        if (value === null)
+          return this;
+        return this.singleton.decorator = mergeDeep(this.singleton.decorator, value, { override: as === "override" }), this;
       case "function":
-        return name ? (as === "override" || !(name in this.singleton.decorator)) && (this.singleton.decorator[name] = value) : this.singleton.decorator = value(this.singleton.decorator), this;
+        if (name) {
+          if (as === "override" || !(name in this.singleton.decorator))
+            this.singleton.decorator[name] = value;
+        } else
+          this.singleton.decorator = value(this.singleton.decorator);
+        return this;
       default:
-        return (as === "override" || !(name in this.singleton.decorator)) && (this.singleton.decorator[name] = value), this;
+        if (as === "override" || !(name in this.singleton.decorator))
+          this.singleton.decorator[name] = value;
+        return this;
     }
   }
   derive(optionsOrTransform, transform2) {
-    transform2 || (transform2 = optionsOrTransform, optionsOrTransform = { as: "local" });
-    let hook = {
-      subType: "derive",
-      fn: transform2
-    };
+    if (!transform2)
+      transform2 = optionsOrTransform, optionsOrTransform = { as: "local" };
+    let hook = { subType: "derive", fn: transform2 };
     return this.onTransform(optionsOrTransform, hook);
   }
   model(name, model) {
@@ -17256,41 +16660,30 @@ var Elysia = class _Elysia {
         let parsedSchemas = {}, kvs = Object.entries(name);
         if (!kvs.length)
           return this;
-        for (let [key, value] of kvs)
-          key in this.definitions.type || (parsedSchemas[key] = this.definitions.type[key] = value, parsedSchemas[key].$id ??= `#/components/schemas/${key}`);
-        return this.definitions.typebox = t.Module({
-          ...this.definitions.typebox.$defs,
-          ...parsedSchemas
-        }), this;
+        for (let [key, value] of kvs) {
+          if (key in this.definitions.type)
+            continue;
+          parsedSchemas[key] = this.definitions.type[key] = value, parsedSchemas[key].$id ??= `#/components/schemas/${key}`;
+        }
+        return this.definitions.typebox = t.Module({ ...this.definitions.typebox.$defs, ...parsedSchemas }), this;
       case "function":
         let result = name(this.definitions.type);
         return this.definitions.type = result, this.definitions.typebox = t.Module(result), this;
       case "string":
         if (!model)
           break;
-        let newModel = {
-          ...model,
-          id: model.$id ?? `#/components/schemas/${name}`
-        };
-        return this.definitions.type[name] = model, this.definitions.typebox = t.Module({
-          ...this.definitions.typebox.$defs,
-          ...newModel
-        }), this;
+        let newModel = { ...model, id: model.$id ?? `#/components/schemas/${name}` };
+        return this.definitions.type[name] = model, this.definitions.typebox = t.Module({ ...this.definitions.typebox.$defs, ...newModel }), this;
     }
-    return this.definitions.type[name] = model, this.definitions.typebox = t.Module({
-      ...this.definitions.typebox.$defs,
-      [name]: model
-    }), this;
+    return this.definitions.type[name] = model, this.definitions.typebox = t.Module({ ...this.definitions.typebox.$defs, [name]: model }), this;
   }
   Ref(key) {
     return t.Ref(key);
   }
   mapDerive(optionsOrDerive, mapper) {
-    mapper || (mapper = optionsOrDerive, optionsOrDerive = { as: "local" });
-    let hook = {
-      subType: "mapDerive",
-      fn: mapper
-    };
+    if (!mapper)
+      mapper = optionsOrDerive, optionsOrDerive = { as: "local" };
+    let hook = { subType: "mapDerive", fn: mapper };
     return this.onTransform(optionsOrDerive, hook);
   }
   affix(base, type, word) {
@@ -17332,37 +16725,64 @@ var Elysia = class _Elysia {
     return this.affix("suffix", type, word);
   }
   compile() {
-    return this["~adapter"].isWebStandard ? (this.fetch = this.config.aot ? composeGeneralHandler(this) : createDynamicHandler(this), typeof this.server?.reload == "function" && this.server.reload({
-      ...this.server || {},
-      fetch: this.fetch
-    }), this) : (typeof this.server?.reload == "function" && this.server.reload(this.server || {}), this._handle = composeGeneralHandler(this), this);
+    if (this["~adapter"].isWebStandard) {
+      if (this.fetch = this.config.aot ? composeGeneralHandler(this) : createDynamicHandler(this), typeof this.server?.reload === "function")
+        this.server.reload({ ...this.server || {}, fetch: this.fetch });
+      return this;
+    }
+    if (typeof this.server?.reload === "function")
+      this.server.reload(this.server || {});
+    return this._handle = composeGeneralHandler(this), this;
   }
+  handle = async (request) => this.fetch(request);
+  fetch = (request) => {
+    return (this.fetch = this.config.aot ? composeGeneralHandler(this) : createDynamicHandler(this))(request);
+  };
+  handleError = async (context, error2) => {
+    return (this.handleError = this.config.aot ? composeErrorHandler(this) : createDynamicErrorHandler(this))(context, error2);
+  };
+  listen = (options, callback) => {
+    if (this["~adapter"].listen(this)(options, callback), this.promisedModules.size)
+      clearSucroseCache(5000);
+    return this.promisedModules.then(() => {
+      clearSucroseCache(1000);
+    }), this;
+  };
+  stop = async (closeActiveConnections) => {
+    if (!this.server)
+      throw new Error("Elysia isn't running. Call `app.listen` to start the server.");
+    if (this.server) {
+      if (this.server.stop(closeActiveConnections), this.server = null, this.event.stop?.length)
+        for (let i2 = 0;i2 < this.event.stop.length; i2++)
+          this.event.stop[i2].fn(this);
+    }
+  };
   get modules() {
     return this.promisedModules;
   }
-};
+}
 
 // node_modules/elysia-mcp/dist/index.js
-var __create2 = Object.create;
-var __getProtoOf2 = Object.getPrototypeOf;
-var __defProp2 = Object.defineProperty;
-var __getOwnPropNames2 = Object.getOwnPropertyNames;
-var __hasOwnProp2 = Object.prototype.hasOwnProperty;
-var __toESM2 = (mod, isNodeMode, target) => {
-  target = mod != null ? __create2(__getProtoOf2(mod)) : {};
-  const to = isNodeMode || !mod || !mod.__esModule ? __defProp2(target, "default", { value: mod, enumerable: true }) : target;
-  for (let key of __getOwnPropNames2(mod))
-    if (!__hasOwnProp2.call(to, key))
-      __defProp2(to, key, {
+var __create3 = Object.create;
+var __getProtoOf3 = Object.getPrototypeOf;
+var __defProp3 = Object.defineProperty;
+var __getOwnPropNames3 = Object.getOwnPropertyNames;
+var __hasOwnProp3 = Object.prototype.hasOwnProperty;
+var __toESM3 = (mod, isNodeMode, target) => {
+  target = mod != null ? __create3(__getProtoOf3(mod)) : {};
+  const to = isNodeMode || !mod || !mod.__esModule ? __defProp3(target, "default", { value: mod, enumerable: true }) : target;
+  for (let key of __getOwnPropNames3(mod))
+    if (!__hasOwnProp3.call(to, key))
+      __defProp3(to, key, {
         get: () => mod[key],
         enumerable: true
       });
   return to;
 };
-var __commonJS2 = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+var __commonJS3 = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
 var __export2 = (target, all) => {
   for (var name in all)
-    __defProp2(target, name, {
+    __defProp3(target, name, {
       get: all[name],
       enumerable: true,
       configurable: true,
@@ -17370,10 +16790,10 @@ var __export2 = (target, all) => {
     });
 };
 var __esm2 = (fn, res) => () => (fn && (res = fn(fn = 0)), res);
-var require_dist2 = __commonJS2((exports) => {
+var require_dist2 = __commonJS3((exports) => {
   Object.defineProperty(exports, "__esModule", { value: true });
-  exports.parse = parse22;
-  exports.serialize = serialize2;
+  exports.parse = parse2;
+  exports.serialize = serialize;
   var cookieNameRegExp = /^[\u0021-\u003A\u003C\u003E-\u007E]+$/;
   var cookieValueRegExp = /^[\u0021-\u003A\u003C-\u007E]*$/;
   var domainValueRegExp = /^([.]?[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i;
@@ -17384,12 +16804,12 @@ var require_dist2 = __commonJS2((exports) => {
     C.prototype = Object.create(null);
     return C;
   })();
-  function parse22(str, options) {
+  function parse2(str, options) {
     const obj = new NullObject;
     const len = str.length;
     if (len < 2)
       return obj;
-    const dec = options?.decode || decode23;
+    const dec = options?.decode || decode2;
     let index = 0;
     do {
       const eqIdx = str.indexOf("=", index);
@@ -17430,7 +16850,7 @@ var require_dist2 = __commonJS2((exports) => {
     }
     return min;
   }
-  function serialize2(name, val, options) {
+  function serialize(name, val, options) {
     const enc = options?.encode || encodeURIComponent;
     if (!cookieNameRegExp.test(name)) {
       throw new TypeError(`argument name is invalid: ${name}`);
@@ -17510,7 +16930,7 @@ var require_dist2 = __commonJS2((exports) => {
     }
     return str;
   }
-  function decode23(str) {
+  function decode2(str) {
     if (str.indexOf("%") === -1)
       return str;
     try {
@@ -17523,7 +16943,7 @@ var require_dist2 = __commonJS2((exports) => {
     return __toString.call(val) === "[object Date]";
   }
 });
-var require_fast_decode_uri_component2 = __commonJS2((exports, module) => {
+var require_fast_decode_uri_component2 = __commonJS3((exports, module) => {
   var UTF8_ACCEPT = 12;
   var UTF8_REJECT = 0;
   var UTF8_DATA = [
@@ -17992,7 +17412,7 @@ var UINT32_LE2;
 var UINT32_BE2;
 var INT32_BE2;
 var UINT64_LE2;
-var init_lib3 = __esm2(() => {
+var init_lib4 = __esm2(() => {
   init_ieee7542();
   UINT82 = {
     len: 1,
@@ -18775,7 +18195,7 @@ var zls2 = function(d, dict) {
 };
 var td2;
 var tds2 = 0;
-var init_browser2 = __esm2(() => {
+var init_browser = __esm2(() => {
   u82 = Uint8Array;
   u162 = Uint16Array;
   i322 = Int32Array;
@@ -18833,7 +18253,7 @@ var init_browser2 = __esm2(() => {
     tds2 = 1;
   } catch (e) {}
 });
-var require_ms2 = __commonJS2((exports, module) => {
+var require_ms2 = __commonJS3((exports, module) => {
   var s = 1000;
   var m = s * 60;
   var h = m * 60;
@@ -18844,13 +18264,13 @@ var require_ms2 = __commonJS2((exports, module) => {
     options = options || {};
     var type = typeof val;
     if (type === "string" && val.length > 0) {
-      return parse22(val);
+      return parse2(val);
     } else if (type === "number" && isFinite(val)) {
       return options.long ? fmtLong(val) : fmtShort(val);
     }
     throw new Error("val is not a non-empty string or a valid number. val=" + JSON.stringify(val));
   };
-  function parse22(str) {
+  function parse2(str) {
     str = String(str);
     if (str.length > 100) {
       return;
@@ -18941,7 +18361,7 @@ var require_ms2 = __commonJS2((exports, module) => {
     return Math.round(ms / n) + " " + name + (isPlural ? "s" : "");
   }
 });
-var require_common2 = __commonJS2((exports, module) => {
+var require_common2 = __commonJS3((exports, module) => {
   function setup(env3) {
     createDebug.debug = createDebug;
     createDebug.default = createDebug;
@@ -19114,7 +18534,7 @@ var require_common2 = __commonJS2((exports, module) => {
   }
   module.exports = setup;
 });
-var require_browser2 = __commonJS2((exports, module) => {
+var require_browser2 = __commonJS3((exports, module) => {
   exports.formatArgs = formatArgs;
   exports.save = save;
   exports.load = load;
@@ -19278,7 +18698,7 @@ var LocalFileHeaderToken2;
 var EndOfCentralDirectoryRecordToken2;
 var FileHeader2;
 var init_ZipToken2 = __esm2(() => {
-  init_lib3();
+  init_lib4();
   Signature2 = {
     LocalFileHeader: 67324752,
     DataDescriptor: 134695760,
@@ -19537,9 +18957,9 @@ var syncBufferSize2;
 var ddSignatureArray2;
 var eocdSignatureBytes2;
 var init_lib22 = __esm2(() => {
-  init_lib3();
-  init_browser2();
-  import_debug2 = __toESM2(require_browser2(), 1);
+  init_lib4();
+  init_browser();
+  import_debug2 = __toESM3(require_browser2(), 1);
   init_ZipToken2();
   debug2 = import_debug2.default("tokenizer:inflate");
   syncBufferSize2 = 256 * 1024;
@@ -19575,7 +18995,7 @@ var init_uint8array_extras2 = __esm2(() => {
     utf8: new globalThis.TextDecoder("utf8")
   };
   cachedEncoder2 = new globalThis.TextEncoder;
-  byteToHexLookupTable2 = Array.from({ length: 256 }, (_, index) => index.toString(16).padStart(2, "0"));
+  byteToHexLookupTable2 = Array.from({ length: 256 }, (_2, index) => index.toString(16).padStart(2, "0"));
 });
 function stringToBytes2(string2) {
   return [...string2].map((character) => character.charCodeAt(0));
@@ -19596,7 +19016,7 @@ function tarHeaderChecksumMatches2(arrayBuffer, offset = 0) {
 }
 var uint32SyncSafeToken2;
 var init_util2 = __esm2(() => {
-  init_lib3();
+  init_lib4();
   uint32SyncSafeToken2 = {
     get: (buffer, offset) => buffer[offset + 3] & 127 | buffer[offset + 2] << 7 | buffer[offset + 1] << 14 | buffer[offset] << 21,
     len: 4
@@ -19956,8 +19376,8 @@ var init_supported2 = __esm2(() => {
     "application/vnd.rn-realmedia"
   ];
 });
-var exports_core3 = {};
-__export2(exports_core3, {
+var exports_core2 = {};
+__export2(exports_core2, {
   supportedMimeTypes: () => supportedMimeTypes2,
   supportedExtensions: () => supportedExtensions2,
   reasonableDetectionSizeInBytes: () => reasonableDetectionSizeInBytes2,
@@ -19966,16 +19386,16 @@ __export2(exports_core3, {
   fileTypeFromStream: () => fileTypeFromStream2,
   fileTypeFromBuffer: () => fileTypeFromBuffer2,
   fileTypeFromBlob: () => fileTypeFromBlob3,
-  FileTypeParser: () => FileTypeParser2
+  FileTypeParser: () => FileTypeParser3
 });
 async function fileTypeFromStream2(stream, options) {
-  return new FileTypeParser2(options).fromStream(stream);
+  return new FileTypeParser3(options).fromStream(stream);
 }
 async function fileTypeFromBuffer2(input, options) {
-  return new FileTypeParser2(options).fromBuffer(input);
+  return new FileTypeParser3(options).fromBuffer(input);
 }
 async function fileTypeFromBlob3(blob, options) {
-  return new FileTypeParser2(options).fromBlob(blob);
+  return new FileTypeParser3(options).fromBlob(blob);
 }
 function getFileTypeFromMimeType2(mimeType) {
   mimeType = mimeType.toLowerCase();
@@ -20125,13 +19545,13 @@ function _check2(buffer, headers, options) {
   return true;
 }
 async function fileTypeFromTokenizer2(tokenizer, options) {
-  return new FileTypeParser2(options).fromTokenizer(tokenizer);
+  return new FileTypeParser3(options).fromTokenizer(tokenizer);
 }
 async function fileTypeStream2(webStream, options) {
-  return new FileTypeParser2(options).toDetectionStream(webStream, options);
+  return new FileTypeParser3(options).toDetectionStream(webStream, options);
 }
 
-class FileTypeParser2 {
+class FileTypeParser3 {
   constructor(options) {
     this.options = {
       mpegOffsetTolerance: 0,
@@ -21402,7 +20822,7 @@ var reasonableDetectionSizeInBytes2 = 4100;
 var supportedExtensions2;
 var supportedMimeTypes2;
 var init_core22 = __esm2(() => {
-  init_lib3();
+  init_lib4();
   init_core3();
   init_lib22();
   init_uint8array_extras2();
@@ -21523,7 +20943,7 @@ __export2(exports_external, {
 });
 var util;
 (function(util2) {
-  util2.assertEqual = (_) => {};
+  util2.assertEqual = (_2) => {};
   function assertIs(_arg) {}
   util2.assertIs = assertIs;
   function assertNever(_x) {
@@ -21538,10 +20958,10 @@ var util;
     return obj;
   };
   util2.getValidEnumValues = (obj) => {
-    const validKeys = util2.objectKeys(obj).filter((k) => typeof obj[obj[k]] !== "number");
+    const validKeys = util2.objectKeys(obj).filter((k2) => typeof obj[obj[k2]] !== "number");
     const filtered = {};
-    for (const k of validKeys) {
-      filtered[k] = obj[k];
+    for (const k2 of validKeys) {
+      filtered[k2] = obj[k2];
     }
     return util2.objectValues(filtered);
   };
@@ -21571,7 +20991,7 @@ var util;
     return array.map((val) => typeof val === "string" ? `'${val}'` : val).join(separator);
   }
   util2.joinValues = joinValues;
-  util2.jsonStringifyReplacer = (_, value) => {
+  util2.jsonStringifyReplacer = (_2, value) => {
     if (typeof value === "bigint") {
       return value.toString();
     }
@@ -26705,7 +26125,7 @@ function parseStringDef(def, refs) {
         case "trim":
           break;
         default:
-          ((_) => {})(check2);
+          ((_2) => {})(check2);
       }
     }
   }
@@ -27328,7 +26748,7 @@ var selectParser = (def, typeName, refs) => {
     case ZodFirstPartyTypeKind.ZodSymbol:
       return;
     default:
-      return ((_) => {
+      return ((_2) => {
         return;
       })(typeName);
   }
@@ -27656,7 +27076,7 @@ class McpServer {
       }
     });
     this.server.setRequestHandler(ListResourcesRequestSchema, async (request, extra) => {
-      const resources = Object.entries(this._registeredResources).filter(([_, resource]) => resource.enabled).map(([uri2, resource]) => ({
+      const resources = Object.entries(this._registeredResources).filter(([_2, resource]) => resource.enabled).map(([uri2, resource]) => ({
         uri: uri2,
         name: resource.name,
         ...resource.metadata
@@ -28225,7 +27645,7 @@ var TransformKind2 = Symbol.for("TypeBox.Transform");
 var ReadonlyKind2 = Symbol.for("TypeBox.Readonly");
 var OptionalKind2 = Symbol.for("TypeBox.Optional");
 var Hint3 = Symbol.for("TypeBox.Hint");
-var Kind3 = Symbol.for("TypeBox.Kind");
+var Kind2 = Symbol.for("TypeBox.Kind");
 function IsReadonly3(value) {
   return IsObject5(value) && value[ReadonlyKind2] === "Readonly";
 }
@@ -28272,7 +27692,7 @@ function IsIterator32(value) {
   return IsKindOf3(value, "Iterator");
 }
 function IsKindOf3(value, kind) {
-  return IsObject5(value) && Kind3 in value && value[Kind3] === kind;
+  return IsObject5(value) && Kind2 in value && value[Kind2] === kind;
 }
 function IsLiteralValue3(value) {
   return IsBoolean5(value) || IsNumber5(value) || IsString5(value);
@@ -28350,7 +27770,7 @@ function IsVoid3(value) {
   return IsKindOf3(value, "Void");
 }
 function IsKind3(value) {
-  return IsObject5(value) && Kind3 in value && IsString5(value[Kind3]);
+  return IsObject5(value) && Kind2 in value && IsString5(value[Kind2]);
 }
 function IsSchema3(value) {
   return IsAny3(value) || IsArgument3(value) || IsArray32(value) || IsBoolean32(value) || IsBigInt32(value) || IsAsyncIterator32(value) || IsComputed3(value) || IsConstructor3(value) || IsDate32(value) || IsFunction32(value) || IsInteger22(value) || IsIntersect3(value) || IsIterator32(value) || IsLiteral3(value) || IsMappedKey3(value) || IsMappedResult3(value) || IsNever3(value) || IsNot3(value) || IsNull32(value) || IsNumber32(value) || IsObject32(value) || IsPromise22(value) || IsRecord3(value) || IsRef3(value) || IsRegExp22(value) || IsString32(value) || IsSymbol32(value) || IsTemplateLiteral3(value) || IsThis3(value) || IsTuple3(value) || IsUndefined32(value) || IsUnion3(value) || IsUint8Array32(value) || IsUnknown3(value) || IsUnsafe3(value) || IsVoid3(value) || IsKind3(value);
@@ -28544,7 +27964,7 @@ function IsIterator42(value) {
   return IsKindOf22(value, "Iterator") && value.type === "Iterator" && IsOptionalString2(value.$id) && IsSchema22(value.items);
 }
 function IsKindOf22(value, kind) {
-  return IsObject5(value) && Kind3 in value && value[Kind3] === kind;
+  return IsObject5(value) && Kind2 in value && value[Kind2] === kind;
 }
 function IsLiteralString2(value) {
   return IsLiteral22(value) && IsString5(value.const);
@@ -28640,7 +28060,7 @@ function IsVoid22(value) {
   return IsKindOf22(value, "Void") && value.type === "void" && IsOptionalString2(value.$id);
 }
 function IsKind22(value) {
-  return IsObject5(value) && Kind3 in value && IsString5(value[Kind3]) && !KnownTypes2.includes(value[Kind3]);
+  return IsObject5(value) && Kind2 in value && IsString5(value[Kind2]) && !KnownTypes2.includes(value[Kind2]);
 }
 function IsSchema22(value) {
   return IsObject5(value) && (IsAny22(value) || IsArgument22(value) || IsArray42(value) || IsBoolean42(value) || IsBigInt42(value) || IsAsyncIterator42(value) || IsComputed22(value) || IsConstructor22(value) || IsDate42(value) || IsFunction42(value) || IsInteger32(value) || IsIntersect22(value) || IsIterator42(value) || IsLiteral22(value) || IsMappedKey22(value) || IsMappedResult22(value) || IsNever22(value) || IsNot22(value) || IsNull42(value) || IsNumber42(value) || IsObject42(value) || IsPromise32(value) || IsRecord22(value) || IsRef22(value) || IsRegExp32(value) || IsString42(value) || IsSymbol42(value) || IsTemplateLiteral22(value) || IsThis22(value) || IsTuple22(value) || IsUndefined42(value) || IsUnion22(value) || IsUint8Array42(value) || IsUnknown22(value) || IsUnsafe22(value) || IsVoid22(value) || IsKind22(value));
@@ -28709,68 +28129,68 @@ function Set32(kind, func) {
 function Get22(kind) {
   return map3.get(kind);
 }
-function SetIncludes2(T, S) {
-  return T.includes(S);
+function SetIncludes2(T2, S) {
+  return T2.includes(S);
 }
-function SetDistinct2(T) {
-  return [...new Set(T)];
+function SetDistinct2(T2) {
+  return [...new Set(T2)];
 }
-function SetIntersect2(T, S) {
-  return T.filter((L) => S.includes(L));
+function SetIntersect2(T2, S) {
+  return T2.filter((L) => S.includes(L));
 }
-function SetIntersectManyResolve2(T, Init) {
-  return T.reduce((Acc, L) => {
+function SetIntersectManyResolve2(T2, Init) {
+  return T2.reduce((Acc, L) => {
     return SetIntersect2(Acc, L);
   }, Init);
 }
-function SetIntersectMany2(T) {
-  return T.length === 1 ? T[0] : T.length > 1 ? SetIntersectManyResolve2(T.slice(1), T[0]) : [];
+function SetIntersectMany2(T2) {
+  return T2.length === 1 ? T2[0] : T2.length > 1 ? SetIntersectManyResolve2(T2.slice(1), T2[0]) : [];
 }
-function SetUnionMany2(T) {
+function SetUnionMany2(T2) {
   const Acc = [];
-  for (const L of T)
+  for (const L of T2)
     Acc.push(...L);
   return Acc;
 }
 function Any2(options) {
-  return CreateType2({ [Kind3]: "Any" }, options);
+  return CreateType2({ [Kind2]: "Any" }, options);
 }
 function Array22(items, options) {
-  return CreateType2({ [Kind3]: "Array", type: "array", items }, options);
+  return CreateType2({ [Kind2]: "Array", type: "array", items }, options);
 }
 function Argument2(index) {
-  return CreateType2({ [Kind3]: "Argument", index });
+  return CreateType2({ [Kind2]: "Argument", index });
 }
 function AsyncIterator2(items, options) {
-  return CreateType2({ [Kind3]: "AsyncIterator", type: "AsyncIterator", items }, options);
+  return CreateType2({ [Kind2]: "AsyncIterator", type: "AsyncIterator", items }, options);
 }
 function Computed2(target, parameters, options) {
-  return CreateType2({ [Kind3]: "Computed", target, parameters }, options);
+  return CreateType2({ [Kind2]: "Computed", target, parameters }, options);
 }
 function DiscardKey2(value, key) {
-  const { [key]: _, ...rest } = value;
+  const { [key]: _2, ...rest } = value;
   return rest;
 }
 function Discard2(value, keys) {
   return keys.reduce((acc, key) => DiscardKey2(acc, key), value);
 }
 function Never2(options) {
-  return CreateType2({ [Kind3]: "Never", not: {} }, options);
+  return CreateType2({ [Kind2]: "Never", not: {} }, options);
 }
 function MappedResult2(properties) {
   return CreateType2({
-    [Kind3]: "MappedResult",
+    [Kind2]: "MappedResult",
     properties
   });
 }
 function Constructor2(parameters, returns, options) {
-  return CreateType2({ [Kind3]: "Constructor", type: "Constructor", parameters, returns }, options);
+  return CreateType2({ [Kind2]: "Constructor", type: "Constructor", parameters, returns }, options);
 }
 function Function22(parameters, returns, options) {
-  return CreateType2({ [Kind3]: "Function", type: "Function", parameters, returns }, options);
+  return CreateType2({ [Kind2]: "Function", type: "Function", parameters, returns }, options);
 }
-function UnionCreate2(T, options) {
-  return CreateType2({ [Kind3]: "Union", anyOf: T }, options);
+function UnionCreate2(T2, options) {
+  return CreateType2({ [Kind2]: "Union", anyOf: T2 }, options);
 }
 function IsUnionOptional2(types2) {
   return types2.some((type) => IsOptional3(type));
@@ -28778,15 +28198,15 @@ function IsUnionOptional2(types2) {
 function RemoveOptionalFromRest3(types2) {
   return types2.map((left) => IsOptional3(left) ? RemoveOptionalFromType3(left) : left);
 }
-function RemoveOptionalFromType3(T) {
-  return Discard2(T, [OptionalKind2]);
+function RemoveOptionalFromType3(T2) {
+  return Discard2(T2, [OptionalKind2]);
 }
 function ResolveUnion2(types2, options) {
   const isOptional2 = IsUnionOptional2(types2);
   return isOptional2 ? Optional2(UnionCreate2(RemoveOptionalFromRest3(types2), options)) : UnionCreate2(RemoveOptionalFromRest3(types2), options);
 }
-function UnionEvaluated2(T, options) {
-  return T.length === 1 ? CreateType2(T[0], options) : T.length === 0 ? Never2(options) : ResolveUnion2(T, options);
+function UnionEvaluated2(T2, options) {
+  return T2.length === 1 ? CreateType2(T2[0], options) : T2.length === 0 ? Never2(options) : ResolveUnion2(T2, options);
 }
 function Union3(types2, options) {
   return types2.length === 0 ? Never2(options) : types2.length === 1 ? CreateType2(types2[0], options) : UnionCreate2(types2, options);
@@ -28968,22 +28388,22 @@ function TemplateLiteralGenerate2(schema) {
 }
 function Literal2(value, options) {
   return CreateType2({
-    [Kind3]: "Literal",
+    [Kind2]: "Literal",
     const: value,
     type: typeof value
   }, options);
 }
 function Boolean22(options) {
-  return CreateType2({ [Kind3]: "Boolean", type: "boolean" }, options);
+  return CreateType2({ [Kind2]: "Boolean", type: "boolean" }, options);
 }
 function BigInt22(options) {
-  return CreateType2({ [Kind3]: "BigInt", type: "bigint" }, options);
+  return CreateType2({ [Kind2]: "BigInt", type: "bigint" }, options);
 }
 function Number22(options) {
-  return CreateType2({ [Kind3]: "Number", type: "number" }, options);
+  return CreateType2({ [Kind2]: "Number", type: "number" }, options);
 }
 function String22(options) {
-  return CreateType2({ [Kind3]: "String", type: "string" }, options);
+  return CreateType2({ [Kind2]: "String", type: "string" }, options);
 }
 function* FromUnion21(syntax) {
   const trim = syntax.trim().replace(/"|'/g, "");
@@ -29028,7 +28448,7 @@ function Escape3(value) {
 }
 function Visit22(schema, acc) {
   return IsTemplateLiteral3(schema) ? schema.pattern.slice(1, schema.pattern.length - 1) : IsUnion3(schema) ? `(${schema.anyOf.map((schema2) => Visit22(schema2, acc)).join("|")})` : IsNumber32(schema) ? `${acc}${PatternNumber2}` : IsInteger22(schema) ? `${acc}${PatternNumber2}` : IsBigInt32(schema) ? `${acc}${PatternNumber2}` : IsString32(schema) ? `${acc}${PatternString2}` : IsLiteral3(schema) ? `${acc}${Escape3(schema.const.toString())}` : IsBoolean32(schema) ? `${acc}${PatternBoolean2}` : (() => {
-    throw new TemplateLiteralPatternError2(`Unexpected Kind '${schema[Kind3]}'`);
+    throw new TemplateLiteralPatternError2(`Unexpected Kind '${schema[Kind2]}'`);
   })();
 }
 function TemplateLiteralPattern2(kinds) {
@@ -29041,7 +28461,7 @@ function TemplateLiteralToUnion2(schema) {
 }
 function TemplateLiteral2(unresolved, options) {
   const pattern = IsString5(unresolved) ? TemplateLiteralPattern2(TemplateLiteralSyntax2(unresolved)) : TemplateLiteralPattern2(unresolved);
-  return CreateType2({ [Kind3]: "TemplateLiteral", type: "string", pattern }, options);
+  return CreateType2({ [Kind2]: "TemplateLiteral", type: "string", pattern }, options);
 }
 function FromTemplateLiteral7(templateLiteral) {
   const keys = TemplateLiteralGenerate2(templateLiteral);
@@ -29135,7 +28555,7 @@ function IndexFromMappedKey2(type, mappedKey, options) {
   return MappedResult2(properties);
 }
 function Iterator2(items, options) {
-  return CreateType2({ [Kind3]: "Iterator", type: "Iterator", items }, options);
+  return CreateType2({ [Kind2]: "Iterator", type: "Iterator", items }, options);
 }
 function RequiredKeys2(properties) {
   const keys = [];
@@ -29147,12 +28567,12 @@ function RequiredKeys2(properties) {
 }
 function _Object2(properties, options) {
   const required = RequiredKeys2(properties);
-  const schematic = required.length > 0 ? { [Kind3]: "Object", type: "object", properties, required } : { [Kind3]: "Object", type: "object", properties };
+  const schematic = required.length > 0 ? { [Kind2]: "Object", type: "object", properties, required } : { [Kind2]: "Object", type: "object", properties };
   return CreateType2(schematic, options);
 }
 var Object22 = _Object2;
 function Promise22(item, options) {
-  return CreateType2({ [Kind3]: "Promise", type: "Promise", item }, options);
+  return CreateType2({ [Kind2]: "Promise", type: "Promise", item }, options);
 }
 function RemoveReadonly2(schema) {
   return CreateType2(Discard2(schema, [ReadonlyKind2]));
@@ -29181,7 +28601,7 @@ function ReadonlyFromMappedResult2(R, F) {
   return MappedResult2(P);
 }
 function Tuple2(types2, options) {
-  return CreateType2(types2.length > 0 ? { [Kind3]: "Tuple", type: "array", items: types2, additionalItems: false, minItems: types2.length, maxItems: types2.length } : { [Kind3]: "Tuple", type: "array", minItems: types2.length, maxItems: types2.length }, options);
+  return CreateType2(types2.length > 0 ? { [Kind2]: "Tuple", type: "array", items: types2, additionalItems: false, minItems: types2.length, maxItems: types2.length } : { [Kind2]: "Tuple", type: "array", minItems: types2.length, maxItems: types2.length }, options);
 }
 function FromMappedResult32(K, P) {
   return K in P ? FromSchemaType2(K, P[K]) : MappedResult2(P);
@@ -29202,28 +28622,28 @@ function FromMappedKey5(K, P) {
   const R = MappedKeyToMappedResultProperties2(K, P);
   return FromMappedResult32(K, R);
 }
-function FromRest22(K, T) {
-  return T.map((L) => FromSchemaType2(K, L));
+function FromRest22(K, T2) {
+  return T2.map((L) => FromSchemaType2(K, L));
 }
-function FromProperties32(K, T) {
+function FromProperties32(K, T2) {
   const Acc = {};
-  for (const K2 of globalThis.Object.getOwnPropertyNames(T))
-    Acc[K2] = FromSchemaType2(K, T[K2]);
+  for (const K2 of globalThis.Object.getOwnPropertyNames(T2))
+    Acc[K2] = FromSchemaType2(K, T2[K2]);
   return Acc;
 }
-function FromSchemaType2(K, T) {
-  const options = { ...T };
-  return IsOptional3(T) ? Optional2(FromSchemaType2(K, Discard2(T, [OptionalKind2]))) : IsReadonly3(T) ? Readonly2(FromSchemaType2(K, Discard2(T, [ReadonlyKind2]))) : IsMappedResult3(T) ? FromMappedResult32(K, T.properties) : IsMappedKey3(T) ? FromMappedKey5(K, T.keys) : IsConstructor3(T) ? Constructor2(FromRest22(K, T.parameters), FromSchemaType2(K, T.returns), options) : IsFunction32(T) ? Function22(FromRest22(K, T.parameters), FromSchemaType2(K, T.returns), options) : IsAsyncIterator32(T) ? AsyncIterator2(FromSchemaType2(K, T.items), options) : IsIterator32(T) ? Iterator2(FromSchemaType2(K, T.items), options) : IsIntersect3(T) ? Intersect3(FromRest22(K, T.allOf), options) : IsUnion3(T) ? Union3(FromRest22(K, T.anyOf), options) : IsTuple3(T) ? Tuple2(FromRest22(K, T.items ?? []), options) : IsObject32(T) ? Object22(FromProperties32(K, T.properties), options) : IsArray32(T) ? Array22(FromSchemaType2(K, T.items), options) : IsPromise22(T) ? Promise22(FromSchemaType2(K, T.item), options) : T;
+function FromSchemaType2(K, T2) {
+  const options = { ...T2 };
+  return IsOptional3(T2) ? Optional2(FromSchemaType2(K, Discard2(T2, [OptionalKind2]))) : IsReadonly3(T2) ? Readonly2(FromSchemaType2(K, Discard2(T2, [ReadonlyKind2]))) : IsMappedResult3(T2) ? FromMappedResult32(K, T2.properties) : IsMappedKey3(T2) ? FromMappedKey5(K, T2.keys) : IsConstructor3(T2) ? Constructor2(FromRest22(K, T2.parameters), FromSchemaType2(K, T2.returns), options) : IsFunction32(T2) ? Function22(FromRest22(K, T2.parameters), FromSchemaType2(K, T2.returns), options) : IsAsyncIterator32(T2) ? AsyncIterator2(FromSchemaType2(K, T2.items), options) : IsIterator32(T2) ? Iterator2(FromSchemaType2(K, T2.items), options) : IsIntersect3(T2) ? Intersect3(FromRest22(K, T2.allOf), options) : IsUnion3(T2) ? Union3(FromRest22(K, T2.anyOf), options) : IsTuple3(T2) ? Tuple2(FromRest22(K, T2.items ?? []), options) : IsObject32(T2) ? Object22(FromProperties32(K, T2.properties), options) : IsArray32(T2) ? Array22(FromSchemaType2(K, T2.items), options) : IsPromise22(T2) ? Promise22(FromSchemaType2(K, T2.item), options) : T2;
 }
-function MappedFunctionReturnType2(K, T) {
+function MappedFunctionReturnType2(K, T2) {
   const Acc = {};
   for (const L of K)
-    Acc[L] = FromSchemaType2(L, T);
+    Acc[L] = FromSchemaType2(L, T2);
   return Acc;
 }
 function Mapped2(key, map4, options) {
   const K = IsSchema3(key) ? IndexPropertyKeys2(key) : key;
-  const RT = map4({ [Kind3]: "MappedKey", keys: K });
+  const RT = map4({ [Kind2]: "MappedKey", keys: K });
   const R = MappedFunctionReturnType2(K, RT);
   return Object22(R, options);
 }
@@ -29253,10 +28673,10 @@ function OptionalFromMappedResult2(R, F) {
   const P = FromMappedResult42(R, F);
   return MappedResult2(P);
 }
-function IntersectCreate2(T, options = {}) {
-  const allObjects = T.every((schema) => IsObject32(schema));
+function IntersectCreate2(T2, options = {}) {
+  const allObjects = T2.every((schema) => IsObject32(schema));
   const clonedUnevaluatedProperties = IsSchema3(options.unevaluatedProperties) ? { unevaluatedProperties: options.unevaluatedProperties } : {};
-  return CreateType2(options.unevaluatedProperties === false || IsSchema3(options.unevaluatedProperties) || allObjects ? { ...clonedUnevaluatedProperties, [Kind3]: "Intersect", type: "object", allOf: T } : { ...clonedUnevaluatedProperties, [Kind3]: "Intersect", allOf: T }, options);
+  return CreateType2(options.unevaluatedProperties === false || IsSchema3(options.unevaluatedProperties) || allObjects ? { ...clonedUnevaluatedProperties, [Kind2]: "Intersect", type: "object", allOf: T2 } : { ...clonedUnevaluatedProperties, [Kind2]: "Intersect", allOf: T2 }, options);
 }
 function IsIntersectOptional2(types2) {
   return types2.every((left) => IsOptional3(left));
@@ -29292,7 +28712,7 @@ function Ref2(...args) {
   const [$ref, options] = typeof args[0] === "string" ? [args[0], args[1]] : [args[0].$id, args[1]];
   if (typeof $ref !== "string")
     throw new TypeBoxError2("Ref: $ref must be a string");
-  return CreateType2({ [Kind3]: "Ref", $ref }, options);
+  return CreateType2({ [Kind2]: "Ref", $ref }, options);
 }
 function FromComputed6(target, parameters) {
   return Computed2("Awaited", [Computed2(target, parameters)]);
@@ -29332,13 +28752,13 @@ function FromUnion52(types2) {
   return propertyKeys;
 }
 function FromTuple22(types2) {
-  return types2.map((_, indexer) => indexer.toString());
+  return types2.map((_2, indexer) => indexer.toString());
 }
-function FromArray22(_) {
+function FromArray22(_2) {
   return ["[number]"];
 }
-function FromProperties52(T) {
-  return globalThis.Object.getOwnPropertyNames(T);
+function FromProperties52(T2) {
+  return globalThis.Object.getOwnPropertyNames(T2);
 }
 function FromPatternProperties2(patternProperties) {
   if (!includePatternProperties2)
@@ -29393,56 +28813,56 @@ function KeyOfFromMappedResult2(mappedResult, options) {
 function KeyOfPropertyEntries2(schema) {
   const keys = KeyOfPropertyKeys2(schema);
   const schemas = IndexFromPropertyKeys2(schema, keys);
-  return keys.map((_, index) => [keys[index], schemas[index]]);
+  return keys.map((_2, index) => [keys[index], schemas[index]]);
 }
-function CompositeKeys2(T) {
+function CompositeKeys2(T2) {
   const Acc = [];
-  for (const L of T)
+  for (const L of T2)
     Acc.push(...KeyOfPropertyKeys2(L));
   return SetDistinct2(Acc);
 }
-function FilterNever2(T) {
-  return T.filter((L) => !IsNever3(L));
+function FilterNever2(T2) {
+  return T2.filter((L) => !IsNever3(L));
 }
-function CompositeProperty2(T, K) {
+function CompositeProperty2(T2, K) {
   const Acc = [];
-  for (const L of T)
+  for (const L of T2)
     Acc.push(...IndexFromPropertyKeys2(L, [K]));
   return FilterNever2(Acc);
 }
-function CompositeProperties2(T, K) {
+function CompositeProperties2(T2, K) {
   const Acc = {};
   for (const L of K) {
-    Acc[L] = IntersectEvaluated2(CompositeProperty2(T, L));
+    Acc[L] = IntersectEvaluated2(CompositeProperty2(T2, L));
   }
   return Acc;
 }
-function Composite2(T, options) {
-  const K = CompositeKeys2(T);
-  const P = CompositeProperties2(T, K);
+function Composite2(T2, options) {
+  const K = CompositeKeys2(T2);
+  const P = CompositeProperties2(T2, K);
   const R = Object22(P, options);
   return R;
 }
 function Date22(options) {
-  return CreateType2({ [Kind3]: "Date", type: "Date" }, options);
+  return CreateType2({ [Kind2]: "Date", type: "Date" }, options);
 }
 function Null2(options) {
-  return CreateType2({ [Kind3]: "Null", type: "null" }, options);
+  return CreateType2({ [Kind2]: "Null", type: "null" }, options);
 }
 function Symbol22(options) {
-  return CreateType2({ [Kind3]: "Symbol", type: "symbol" }, options);
+  return CreateType2({ [Kind2]: "Symbol", type: "symbol" }, options);
 }
 function Undefined2(options) {
-  return CreateType2({ [Kind3]: "Undefined", type: "undefined" }, options);
+  return CreateType2({ [Kind2]: "Undefined", type: "undefined" }, options);
 }
 function Uint8Array22(options) {
-  return CreateType2({ [Kind3]: "Uint8Array", type: "Uint8Array" }, options);
+  return CreateType2({ [Kind2]: "Uint8Array", type: "Uint8Array" }, options);
 }
 function Unknown2(options) {
-  return CreateType2({ [Kind3]: "Unknown" }, options);
+  return CreateType2({ [Kind2]: "Unknown" }, options);
 }
-function FromArray32(T) {
-  return T.map((L) => FromValue3(L, false));
+function FromArray32(T2) {
+  return T2.map((L) => FromValue3(L, false));
 }
 function FromProperties72(value) {
   const Acc = {};
@@ -29450,14 +28870,14 @@ function FromProperties72(value) {
     Acc[K] = Readonly2(FromValue3(value[K], false));
   return Acc;
 }
-function ConditionalReadonly2(T, root) {
-  return root === true ? T : Readonly2(T);
+function ConditionalReadonly2(T2, root) {
+  return root === true ? T2 : Readonly2(T2);
 }
 function FromValue3(value, root) {
   return IsAsyncIterator5(value) ? ConditionalReadonly2(Any2(), root) : IsIterator5(value) ? ConditionalReadonly2(Any2(), root) : IsArray5(value) ? Readonly2(Tuple2(FromArray32(value))) : IsUint8Array5(value) ? Uint8Array22() : IsDate5(value) ? Date22() : IsObject5(value) ? ConditionalReadonly2(Object22(FromProperties72(value)), root) : IsFunction5(value) ? ConditionalReadonly2(Function22([], Unknown2()), root) : IsUndefined5(value) ? Undefined2() : IsNull5(value) ? Null2() : IsSymbol5(value) ? Symbol22() : IsBigInt5(value) ? BigInt22() : IsNumber5(value) ? Literal2(value) : IsBoolean5(value) ? Literal2(value) : IsString5(value) ? Literal2(value) : Object22({});
 }
-function Const2(T, options) {
-  return CreateType2(FromValue3(T, true), options);
+function Const2(T2, options) {
+  return CreateType2(FromValue3(T2, true), options);
 }
 function ConstructorParameters2(schema, options) {
   return IsConstructor3(schema) ? Tuple2(schema.parameters, options) : Never2(options);
@@ -29709,7 +29129,7 @@ function FromVoid5(left, right) {
   return exports_type4.IsIntersect(right) ? FromIntersectRight2(left, right) : exports_type4.IsUnion(right) ? FromUnionRight2(left, right) : exports_type4.IsUnknown(right) ? FromUnknownRight2(left, right) : exports_type4.IsAny(right) ? FromAnyRight2(left, right) : exports_type4.IsObject(right) ? FromObjectRight2(left, right) : exports_type4.IsVoid(right) ? ExtendsResult2.True : ExtendsResult2.False;
 }
 function Visit32(left, right) {
-  return exports_type4.IsTemplateLiteral(left) || exports_type4.IsTemplateLiteral(right) ? FromTemplateLiteral22(left, right) : exports_type4.IsRegExp(left) || exports_type4.IsRegExp(right) ? FromRegExp5(left, right) : exports_type4.IsNot(left) || exports_type4.IsNot(right) ? FromNot8(left, right) : exports_type4.IsAny(left) ? FromAny5(left, right) : exports_type4.IsArray(left) ? FromArray42(left, right) : exports_type4.IsBigInt(left) ? FromBigInt6(left, right) : exports_type4.IsBoolean(left) ? FromBoolean6(left, right) : exports_type4.IsAsyncIterator(left) ? FromAsyncIterator8(left, right) : exports_type4.IsConstructor(left) ? FromConstructor9(left, right) : exports_type4.IsDate(left) ? FromDate8(left, right) : exports_type4.IsFunction(left) ? FromFunction8(left, right) : exports_type4.IsInteger(left) ? FromInteger6(left, right) : exports_type4.IsIntersect(left) ? FromIntersect42(left, right) : exports_type4.IsIterator(left) ? FromIterator8(left, right) : exports_type4.IsLiteral(left) ? FromLiteral22(left, right) : exports_type4.IsNever(left) ? FromNever6(left, right) : exports_type4.IsNull(left) ? FromNull6(left, right) : exports_type4.IsNumber(left) ? FromNumber6(left, right) : exports_type4.IsObject(left) ? FromObject19(left, right) : exports_type4.IsRecord(left) ? FromRecord14(left, right) : exports_type4.IsString(left) ? FromString6(left, right) : exports_type4.IsSymbol(left) ? FromSymbol6(left, right) : exports_type4.IsTuple(left) ? FromTuple32(left, right) : exports_type4.IsPromise(left) ? FromPromise22(left, right) : exports_type4.IsUint8Array(left) ? FromUint8Array5(left, right) : exports_type4.IsUndefined(left) ? FromUndefined6(left, right) : exports_type4.IsUnion(left) ? FromUnion62(left, right) : exports_type4.IsUnknown(left) ? FromUnknown5(left, right) : exports_type4.IsVoid(left) ? FromVoid5(left, right) : Throw2(`Unknown left type operand '${left[Kind3]}'`);
+  return exports_type4.IsTemplateLiteral(left) || exports_type4.IsTemplateLiteral(right) ? FromTemplateLiteral22(left, right) : exports_type4.IsRegExp(left) || exports_type4.IsRegExp(right) ? FromRegExp5(left, right) : exports_type4.IsNot(left) || exports_type4.IsNot(right) ? FromNot8(left, right) : exports_type4.IsAny(left) ? FromAny5(left, right) : exports_type4.IsArray(left) ? FromArray42(left, right) : exports_type4.IsBigInt(left) ? FromBigInt6(left, right) : exports_type4.IsBoolean(left) ? FromBoolean6(left, right) : exports_type4.IsAsyncIterator(left) ? FromAsyncIterator8(left, right) : exports_type4.IsConstructor(left) ? FromConstructor9(left, right) : exports_type4.IsDate(left) ? FromDate8(left, right) : exports_type4.IsFunction(left) ? FromFunction8(left, right) : exports_type4.IsInteger(left) ? FromInteger6(left, right) : exports_type4.IsIntersect(left) ? FromIntersect42(left, right) : exports_type4.IsIterator(left) ? FromIterator8(left, right) : exports_type4.IsLiteral(left) ? FromLiteral22(left, right) : exports_type4.IsNever(left) ? FromNever6(left, right) : exports_type4.IsNull(left) ? FromNull6(left, right) : exports_type4.IsNumber(left) ? FromNumber6(left, right) : exports_type4.IsObject(left) ? FromObject19(left, right) : exports_type4.IsRecord(left) ? FromRecord14(left, right) : exports_type4.IsString(left) ? FromString6(left, right) : exports_type4.IsSymbol(left) ? FromSymbol6(left, right) : exports_type4.IsTuple(left) ? FromTuple32(left, right) : exports_type4.IsPromise(left) ? FromPromise22(left, right) : exports_type4.IsUint8Array(left) ? FromUint8Array5(left, right) : exports_type4.IsUndefined(left) ? FromUndefined6(left, right) : exports_type4.IsUnion(left) ? FromUnion62(left, right) : exports_type4.IsUnknown(left) ? FromUnknown5(left, right) : exports_type4.IsVoid(left) ? FromVoid5(left, right) : Throw2(`Unknown left type operand '${left[Kind2]}'`);
 }
 function ExtendsCheck2(left, right) {
   return Visit32(left, right);
@@ -29731,8 +29151,8 @@ function ExtendsResolve2(left, right, trueType, falseType) {
   const R = ExtendsCheck2(left, right);
   return R === ExtendsResult2.Union ? Union3([trueType, falseType]) : R === ExtendsResult2.True ? trueType : falseType;
 }
-function Extends2(L, R, T, F, options) {
-  return IsMappedResult3(L) ? ExtendsFromMappedResult2(L, R, T, F, options) : IsMappedKey3(L) ? CreateType2(ExtendsFromMappedKey2(L, R, T, F, options)) : CreateType2(ExtendsResolve2(L, R, T, F), options);
+function Extends2(L, R, T2, F, options) {
+  return IsMappedResult3(L) ? ExtendsFromMappedResult2(L, R, T2, F, options) : IsMappedKey3(L) ? CreateType2(ExtendsFromMappedKey2(L, R, T2, F, options)) : CreateType2(ExtendsResolve2(L, R, T2, F), options);
 }
 function FromPropertyKey4(K, U, L, R, options) {
   return {
@@ -29747,8 +29167,8 @@ function FromPropertyKeys4(K, U, L, R, options) {
 function FromMappedKey22(K, U, L, R, options) {
   return FromPropertyKeys4(K.keys, U, L, R, options);
 }
-function ExtendsFromMappedKey2(T, U, L, R, options) {
-  const P = FromMappedKey22(T, U, L, R, options);
+function ExtendsFromMappedKey2(T2, U, L, R, options) {
+  const P = FromMappedKey22(T2, U, L, R, options);
   return MappedResult2(P);
 }
 function Intersect22(schema) {
@@ -29761,7 +29181,7 @@ function Not3(schema) {
   return !ExtendsUndefinedCheck2(schema.not);
 }
 function ExtendsUndefinedCheck2(schema) {
-  return schema[Kind3] === "Intersect" ? Intersect22(schema) : schema[Kind3] === "Union" ? Union22(schema) : schema[Kind3] === "Not" ? Not3(schema) : schema[Kind3] === "Undefined" ? true : false;
+  return schema[Kind2] === "Intersect" ? Intersect22(schema) : schema[Kind2] === "Union" ? Union22(schema) : schema[Kind2] === "Not" ? Not3(schema) : schema[Kind2] === "Undefined" ? true : false;
 }
 function ExcludeFromTemplateLiteral2(L, R) {
   return Exclude2(TemplateLiteralToUnion2(L), R);
@@ -29783,11 +29203,11 @@ function FromProperties92(P, U) {
     Acc[K2] = Exclude2(P[K2], U);
   return Acc;
 }
-function FromMappedResult72(R, T) {
-  return FromProperties92(R.properties, T);
+function FromMappedResult72(R, T2) {
+  return FromProperties92(R.properties, T2);
 }
-function ExcludeFromMappedResult2(R, T) {
-  const P = FromMappedResult72(R, T);
+function ExcludeFromMappedResult2(R, T2) {
+  const P = FromMappedResult72(R, T2);
   return MappedResult2(P);
 }
 function ExtractFromTemplateLiteral2(L, R) {
@@ -29804,17 +29224,17 @@ function Extract2(L, R, options) {
     return CreateType2(ExtractFromMappedResult2(L, R), options);
   return CreateType2(IsUnion3(L) ? ExtractRest2(L.anyOf, R) : ExtendsCheck2(L, R) !== ExtendsResult2.False ? L : Never2(), options);
 }
-function FromProperties102(P, T) {
+function FromProperties102(P, T2) {
   const Acc = {};
   for (const K2 of globalThis.Object.getOwnPropertyNames(P))
-    Acc[K2] = Extract2(P[K2], T);
+    Acc[K2] = Extract2(P[K2], T2);
   return Acc;
 }
-function FromMappedResult82(R, T) {
-  return FromProperties102(R.properties, T);
+function FromMappedResult82(R, T2) {
+  return FromProperties102(R.properties, T2);
 }
-function ExtractFromMappedResult2(R, T) {
-  const P = FromMappedResult82(R, T);
+function ExtractFromMappedResult2(R, T2) {
+  const P = FromMappedResult82(R, T2);
   return MappedResult2(P);
 }
 function InstanceType2(schema, options) {
@@ -29823,17 +29243,17 @@ function InstanceType2(schema, options) {
 function ReadonlyOptional2(schema) {
   return Readonly2(Optional2(schema));
 }
-function RecordCreateFromPattern2(pattern, T, options) {
-  return CreateType2({ [Kind3]: "Record", type: "object", patternProperties: { [pattern]: T } }, options);
+function RecordCreateFromPattern2(pattern, T2, options) {
+  return CreateType2({ [Kind2]: "Record", type: "object", patternProperties: { [pattern]: T2 } }, options);
 }
-function RecordCreateFromKeys2(K, T, options) {
+function RecordCreateFromKeys2(K, T2, options) {
   const result = {};
   for (const K2 of K)
-    result[K2] = T;
+    result[K2] = T2;
   return Object22(result, { ...options, [Hint3]: "Record" });
 }
-function FromTemplateLiteralKey2(K, T, options) {
-  return IsTemplateLiteralFinite2(K) ? RecordCreateFromKeys2(IndexPropertyKeys2(K), T, options) : RecordCreateFromPattern2(K.pattern, T, options);
+function FromTemplateLiteralKey2(K, T2, options) {
+  return IsTemplateLiteralFinite2(K) ? RecordCreateFromKeys2(IndexPropertyKeys2(K), T2, options) : RecordCreateFromPattern2(K.pattern, T2, options);
 }
 function FromUnionKey2(key, type, options) {
   return RecordCreateFromKeys2(IndexPropertyKeys2(Union3(key)), type, options);
@@ -29848,7 +29268,7 @@ function FromStringKey2(key, type, options) {
   const pattern = IsUndefined5(key.pattern) ? PatternStringExact2 : key.pattern;
   return RecordCreateFromPattern2(pattern, type, options);
 }
-function FromAnyKey2(_, type, options) {
+function FromAnyKey2(_2, type, options) {
   return RecordCreateFromPattern2(PatternStringExact2, type, options);
 }
 function FromNeverKey2(_key, type, options) {
@@ -29860,7 +29280,7 @@ function FromBooleanKey2(_key, type, options) {
 function FromIntegerKey2(_key, type, options) {
   return RecordCreateFromPattern2(PatternNumberExact2, type, options);
 }
-function FromNumberKey2(_, type, options) {
+function FromNumberKey2(_2, type, options) {
   return RecordCreateFromPattern2(PatternNumberExact2, type, options);
 }
 function Record2(key, type, options = {}) {
@@ -29950,7 +29370,7 @@ function Instantiate2(type, args) {
   return FromType3(args, CloneType2(type));
 }
 function Integer2(options) {
-  return CreateType2({ [Kind3]: "Integer", type: "integer" }, options);
+  return CreateType2({ [Kind2]: "Integer", type: "integer" }, options);
 }
 function MappedIntrinsicPropertyKey2(K, M, options) {
   return {
@@ -29963,11 +29383,11 @@ function MappedIntrinsicPropertyKeys2(K, M, options) {
   }, {});
   return result;
 }
-function MappedIntrinsicProperties2(T, M, options) {
-  return MappedIntrinsicPropertyKeys2(T["keys"], M, options);
+function MappedIntrinsicProperties2(T2, M, options) {
+  return MappedIntrinsicPropertyKeys2(T2["keys"], M, options);
 }
-function IntrinsicFromMappedKey2(T, M, options) {
-  const P = MappedIntrinsicProperties2(T, M, options);
+function IntrinsicFromMappedKey2(T2, M, options) {
+  const P = MappedIntrinsicProperties2(T2, M, options);
   return MappedResult2(P);
 }
 function ApplyUncapitalize2(value) {
@@ -29998,23 +29418,23 @@ function FromTemplateLiteral32(schema, mode, options) {
 function FromLiteralValue2(value, mode) {
   return typeof value === "string" ? mode === "Uncapitalize" ? ApplyUncapitalize2(value) : mode === "Capitalize" ? ApplyCapitalize2(value) : mode === "Uppercase" ? ApplyUppercase2(value) : mode === "Lowercase" ? ApplyLowercase2(value) : value : value.toString();
 }
-function FromRest52(T, M) {
-  return T.map((L) => Intrinsic2(L, M));
+function FromRest52(T2, M) {
+  return T2.map((L) => Intrinsic2(L, M));
 }
 function Intrinsic2(schema, mode, options = {}) {
   return IsMappedKey3(schema) ? IntrinsicFromMappedKey2(schema, mode, options) : IsTemplateLiteral3(schema) ? FromTemplateLiteral32(schema, mode, options) : IsUnion3(schema) ? Union3(FromRest52(schema.anyOf, mode), options) : IsLiteral3(schema) ? Literal2(FromLiteralValue2(schema.const, mode), options) : CreateType2(schema, options);
 }
-function Capitalize2(T, options = {}) {
-  return Intrinsic2(T, "Capitalize", options);
+function Capitalize2(T2, options = {}) {
+  return Intrinsic2(T2, "Capitalize", options);
 }
-function Lowercase2(T, options = {}) {
-  return Intrinsic2(T, "Lowercase", options);
+function Lowercase2(T2, options = {}) {
+  return Intrinsic2(T2, "Lowercase", options);
 }
-function Uncapitalize2(T, options = {}) {
-  return Intrinsic2(T, "Uncapitalize", options);
+function Uncapitalize2(T2, options = {}) {
+  return Intrinsic2(T2, "Uncapitalize", options);
 }
-function Uppercase2(T, options = {}) {
-  return Intrinsic2(T, "Uppercase", options);
+function Uppercase2(T2, options = {}) {
+  return Intrinsic2(T2, "Uppercase", options);
 }
 function FromProperties122(properties, propertyKeys, options) {
   const result = {};
@@ -30036,11 +29456,11 @@ function FromUnion82(types2, propertyKeys) {
   return types2.map((type) => OmitResolve2(type, propertyKeys));
 }
 function FromProperty32(properties, key) {
-  const { [key]: _, ...R } = properties;
+  const { [key]: _2, ...R } = properties;
   return R;
 }
 function FromProperties132(properties, propertyKeys) {
-  return propertyKeys.reduce((T, K2) => FromProperty32(T, K2), properties);
+  return propertyKeys.reduce((T2, K2) => FromProperty32(T2, K2), properties);
 }
 function FromObject32(properties, propertyKeys) {
   const options = Discard2(properties, [TransformKind2, "$id", "required", "properties"]);
@@ -30102,9 +29522,9 @@ function FromProperties152(properties, propertyKeys) {
       result[K2] = properties[K2];
   return result;
 }
-function FromObject42(T, K) {
-  const options = Discard2(T, [TransformKind2, "$id", "required", "properties"]);
-  const properties = FromProperties152(T["properties"], K);
+function FromObject42(T2, K) {
+  const options = Discard2(T2, [TransformKind2, "$id", "required", "properties"]);
+  const properties = FromProperties152(T2["properties"], K);
   return Object22(properties, options);
 }
 function UnionFromPropertyKeys22(propertyKeys) {
@@ -30318,7 +29738,7 @@ class TModule2 {
   }
   Import(key, options) {
     const $defs = { ...this.$defs, [key]: CreateType2(this.$defs[key], options) };
-    return CreateType2({ [Kind3]: "Import", $defs, $ref: key });
+    return CreateType2({ [Kind2]: "Import", $defs, $ref: key });
   }
   WithIdentifiers($defs) {
     return globalThis.Object.getOwnPropertyNames($defs).reduce((result, key) => {
@@ -30330,7 +29750,7 @@ function Module2(properties) {
   return new TModule2(properties);
 }
 function Not22(type, options) {
-  return CreateType2({ [Kind3]: "Not", not: type }, options);
+  return CreateType2({ [Kind2]: "Not", not: type }, options);
 }
 function Parameters2(schema, options) {
   return IsFunction32(schema) ? Tuple2(schema.parameters, options) : Never2();
@@ -30339,19 +29759,19 @@ var Ordinal2 = 0;
 function Recursive2(callback, options = {}) {
   if (IsUndefined5(options.$id))
     options.$id = `T${Ordinal2++}`;
-  const thisType = CloneType2(callback({ [Kind3]: "This", $ref: `${options.$id}` }));
+  const thisType = CloneType2(callback({ [Kind2]: "This", $ref: `${options.$id}` }));
   thisType.$id = options.$id;
   return CreateType2({ [Hint3]: "Recursive", ...thisType }, options);
 }
 function RegExp22(unresolved, options) {
   const expr = IsString5(unresolved) ? new globalThis.RegExp(unresolved) : unresolved;
-  return CreateType2({ [Kind3]: "RegExp", type: "RegExp", source: expr.source, flags: expr.flags }, options);
+  return CreateType2({ [Kind2]: "RegExp", type: "RegExp", source: expr.source, flags: expr.flags }, options);
 }
-function RestResolve2(T) {
-  return IsIntersect3(T) ? T.allOf : IsUnion3(T) ? T.anyOf : IsTuple3(T) ? T.items ?? [] : [];
+function RestResolve2(T2) {
+  return IsIntersect3(T2) ? T2.allOf : IsUnion3(T2) ? T2.anyOf : IsTuple3(T2) ? T2.items ?? [] : [];
 }
-function Rest2(T) {
-  return RestResolve2(T);
+function Rest2(T2) {
+  return RestResolve2(T2);
 }
 function ReturnType2(schema, options) {
   return IsFunction32(schema) ? CreateType2(schema.returns, options) : Never2(options);
@@ -30361,15 +29781,15 @@ class TransformDecodeBuilder2 {
   constructor(schema) {
     this.schema = schema;
   }
-  Decode(decode4) {
-    return new TransformEncodeBuilder2(this.schema, decode4);
+  Decode(decode2) {
+    return new TransformEncodeBuilder2(this.schema, decode2);
   }
 }
 
 class TransformEncodeBuilder2 {
-  constructor(schema, decode4) {
+  constructor(schema, decode2) {
     this.schema = schema;
-    this.decode = decode4;
+    this.decode = decode2;
   }
   EncodeTransform(encode2, schema) {
     const Encode2 = (value) => schema[TransformKind2].Encode(encode2(value));
@@ -30389,10 +29809,10 @@ function Transform2(schema) {
   return new TransformDecodeBuilder2(schema);
 }
 function Unsafe2(options = {}) {
-  return CreateType2({ [Kind3]: options[Kind3] ?? "Unsafe" }, options);
+  return CreateType2({ [Kind2]: options[Kind2] ?? "Unsafe" }, options);
 }
 function Void2(options) {
-  return CreateType2({ [Kind3]: "Void", type: "void" }, options);
+  return CreateType2({ [Kind2]: "Void", type: "void" }, options);
 }
 var exports_type32 = {};
 __export2(exports_type32, {
@@ -30589,7 +30009,7 @@ function DefaultErrorFunction2(error) {
     case ValueErrorType2.Void:
       return "Expected void";
     case ValueErrorType2.Kind:
-      return `Expected kind '${error.schema[Kind3]}'`;
+      return `Expected kind '${error.schema[Kind2]}'`;
     default:
       return "Unknown error type";
   }
@@ -30618,7 +30038,7 @@ function Pushref2(schema, references) {
   return references;
 }
 function Deref2(schema, references) {
-  return schema[Kind3] === "This" || schema[Kind3] === "Ref" ? Resolve2(schema, references) : schema;
+  return schema[Kind2] === "This" || schema[Kind2] === "Ref" ? Resolve2(schema, references) : schema;
 }
 
 class ValueHashError2 extends TypeBoxError2 {
@@ -30643,7 +30063,7 @@ var ByteMarker2;
 })(ByteMarker2 || (ByteMarker2 = {}));
 var Accumulator2 = BigInt("14695981039346656037");
 var [Prime2, Size2] = [BigInt("1099511628211"), BigInt("18446744073709551616")];
-var Bytes2 = Array.from({ length: 256 }).map((_, i3) => BigInt(i3));
+var Bytes2 = Array.from({ length: 256 }).map((_2, i3) => BigInt(i3));
 var F642 = new Float64Array(1);
 var F64In2 = new DataView(F642.buffer);
 var F64Out2 = new Uint8Array(F642.buffer);
@@ -30754,7 +30174,7 @@ class ValueCheckUnknownTypeError2 extends TypeBoxError2 {
   }
 }
 function IsAnyOrUnknown2(schema) {
-  return schema[Kind3] === "Any" || schema[Kind3] === "Unknown";
+  return schema[Kind2] === "Any" || schema[Kind2] === "Unknown";
 }
 function IsDefined3(value) {
   return value !== undefined;
@@ -31092,15 +30512,15 @@ function FromVoid22(schema, references, value) {
   return TypeSystemPolicy2.IsVoidLike(value);
 }
 function FromKind4(schema, references, value) {
-  if (!exports_type22.Has(schema[Kind3]))
+  if (!exports_type22.Has(schema[Kind2]))
     return false;
-  const func = exports_type22.Get(schema[Kind3]);
+  const func = exports_type22.Get(schema[Kind2]);
   return func(schema, value);
 }
 function Visit52(schema, references, value) {
   const references_ = IsDefined3(schema.$id) ? Pushref2(schema, references) : references;
   const schema_ = schema;
-  switch (schema_[Kind3]) {
+  switch (schema_[Kind2]) {
     case "Any":
       return FromAny22(schema_, references_, value);
     case "Argument":
@@ -31168,7 +30588,7 @@ function Visit52(schema, references, value) {
     case "Void":
       return FromVoid22(schema_, references_, value);
     default:
-      if (!exports_type22.Has(schema_[Kind3]))
+      if (!exports_type22.Has(schema_[Kind2]))
         throw new ValueCheckUnknownTypeError2(schema_);
       return FromKind4(schema_, references_, value);
   }
@@ -31646,14 +31066,14 @@ function* FromVoid32(schema, references, path, value) {
     yield Create3(ValueErrorType2.Void, schema, path, value);
 }
 function* FromKind22(schema, references, path, value) {
-  const check2 = exports_type22.Get(schema[Kind3]);
+  const check2 = exports_type22.Get(schema[Kind2]);
   if (!check2(schema, value))
     yield Create3(ValueErrorType2.Kind, schema, path, value);
 }
 function* Visit62(schema, references, path, value) {
   const references_ = IsDefined22(schema.$id) ? [...references, schema] : references;
   const schema_ = schema;
-  switch (schema_[Kind3]) {
+  switch (schema_[Kind2]) {
     case "Any":
       return yield* FromAny32(schema_, references_, path, value);
     case "Argument":
@@ -31721,7 +31141,7 @@ function* Visit62(schema, references, path, value) {
     case "Void":
       return yield* FromVoid32(schema_, references_, path, value);
     default:
-      if (!exports_type22.Has(schema_[Kind3]))
+      if (!exports_type22.Has(schema_[Kind2]))
         throw new ValueErrorsUnknownTypeError2(schema);
       return yield* FromKind22(schema_, references_, path, value);
   }
@@ -32090,7 +31510,7 @@ function FromTuple82(schema, references) {
   if (schema.items === undefined) {
     return [];
   } else {
-    return Array.from({ length: schema.minItems }).map((_, index) => Visit72(schema.items[index], references));
+    return Array.from({ length: schema.minItems }).map((_2, index) => Visit72(schema.items[index], references));
   }
 }
 function FromUndefined42(schema, references) {
@@ -32142,7 +31562,7 @@ function FromKind32(schema, references) {
 function Visit72(schema, references) {
   const references_ = Pushref2(schema, references);
   const schema_ = schema;
-  switch (schema_[Kind3]) {
+  switch (schema_[Kind2]) {
     case "Any":
       return FromAny42(schema_, references_);
     case "Argument":
@@ -32210,7 +31630,7 @@ function Visit72(schema, references) {
     case "Void":
       return FromVoid42(schema_, references_);
     default:
-      if (!exports_type22.Has(schema_[Kind3]))
+      if (!exports_type22.Has(schema_[Kind2]))
         throw new ValueCreateError2(schema_, "Unknown type");
       return FromKind32(schema_, references_);
   }
@@ -32229,13 +31649,13 @@ class ValueCastError2 extends TypeBoxError2 {
   }
 }
 function ScoreUnion2(schema, references, value) {
-  if (schema[Kind3] === "Object" && typeof value === "object" && !IsNull22(value)) {
+  if (schema[Kind2] === "Object" && typeof value === "object" && !IsNull22(value)) {
     const object2 = schema;
     const keys = Object.getOwnPropertyNames(value);
     const entries = Object.entries(object2.properties);
     const [point, max3] = [1 / entries.length, entries.length];
     return entries.reduce((acc, [key, schema2]) => {
-      const literal2 = schema2[Kind3] === "Literal" && schema2.const === value[key] ? max3 : 0;
+      const literal2 = schema2[Kind2] === "Literal" && schema2.const === value[key] ? max3 : 0;
       const checks = Check2(schema2, references, value[key]) ? point : 0;
       const exists = keys.includes(key) ? point : 0;
       return acc + (literal2 + checks + exists);
@@ -32365,7 +31785,7 @@ function FromUnion142(schema, references, value) {
 function Visit82(schema, references, value) {
   const references_ = IsString22(schema.$id) ? Pushref2(schema, references) : references;
   const schema_ = schema;
-  switch (schema[Kind3]) {
+  switch (schema[Kind2]) {
     case "Array":
       return FromArray112(schema_, references_, value);
     case "Constructor":
@@ -32400,7 +31820,7 @@ function Cast2(...args) {
   return args.length === 3 ? Visit82(args[0], args[1], args[2]) : Visit82(args[0], [], args[1]);
 }
 function IsCheckable2(schema) {
-  return IsKind3(schema) && schema[Kind3] !== "Unsafe";
+  return IsKind3(schema) && schema[Kind2] !== "Unsafe";
 }
 function FromArray122(schema, references, value) {
   if (!IsArray22(value))
@@ -32493,7 +31913,7 @@ function FromUnion152(schema, references, value) {
 function Visit92(schema, references, value) {
   const references_ = IsString22(schema.$id) ? Pushref2(schema, references) : references;
   const schema_ = schema;
-  switch (schema_[Kind3]) {
+  switch (schema_[Kind2]) {
     case "Array":
       return FromArray122(schema_, references_, value);
     case "Import":
@@ -32678,7 +32098,7 @@ function FromUnion162(schema, references, value) {
 function Visit102(schema, references, value) {
   const references_ = Pushref2(schema, references);
   const schema_ = schema;
-  switch (schema[Kind3]) {
+  switch (schema[Kind2]) {
     case "Array":
       return FromArray132(schema_, references_, value);
     case "BigInt":
@@ -32853,7 +32273,7 @@ function FromUnion172(schema, references, path, value) {
 function Visit112(schema, references, path, value) {
   const references_ = Pushref2(schema, references);
   const schema_ = schema;
-  switch (schema[Kind3]) {
+  switch (schema[Kind2]) {
     case "Array":
       return FromArray142(schema_, references_, path, value);
     case "Import":
@@ -33025,7 +32445,7 @@ function FromUnion182(schema, references, path, value) {
 function Visit122(schema, references, path, value) {
   const references_ = Pushref2(schema, references);
   const schema_ = schema;
-  switch (schema[Kind3]) {
+  switch (schema[Kind2]) {
     case "Array":
       return FromArray152(schema_, references_, path, value);
     case "Import":
@@ -33113,7 +32533,7 @@ function Visit132(schema, references) {
     return false;
   if (schema.$id)
     visited2.add(schema.$id);
-  switch (schema[Kind3]) {
+  switch (schema[Kind2]) {
     case "Array":
       return FromArray162(schema_, references_);
     case "AsyncIterator":
@@ -33268,7 +32688,7 @@ function FromUnion202(schema, references, value) {
 function Visit142(schema, references, value) {
   const references_ = Pushref2(schema, references);
   const schema_ = schema;
-  switch (schema_[Kind3]) {
+  switch (schema_[Kind2]) {
     case "Array":
       return FromArray172(schema_, references_, value);
     case "Date":
@@ -33880,7 +33300,7 @@ var Policy2;
 var TypeCompiler2;
 (function(TypeCompiler22) {
   function IsAnyOrUnknown22(schema) {
-    return schema[Kind3] === "Any" || schema[Kind3] === "Unknown";
+    return schema[Kind2] === "Any" || schema[Kind2] === "Unknown";
   }
   function* FromAny52(schema, references, value) {
     yield "true";
@@ -34138,7 +33558,7 @@ var TypeCompiler2;
   function* FromKind42(schema, references, value) {
     const instance = state.instances.size;
     state.instances.set(instance, schema);
-    yield `kind('${schema[Kind3]}', ${instance}, ${value})`;
+    yield `kind('${schema[Kind2]}', ${instance}, ${value})`;
   }
   function* Visit172(schema, references, value, useHoisting = true) {
     const references_ = IsString22(schema.$id) ? [...references, schema] : references;
@@ -34154,7 +33574,7 @@ var TypeCompiler2;
         return yield `${functionName}(${value})`;
       }
     }
-    switch (schema_[Kind3]) {
+    switch (schema_[Kind2]) {
       case "Any":
         return yield* FromAny52(schema_, references_, value);
       case "Argument":
@@ -34222,7 +33642,7 @@ var TypeCompiler2;
       case "Void":
         return yield* FromVoid52(schema_, references_, value);
       default:
-        if (!exports_type22.Has(schema_[Kind3]))
+        if (!exports_type22.Has(schema_[Kind2]))
           throw new TypeCompilerUnknownTypeError2(schema);
         return yield* FromKind42(schema_, references_, value);
     }
@@ -34312,10 +33732,10 @@ var TypeCompiler2;
   }
   TypeCompiler22.Compile = Compile;
 })(TypeCompiler2 || (TypeCompiler2 = {}));
-var import_cookie2 = __toESM2(require_dist2(), 1);
-var import_fast_decode_uri_component4 = __toESM2(require_fast_decode_uri_component2(), 1);
-var import_fast_decode_uri_component22 = __toESM2(require_fast_decode_uri_component2(), 1);
-var import_fast_decode_uri_component32 = __toESM2(require_fast_decode_uri_component2(), 1);
+var import_cookie2 = __toESM3(require_dist2(), 1);
+var import_fast_decode_uri_component4 = __toESM3(require_fast_decode_uri_component2(), 1);
+var import_fast_decode_uri_component22 = __toESM3(require_fast_decode_uri_component2(), 1);
+var import_fast_decode_uri_component32 = __toESM3(require_fast_decode_uri_component2(), 1);
 var Kind22 = Symbol.for("TypeBox.Kind");
 var Hint22 = Symbol.for("TypeBox.Hint");
 var isSpecialProperty2 = (name) => /(\ |-|\t|\n)/.test(name);
@@ -34345,7 +33765,7 @@ var mergeObjectIntersection2 = (schema) => {
   for (const type of allOf) {
     if (type.type !== "object")
       continue;
-    const { properties, required, type: _, [Kind22]: __, ...rest } = type;
+    const { properties, required, type: _2, [Kind22]: __, ...rest } = type;
     if (required)
       newSchema.required = newSchema.required ? newSchema.required.concat(required) : required;
     Object.assign(newSchema, rest);
@@ -34612,7 +34032,7 @@ var createMirror2 = (schema, {
     ...hof
   });
 };
-var createNode2 = (part, inert) => {
+var createNode = (part, inert) => {
   let inertMap = inert?.length ? {} : null;
   if (inertMap)
     for (let child of inert)
@@ -34625,16 +34045,16 @@ var createNode2 = (part, inert) => {
     wildcardStore: null
   };
 };
-var cloneNode2 = (node, part) => ({
+var cloneNode = (node, part) => ({
   ...node,
   part
 });
-var createParamNode2 = (name) => ({
+var createParamNode = (name) => ({
   name,
   store: null,
   inert: null
 });
-var Memoirist2 = class _Memoirist2 {
+var Memoirist = class _Memoirist {
   constructor(config = {}) {
     this.config = config, config.lazy && (this.find = this.lazyFind);
   }
@@ -34653,7 +34073,7 @@ var Memoirist2 = class _Memoirist2 {
         this.add(method, path, store, { lazy: false, ignoreHistory: true });
       this.deferred = [], this.find = (method, url) => {
         let root = this.root[method];
-        return root ? matchRoute2(url, url.length, root, 0) : null;
+        return root ? matchRoute(url, url.length, root, 0) : null;
       };
     }
   }
@@ -34667,7 +34087,7 @@ var Memoirist2 = class _Memoirist2 {
     if (typeof path != "string")
       throw new TypeError("Route path must be a string");
     path === "" ? path = "/" : path[0] !== "/" && (path = `/${path}`);
-    let isWildcard = path[path.length - 1] === "*", optionalParams = path.match(_Memoirist2.regex.optionalParams);
+    let isWildcard = path[path.length - 1] === "*", optionalParams = path.match(_Memoirist.regex.optionalParams);
     if (optionalParams) {
       let originalPath = path.replaceAll("?", "");
       this.add(method, originalPath, store, {
@@ -34688,17 +34108,17 @@ var Memoirist2 = class _Memoirist2 {
     if (optionalParams && (path = path.replaceAll("?", "")), this.history.find(([m, p, s]) => m === method && p === path))
       return store;
     (isWildcard || optionalParams && path.charCodeAt(path.length - 1) === 63) && (path = path.slice(0, -1)), ignoreHistory || this.history.push([method, path, store]);
-    let inertParts = path.split(_Memoirist2.regex.static), paramParts = path.match(_Memoirist2.regex.params) || [];
+    let inertParts = path.split(_Memoirist.regex.static), paramParts = path.match(_Memoirist.regex.params) || [];
     inertParts[inertParts.length - 1] === "" && inertParts.pop();
     let node;
-    this.root[method] ? node = this.root[method] : node = this.root[method] = createNode2("/");
+    this.root[method] ? node = this.root[method] : node = this.root[method] = createNode("/");
     let paramPartsIndex = 0;
     for (let i22 = 0;i22 < inertParts.length; ++i22) {
       let part = inertParts[i22];
       if (i22 > 0) {
         let param = paramParts[paramPartsIndex++].slice(1);
         if (node.params === null)
-          node.params = createParamNode2(param);
+          node.params = createParamNode(param);
         else if (node.params.name !== param) {
           if (ignoreError)
             return store;
@@ -34706,7 +34126,7 @@ var Memoirist2 = class _Memoirist2 {
         }
         let params = node.params;
         if (params.inert === null) {
-          node = params.inert = createNode2(part);
+          node = params.inert = createNode(part);
           continue;
         }
         node = params.inert;
@@ -34714,8 +34134,8 @@ var Memoirist2 = class _Memoirist2 {
       for (let j = 0;; ) {
         if (j === part.length) {
           if (j < node.part.length) {
-            let childNode = cloneNode2(node, node.part.slice(j));
-            Object.assign(node, createNode2(part, [childNode]));
+            let childNode = cloneNode(node, node.part.slice(j));
+            Object.assign(node, createNode(part, [childNode]));
           }
           break;
         }
@@ -34726,13 +34146,13 @@ var Memoirist2 = class _Memoirist2 {
             node = inert, part = part.slice(j), j = 0;
             continue;
           }
-          let childNode = createNode2(part.slice(j));
+          let childNode = createNode(part.slice(j));
           node.inert[part.charCodeAt(j)] = childNode, node = childNode;
           break;
         }
         if (part[j] !== node.part[j]) {
-          let existingChild = cloneNode2(node, node.part.slice(j)), newChild = createNode2(part.slice(j));
-          Object.assign(node, createNode2(node.part.slice(0, j), [
+          let existingChild = cloneNode(node, node.part.slice(j)), newChild = createNode(part.slice(j));
+          Object.assign(node, createNode(node.part.slice(0, j), [
             existingChild,
             newChild
           ])), node = newChild;
@@ -34744,7 +34164,7 @@ var Memoirist2 = class _Memoirist2 {
     if (paramPartsIndex < paramParts.length) {
       let name = paramParts[paramPartsIndex].slice(1);
       if (node.params === null)
-        node.params = createParamNode2(name);
+        node.params = createParamNode(name);
       else if (node.params.name !== name) {
         if (ignoreError)
           return store;
@@ -34756,10 +34176,10 @@ var Memoirist2 = class _Memoirist2 {
   }
   find(method, url) {
     let root = this.root[method];
-    return root ? matchRoute2(url, url.length, root, 0) : null;
+    return root ? matchRoute(url, url.length, root, 0) : null;
   }
 };
-var matchRoute2 = (url, urlLength, node, startIndex) => {
+var matchRoute = (url, urlLength, node, startIndex) => {
   let part = node.part, length = part.length, endIndex = startIndex + length;
   if (length > 1) {
     if (endIndex > urlLength)
@@ -34782,7 +34202,7 @@ var matchRoute2 = (url, urlLength, node, startIndex) => {
   if (node.inert !== null) {
     let inert = node.inert[url.charCodeAt(endIndex)];
     if (inert !== undefined) {
-      let route = matchRoute2(url, urlLength, inert, endIndex);
+      let route = matchRoute(url, urlLength, inert, endIndex);
       if (route !== null)
         return route;
     }
@@ -34799,7 +34219,7 @@ var matchRoute2 = (url, urlLength, node, startIndex) => {
           };
         }
       } else if (inert !== null) {
-        let route = matchRoute2(url, urlLength, inert, slashIndex);
+        let route = matchRoute(url, urlLength, inert, slashIndex);
         if (route !== null)
           return route.params[name] = url.substring(endIndex, slashIndex), route;
       }
@@ -35315,7 +34735,7 @@ var StatusMap2 = {
   "Not Extended": 510,
   "Network Authentication Required": 511
 };
-var InvertedStatusMap2 = Object.fromEntries(Object.entries(StatusMap2).map(([k, v]) => [v, k]));
+var InvertedStatusMap2 = Object.fromEntries(Object.entries(StatusMap2).map(([k2, v]) => [v, k2]));
 function removeTrailingEquals2(digest) {
   let trimmedDigest = digest;
   for (;trimmedDigest.endsWith("="); )
@@ -35348,8 +34768,8 @@ var traceBackMacro2 = (extension, property, manage) => {
       if (typeof v == "function") {
         let hook = v(value);
         if (typeof hook == "object")
-          for (let [k, v2] of Object.entries(hook))
-            manage(k)({
+          for (let [k2, v2] of Object.entries(hook))
+            manage(k2)({
               fn: v2
             });
       }
@@ -35491,7 +34911,7 @@ var getLoosePath2 = (path) => path.charCodeAt(path.length - 1) === 47 ? path.sli
 var isNotEmpty2 = (obj) => {
   if (!obj)
     return false;
-  for (let _ in obj)
+  for (let _2 in obj)
     return true;
   return false;
 };
@@ -35577,7 +34997,7 @@ var mapValueError2 = (error2) => {
       return { summary: message, ...error2 };
   }
 };
-var InvalidFileType2 = class _InvalidFileType2 extends Error {
+var InvalidFileType2 = class _InvalidFileType extends Error {
   constructor(property, expected, message = `"${property}" has invalid file type`) {
     super(message);
     this.property = property;
@@ -35585,7 +35005,7 @@ var InvalidFileType2 = class _InvalidFileType2 extends Error {
     this.message = message;
     this.code = "INVALID_FILE_TYPE";
     this.status = 422;
-    Object.setPrototypeOf(this, _InvalidFileType2.prototype);
+    Object.setPrototypeOf(this, _InvalidFileType.prototype);
   }
   toResponse(headers) {
     return isProduction2 ? new Response(JSON.stringify({
@@ -35613,7 +35033,7 @@ var InvalidFileType2 = class _InvalidFileType2 extends Error {
     });
   }
 };
-var ValidationError2 = class _ValidationError2 extends Error {
+var ValidationError2 = class _ValidationError extends Error {
   constructor(type, validator, value, errors2) {
     value && typeof value == "object" && value instanceof ElysiaCustomStatusResponse2 && (value = value.response);
     let error2 = errors2?.First() || (isProduction2 ? undefined : ("Errors" in validator) ? validator.Errors(value).First() : exports_value22.Errors(validator, value).First()), customError = error2?.schema?.message || error2?.schema?.error !== undefined ? typeof error2.schema.error == "function" ? error2.schema.error({
@@ -35662,7 +35082,7 @@ var ValidationError2 = class _ValidationError2 extends Error {
     this.value = value;
     this.code = "VALIDATION";
     this.status = 422;
-    Object.setPrototypeOf(this, _ValidationError2.prototype);
+    Object.setPrototypeOf(this, _ValidationError.prototype);
   }
   get all() {
     return "Errors" in this.validator ? [...this.validator.Errors(this.value)].map(mapValueError2) : [...exports_value22.Errors(this.validator, this.value)].map(mapValueError2);
@@ -35676,7 +35096,7 @@ var ValidationError2 = class _ValidationError2 extends Error {
     }
   }
   get model() {
-    return _ValidationError2.simplifyModel(this.validator);
+    return _ValidationError.simplifyModel(this.validator);
   }
   toResponse(headers) {
     return new Response(this.message, {
@@ -35696,7 +35116,7 @@ var tryParse2 = (v, schema) => {
   }
 };
 function createType2(kind, func) {
-  return exports_type22.Has(kind) || exports_type22.Set(kind, func), (options = {}) => Unsafe2({ ...options, [Kind3]: kind });
+  return exports_type22.Has(kind) || exports_type22.Set(kind, func), (options = {}) => Unsafe2({ ...options, [Kind2]: kind });
 }
 var compile2 = (schema) => {
   try {
@@ -35732,7 +35152,7 @@ var _fileTypeFromBlobWarn2 = false;
 var warnIfFileTypeIsNotInstalled2 = () => {
   _fileTypeFromBlobWarn2 || (console.warn("[Elysia] Attempt to validate file type without 'file-type'. This may lead to security risks. We recommend installing 'file-type' to properly validate file extension."), _fileTypeFromBlobWarn2 = true);
 };
-var loadFileType2 = async () => Promise.resolve().then(() => (init_core22(), exports_core3)).then((x22) => (_fileTypeFromBlob2 = x22.fileTypeFromBlob, _fileTypeFromBlob2)).catch(warnIfFileTypeIsNotInstalled2);
+var loadFileType2 = async () => Promise.resolve().then(() => (init_core22(), exports_core2)).then((x22) => (_fileTypeFromBlob2 = x22.fileTypeFromBlob, _fileTypeFromBlob2)).catch(warnIfFileTypeIsNotInstalled2);
 var _fileTypeFromBlob2;
 var fileTypeFromBlob22 = (file2) => _fileTypeFromBlob2 ? _fileTypeFromBlob2(file2) : loadFileType2().then((mod) => {
   if (mod)
@@ -35977,7 +35397,7 @@ var ElysiaType2 = {
     return {
       default: values[0],
       ...options,
-      [Kind3]: "UnionEnum",
+      [Kind2]: "UnionEnum",
       ...type,
       enum: values
     };
@@ -36388,7 +35808,7 @@ var Cookie2 = class {
   }
 };
 var createCookieJar2 = (set22, store, initial) => (set22.cookie || (set22.cookie = {}), new Proxy(store, {
-  get(_, key) {
+  get(_2, key) {
     return key in store ? new Cookie2(key, set22.cookie, Object.assign({}, initial ?? {}, store[key])) : new Cookie2(key, set22.cookie, Object.assign({}, initial));
   }
 }));
@@ -37194,12 +36614,12 @@ var createTracer2 = (traceListener) => (context) => {
     afterResponse: resolveAfterResponse
   };
 };
-var isOptional2 = (schema) => schema ? schema?.[Kind3] === "Import" && schema.References ? schema.References().some(isOptional2) : (schema.schema && (schema = schema.schema), !!schema && (OptionalKind2 in schema)) : false;
+var isOptional2 = (schema) => schema ? schema?.[Kind2] === "Import" && schema.References ? schema.References().some(isOptional2) : (schema.schema && (schema = schema.schema), !!schema && (OptionalKind2 in schema)) : false;
 var hasAdditionalProperties2 = (_schema) => {
   if (!_schema)
     return false;
   let schema = _schema?.schema ?? _schema;
-  if (schema[Kind3] === "Import" && _schema.References)
+  if (schema[Kind2] === "Import" && _schema.References)
     return _schema.References().some(hasAdditionalProperties2);
   if (schema.anyOf)
     return schema.anyOf.some(hasAdditionalProperties2);
@@ -37234,7 +36654,7 @@ var hasAdditionalProperties2 = (_schema) => {
 var hasType2 = (type, schema) => {
   if (!schema)
     return false;
-  if (Kind3 in schema && schema[Kind3] === type)
+  if (Kind2 in schema && schema[Kind2] === type)
     return true;
   if (schema.type === "object") {
     let properties = schema.properties;
@@ -37250,18 +36670,18 @@ var hasType2 = (type, schema) => {
           if (hasType2(type, property.anyOf[i22]))
             return true;
       }
-      if (Kind3 in property && property[Kind3] === type)
+      if (Kind2 in property && property[Kind2] === type)
         return true;
     }
     return false;
   }
-  return !!schema.properties && Kind3 in schema.properties && schema.properties[Kind3] === type;
+  return !!schema.properties && Kind2 in schema.properties && schema.properties[Kind2] === type;
 };
 var hasProperty2 = (expectedProperty, _schema) => {
   if (!_schema)
     return;
   let schema = _schema.schema ?? _schema;
-  if (schema[Kind3] === "Import" && _schema.References)
+  if (schema[Kind2] === "Import" && _schema.References)
     return _schema.References().some((schema2) => hasProperty2(expectedProperty, schema2));
   if (schema.type === "object") {
     let properties = schema.properties;
@@ -37317,7 +36737,7 @@ var hasRef2 = (schema) => {
         return true;
     }
   }
-  return schema.type === "array" && schema.items && hasRef2(schema.items) ? true : schema[Kind3] === "Ref" && ("$ref" in schema);
+  return schema.type === "array" && schema.items && hasRef2(schema.items) ? true : schema[Kind2] === "Ref" && ("$ref" in schema);
 };
 var hasTransform2 = (schema) => {
   if (!schema)
@@ -37365,7 +36785,7 @@ var _replaceSchemaType2 = (schema, options, config) => {
   let root = config.root;
   if (options.untilObjectFound && !root && schema.type === "object")
     return schema;
-  let fromSymbol = options.from[Kind3];
+  let fromSymbol = options.from[Kind2];
   if (schema.oneOf) {
     for (let i22 = 0;i22 < schema.oneOf.length; i22++)
       schema.oneOf[i22] = _replaceSchemaType2(schema.oneOf[i22], options, config);
@@ -37384,7 +36804,7 @@ var _replaceSchemaType2 = (schema, options, config) => {
   if (schema.not)
     return _replaceSchemaType2(schema.not, options, config);
   let isRoot = root && !!options.excludeRoot;
-  if (schema[Kind3] === fromSymbol) {
+  if (schema[Kind2] === fromSymbol) {
     let { anyOf, oneOf, allOf, not, properties: properties2, items, ...rest } = schema, to = options.to(rest);
     if (!to)
       return schema;
@@ -37484,7 +36904,7 @@ var _replaceSchemaType2 = (schema, options, config) => {
   let properties = schema?.properties;
   if (properties && root && options.rootOnly !== true)
     for (let [key, value] of Object.entries(properties))
-      switch (value[Kind3]) {
+      switch (value[Kind2]) {
         case fromSymbol:
           let { anyOf, oneOf, allOf, not, type, ...rest } = value, to = options.to(rest);
           if (!to)
@@ -37588,14 +37008,14 @@ var getSchemaValidator2 = (s, {
     if (!schema2)
       return;
     let _doesHaveRef;
-    if (schema2[Kind3] !== "Import" && (_doesHaveRef = hasRef2(schema2))) {
+    if (schema2[Kind2] !== "Import" && (_doesHaveRef = hasRef2(schema2))) {
       let id = randomId2();
       doesHaveRef === undefined && (doesHaveRef = _doesHaveRef), schema2 = t2.Module({
         ...modules?.$defs,
         [id]: schema2
       }).Import(id);
     }
-    if (schema2[Kind3] === "Import") {
+    if (schema2[Kind2] === "Import") {
       let newDefs = {};
       for (let [key2, value] of Object.entries(schema2.$defs))
         newDefs[key2] = replaceSchema(value);
@@ -37731,7 +37151,7 @@ var getSchemaValidator2 = (s, {
     "~hasRef": doesHaveRef
   }), compiled;
 };
-var isUnion2 = (schema) => schema[Kind3] === "Union" || !schema.schema && !!schema.anyOf;
+var isUnion2 = (schema) => schema[Kind2] === "Union" || !schema.schema && !!schema.anyOf;
 var mergeObjectSchemas2 = (schemas) => {
   if (schemas.length === 0)
     return {
@@ -37794,7 +37214,7 @@ var getResponseSchemaValidator2 = (s, {
   }
   if (!maybeSchemaOrRecord)
     return;
-  if (Kind3 in maybeSchemaOrRecord)
+  if (Kind2 in maybeSchemaOrRecord)
     return {
       200: getSchemaValidator2(maybeSchemaOrRecord, {
         modules,
@@ -37816,7 +37236,7 @@ var getResponseSchemaValidator2 = (s, {
     if (typeof maybeNameOrSchema == "string") {
       if (maybeNameOrSchema in models) {
         let schema = models[maybeNameOrSchema];
-        record2[+status22] = Kind3 in schema ? getSchemaValidator2(schema, {
+        record2[+status22] = Kind2 in schema ? getSchemaValidator2(schema, {
           modules,
           models,
           additionalProperties,
@@ -37830,7 +37250,7 @@ var getResponseSchemaValidator2 = (s, {
       }
       return;
     }
-    record2[+status22] = Kind3 in maybeNameOrSchema ? getSchemaValidator2(maybeNameOrSchema, {
+    record2[+status22] = Kind2 in maybeNameOrSchema ? getSchemaValidator2(maybeNameOrSchema, {
       modules,
       models,
       additionalProperties,
@@ -37897,7 +37317,7 @@ var getCookieValidator2 = ({
     sanitize: sanitize22
   }), cookieValidator.config = defaultConfig), cookieValidator;
 };
-var unwrapImportSchema2 = (schema) => schema[Kind3] === "Import" && schema.$defs[schema.$ref][Kind3] === "Object" ? schema.$defs[schema.$ref] : schema;
+var unwrapImportSchema2 = (schema) => schema[Kind2] === "Import" && schema.$defs[schema.$ref][Kind2] === "Object" ? schema.$defs[schema.$ref] : schema;
 var allocateIf3 = (value, condition) => condition ? value : "";
 var defaultParsers2 = [
   "json",
@@ -38208,7 +37628,7 @@ try{`;
     let parser = typeof hooks.parse == "string" ? hooks.parse : Array.isArray(hooks.parse) && hooks.parse.length === 1 ? typeof hooks.parse[0] == "string" ? hooks.parse[0] : typeof hooks.parse[0].fn == "string" ? hooks.parse[0].fn : undefined : undefined;
     if (!parser && validator.body && !hooks.parse?.length) {
       let schema = validator.body.schema;
-      schema && schema.anyOf && schema[Kind3] === "Union" && schema.anyOf?.length === 2 && schema.anyOf?.find((x22) => x22[Kind3] === "ElysiaForm") && (parser = "formdata");
+      schema && schema.anyOf && schema[Kind2] === "Union" && schema.anyOf?.length === 2 && schema.anyOf?.find((x22) => x22[Kind2] === "ElysiaForm") && (parser = "formdata");
     }
     if (parser && defaultParsers2.includes(parser)) {
       let reporter = report("parse", {
@@ -38420,11 +37840,11 @@ else Object.assign(c,transformed)
 `);
       let hasUnion = isUnion2(validator.body.schema), hasNonUnionFileWithDefault = false;
       if (validator.body.hasDefault) {
-        let value = exports_value22.Default(validator.body.schema, validator.body.schema.type === "object" || validator.body.schema[Kind3] === "Import" && validator.body.schema.$defs[validator.body.schema.$ref][Kind3] === "Object" ? {} : undefined), schema = unwrapImportSchema2(validator.body.schema);
+        let value = exports_value22.Default(validator.body.schema, validator.body.schema.type === "object" || validator.body.schema[Kind2] === "Import" && validator.body.schema.$defs[validator.body.schema.$ref][Kind2] === "Object" ? {} : undefined), schema = unwrapImportSchema2(validator.body.schema);
         if (!hasUnion && value && typeof value == "object" && (hasType2("File", schema) || hasType2("Files", schema))) {
           hasNonUnionFileWithDefault = true;
-          for (let [k, v] of Object.entries(value))
-            (v === "File" || v === "Files") && delete value[k];
+          for (let [k2, v] of Object.entries(value))
+            (v === "File" || v === "Files") && delete value[k2];
           isNotEmpty2(value) || (value = undefined);
         }
         let parsed = typeof value == "object" ? JSON.stringify(value) : typeof value == "string" ? `'${value}'` : value;
@@ -38464,8 +37884,8 @@ else Object.assign(c,transformed)
               validator2 += `if(fileUnions[${fileUnions.length}].Check(c.body)){`;
               let validateFile22 = "", validatorLength = 0;
               for (let i222 = 0;i222 < iterator2.length; i222++) {
-                let [k, v] = iterator2[i222];
-                !v.extension || v[Kind3] !== "File" && v[Kind3] !== "Files" || (validatorLength && (validateFile22 += ","), validateFile22 += `validateFileExtension(c.body.${k},${JSON.stringify(v.extension)},'body.${k}')`, validatorLength++);
+                let [k2, v] = iterator2[i222];
+                !v.extension || v[Kind2] !== "File" && v[Kind2] !== "Files" || (validatorLength && (validateFile22 += ","), validateFile22 += `validateFileExtension(c.body.${k2},${JSON.stringify(v.extension)},'body.${k2}')`, validatorLength++);
               }
               validateFile22 && (validatorLength === 1 ? validator2 += `await ${validateFile22}
 ` : validatorLength > 1 && (validator2 += `await Promise.all([${validateFile22}])
@@ -38475,8 +37895,8 @@ else Object.assign(c,transformed)
         }
       } else if (hasNonUnionFileWithDefault || !hasUnion && (hasType2("File", unwrapImportSchema2(validator.body.schema)) || hasType2("Files", unwrapImportSchema2(validator.body.schema)))) {
         let validateFile22 = "", i22 = 0;
-        for (let [k, v] of Object.entries(unwrapImportSchema2(validator.body.schema).properties))
-          !v.extension || v[Kind3] !== "File" && v[Kind3] !== "Files" || (i22 && (validateFile22 += ","), validateFile22 += `validateFileExtension(c.body.${k},${JSON.stringify(v.extension)},'body.${k}')`, i22++);
+        for (let [k2, v] of Object.entries(unwrapImportSchema2(validator.body.schema).properties))
+          !v.extension || v[Kind2] !== "File" && v[Kind2] !== "Files" || (i22 && (validateFile22 += ","), validateFile22 += `validateFileExtension(c.body.${k2},${JSON.stringify(v.extension)},'body.${k2}')`, i22++);
         i22 && (fnLiteral += `
 `), i22 === 1 ? fnLiteral += `await ${validateFile22}
 ` : i22 > 1 && (fnLiteral += `await Promise.all([${validateFile22}])
@@ -38846,9 +38266,9 @@ const trace=app.event.trace?.map(x=>typeof x==='function'?x:x.fn)??[]
 const notFound=new NotFoundError()
 const hoc=app.extender.higherOrderFunctions.map(x=>x.fn)
 `, app.event.request?.length && (fnLiteral += `const onRequest=app.event.request.map(x=>x.fn)
-`), fnLiteral += error404.declare, app.event.trace?.length && (fnLiteral += "const " + app.event.trace.map((_, i22) => `tr${i22}=app.event.trace[${i22}].fn`).join(",") + `
+`), fnLiteral += error404.declare, app.event.trace?.length && (fnLiteral += "const " + app.event.trace.map((_2, i22) => `tr${i22}=app.event.trace[${i22}].fn`).join(",") + `
 `), fnLiteral += `${maybeAsync ? "async " : ""}function map(${adapter.parameters}){`, app.event.request?.length && (fnLiteral += `let re
-`), fnLiteral += adapter.createContext(app), app.event.trace?.length && (fnLiteral += "c[ELYSIA_TRACE]=[" + app.event.trace.map((_, i22) => `tr${i22}(c)`).join(",") + `]
+`), fnLiteral += adapter.createContext(app), app.event.trace?.length && (fnLiteral += "c[ELYSIA_TRACE]=[" + app.event.trace.map((_2, i22) => `tr${i22}(c)`).join(",") + `]
 `), fnLiteral += createOnRequestHandler2(app), switchMap && (fnLiteral += `
 map: switch(p){
 ` + switchMap + "}"), fnLiteral += findDynamicRoute + `}
@@ -39899,7 +39319,7 @@ var createDynamicErrorHandler2 = (app) => {
     });
   };
 };
-var Elysia2 = class _Elysia2 {
+var Elysia2 = class _Elysia {
   constructor(config = {}) {
     this.server = null;
     this.dependencies = {};
@@ -39949,11 +39369,11 @@ var Elysia2 = class _Elysia2 {
     this.router = {
       "~http": undefined,
       get http() {
-        return this["~http"] || (this["~http"] = new Memoirist2({ lazy: true })), this["~http"];
+        return this["~http"] || (this["~http"] = new Memoirist({ lazy: true })), this["~http"];
       },
       "~dynamic": undefined,
       get dynamic() {
-        return this["~dynamic"] || (this["~dynamic"] = new Memoirist2), this["~dynamic"];
+        return this["~dynamic"] || (this["~dynamic"] = new Memoirist), this["~dynamic"];
       },
       static: {},
       response: {},
@@ -40519,7 +39939,7 @@ var Elysia2 = class _Elysia2 {
     return promoteEvent2(this.event.parse, type), promoteEvent2(this.event.transform, type), promoteEvent2(this.event.beforeHandle, type), promoteEvent2(this.event.afterHandle, type), promoteEvent2(this.event.mapResponse, type), promoteEvent2(this.event.afterResponse, type), promoteEvent2(this.event.trace, type), promoteEvent2(this.event.error, type), type === "scoped" ? (this.validator.scoped = mergeSchemaValidator2(this.validator.scoped, this.validator.local), this.validator.local = null) : type === "global" && (this.validator.global = mergeSchemaValidator2(this.validator.global, mergeSchemaValidator2(this.validator.scoped, this.validator.local)), this.validator.scoped = null, this.validator.local = null), this;
   }
   group(prefix, schemaOrRun, run) {
-    let instance = new _Elysia2({
+    let instance = new _Elysia({
       ...this.config,
       prefix: ""
     });
@@ -40565,7 +39985,7 @@ var Elysia2 = class _Elysia2 {
         let type = hook.as ?? "local";
         if (hook.schema === "standalone") {
           this.standaloneValidator[type] || (this.standaloneValidator[type] = []);
-          let response = hook?.response || typeof hook?.response == "string" || hook?.response && Kind3 in hook.response ? {
+          let response = hook?.response || typeof hook?.response == "string" || hook?.response && Kind2 in hook.response ? {
             200: hook.response
           } : hook?.response;
           return this.standaloneValidator[type].push({
@@ -40588,7 +40008,7 @@ var Elysia2 = class _Elysia2 {
       }
       return this.guard({}, hook);
     }
-    let instance = new _Elysia2({
+    let instance = new _Elysia({
       ...this.config,
       prefix: ""
     });
@@ -40623,13 +40043,13 @@ var Elysia2 = class _Elysia2 {
     return plugin instanceof Promise ? (this.promisedModules.add(plugin.then((plugin2) => {
       if (typeof plugin2 == "function")
         return plugin2(this);
-      if (plugin2 instanceof _Elysia2)
+      if (plugin2 instanceof _Elysia)
         return this._use(plugin2).compile();
       if (plugin2.constructor.name === "Elysia")
         return this._use(plugin2).compile();
       if (typeof plugin2.default == "function")
         return plugin2.default(this);
-      if (plugin2.default instanceof _Elysia2)
+      if (plugin2.default instanceof _Elysia)
         return this._use(plugin2.default);
       if (plugin2.constructor.name === "Elysia")
         return this._use(plugin2.default);
@@ -40660,7 +40080,7 @@ var Elysia2 = class _Elysia2 {
     if (typeof plugin == "function") {
       let instance = plugin(this);
       return instance instanceof Promise ? (this.promisedModules.add(instance.then((plugin2) => {
-        if (plugin2 instanceof _Elysia2) {
+        if (plugin2 instanceof _Elysia) {
           plugin2.getServer = () => this.getServer(), plugin2.getGlobalRoutes = () => this.getGlobalRoutes(), plugin2.getGlobalDefinitions = () => this.getGlobalDefinitions(), plugin2.model(this.definitions.type), plugin2.error(this.definitions.error);
           for (let {
             method,
@@ -40769,7 +40189,7 @@ var Elysia2 = class _Elysia2 {
         checksum: checksum2(JSON.stringify({
           name: this.config.name,
           seed: this.config.seed,
-          content: Object.entries(macro).map(([k, v]) => `${k}+${v}`).join(",")
+          content: Object.entries(macro).map(([k2, v]) => `${k2}+${v}`).join(",")
         })),
         fn: () => macro
       };
@@ -40778,8 +40198,8 @@ var Elysia2 = class _Elysia2 {
     return this;
   }
   mount(path, handleOrConfig, config) {
-    if (path instanceof _Elysia2 || typeof path == "function" || path.length === 0 || path === "/") {
-      let run = typeof path == "function" ? path : path instanceof _Elysia2 ? path.compile().fetch : handleOrConfig instanceof _Elysia2 ? handleOrConfig.compile().fetch : typeof handleOrConfig == "function" ? handleOrConfig : (() => {
+    if (path instanceof _Elysia || typeof path == "function" || path.length === 0 || path === "/") {
+      let run = typeof path == "function" ? path : path instanceof _Elysia ? path.compile().fetch : handleOrConfig instanceof _Elysia ? handleOrConfig.compile().fetch : typeof handleOrConfig == "function" ? handleOrConfig : (() => {
         throw new Error("Invalid handler");
       })(), handler2 = ({ request, path: path2 }) => run(new Request(replaceUrlPath2(request.url, path2), {
         method: request.method,
@@ -40806,7 +40226,7 @@ var Elysia2 = class _Elysia2 {
         }
       }), this;
     }
-    let handle = handleOrConfig instanceof _Elysia2 ? handleOrConfig.compile().fetch : typeof handleOrConfig == "function" ? handleOrConfig : (() => {
+    let handle = handleOrConfig instanceof _Elysia ? handleOrConfig.compile().fetch : typeof handleOrConfig == "function" ? handleOrConfig : (() => {
       throw new Error("Invalid handler");
     })(), length = path.length - (path.endsWith("*") ? 1 : 0), handler = ({ request, path: path2 }) => handle(new Request(replaceUrlPath2(request.url, path2.slice(length) || "/"), {
       method: request.method,
@@ -41500,7 +40920,7 @@ class ElysiaStreamingHttpTransport {
     }
     if (isJSONRPCResponse(message) || isJSONRPCError(message)) {
       this._requestResponseMap.set(requestId, message);
-      const relatedIds = Array.from(this._requestToStreamMapping.entries()).filter(([_, sid]) => this._streamMapping.get(sid) === stream).map(([id]) => id);
+      const relatedIds = Array.from(this._requestToStreamMapping.entries()).filter(([_2, sid]) => this._streamMapping.get(sid) === stream).map(([id]) => id);
       const allResponsesReady = relatedIds.every((id) => this._requestResponseMap.has(id));
       if (allResponsesReady) {
         if (this._enableJsonResponse) {
@@ -41860,7 +41280,7 @@ __export(exports_external2, {
 // node_modules/zod/dist/esm/v3/helpers/util.js
 var util2;
 (function(util3) {
-  util3.assertEqual = (_) => {};
+  util3.assertEqual = (_2) => {};
   function assertIs(_arg) {}
   util3.assertIs = assertIs;
   function assertNever(_x) {
@@ -41875,10 +41295,10 @@ var util2;
     return obj;
   };
   util3.getValidEnumValues = (obj) => {
-    const validKeys = util3.objectKeys(obj).filter((k) => typeof obj[obj[k]] !== "number");
+    const validKeys = util3.objectKeys(obj).filter((k2) => typeof obj[obj[k2]] !== "number");
     const filtered = {};
-    for (const k of validKeys) {
-      filtered[k] = obj[k];
+    for (const k2 of validKeys) {
+      filtered[k2] = obj[k2];
     }
     return util3.objectValues(filtered);
   };
@@ -41908,7 +41328,7 @@ var util2;
     return array.map((val) => typeof val === "string" ? `'${val}'` : val).join(separator);
   }
   util3.joinValues = joinValues;
-  util3.jsonStringifyReplacer = (_, value) => {
+  util3.jsonStringifyReplacer = (_2, value) => {
     if (typeof value === "bigint") {
       return value.toString();
     }
