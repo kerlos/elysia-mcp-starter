@@ -1,14 +1,11 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
 import { Elysia } from 'elysia';
 import { mcp } from 'elysia-mcp';
 import { registerCalculateTool } from './tools/calculate';
 import { registerHelloPrompt } from './prompts/hello';
 import { registerNewsResource } from './resources/news';
-import { node } from '@elysiajs/node';
-const app = new Elysia({
-  adapter: node(),
-})
+const app = new Elysia()
   .use(
     mcp({
       basePath: '/mcp',
