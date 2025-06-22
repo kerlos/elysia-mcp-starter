@@ -26,13 +26,13 @@ const app = new Elysia()
         registerNewsResource(server);
       },
     })
-  )
+  ).listen(3000);
 
 console.log(
-  `🦊 Elysia is running at localhost:3000`
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
 );
 
 export default {
-  port: 3000,
+  port: app.server?.port,
   fetch: app.fetch,
 }
