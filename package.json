@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "bun run src/index.ts",
-    "build:cli": "bun build --target bun --outfile ./cli/index.js src/index.ts",
+    "build:cli": "bun build --outfile ./cli/index.js src/index.ts",
     "dev": "bun run --watch src/index.ts",
     "inspect": "bunx @modelcontextprotocol/inspector http://localhost:3000/mcp"
   },

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Elysia } from 'elysia';
 import { mcp } from 'elysia-mcp';
 import { registerCalculateTool } from './tools/calculate';
