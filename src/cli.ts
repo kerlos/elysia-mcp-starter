@@ -5,8 +5,10 @@ import { mcp } from 'elysia-mcp';
 import { registerCalculateTool } from './tools/calculate';
 import { registerHelloPrompt } from './prompts/hello';
 import { registerNewsResource } from './resources/news';
-
-const app = new Elysia()
+import { node } from '@elysiajs/node';
+const app = new Elysia({
+  adapter: node(),
+})
   .use(
     mcp({
       basePath: '/mcp',
@@ -27,25 +29,12 @@ const app = new Elysia()
       },
     })
   )
+  .listen(3000, ({ port }) => {
+    const hostname = 'localhost';
+    console.log(`🦊 Elysia MCP Server is running at ${hostname}:${port}`);
 
-console.log(
-  `🦊 Elysia is running at localhost:3000`
-);
-
-export default {
-  port: 3000,
-  fetch: app.fetch,
-}
-
-// Keep the process alive
-process.on('SIGINT', () => {
-  console.log('\nGracefully shutting down...');
-  process.exit(0);
-});
-
-process.on('SIGTERM', () => {
-  console.log('\nGracefully shutting down...');
-  process.exit(0);
-});
-
-
+    console.log(`📡 MCP endpoint: http://${hostname}:${port}/mcp`);
+    console.log(
+      `🔍 You can inspect the server with: npx @modelcontextprotocol/inspector http://${hostname}:${port}/mcp`
+    );
+  });

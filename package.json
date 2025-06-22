@@ -10,11 +10,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "bun run src/index.ts",
-    "build:cli": "bun build --outfile ./cli/index.js src/cli.ts",
+    "build:cli": "bun build --target bun --outfile ./cli/index.js src/cli.ts",
     "dev": "bun run --watch src/index.ts",
     "inspect": "bunx @modelcontextprotocol/inspector http://localhost:3000/mcp"
   },
   "dependencies": {
+    "@elysiajs/node": "^1.3.0",
     "elysia": "latest",
     "elysia-mcp": "^0.0.11"
   },
